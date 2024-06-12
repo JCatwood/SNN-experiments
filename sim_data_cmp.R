@@ -4,6 +4,7 @@ library(doParallel)
 library(GpGp)
 library(VeccTMVN)
 library(TruncatedNormal)
+library(scoringRules)
 
 # input args ---------------
 rm(list = ls())
@@ -118,10 +119,17 @@ if (run_seq_Vecc) {
   sd_cens_seq_Vecc <- apply(y_samp_seq_Vecc, 1, sd)[mask_cens] /
     sqrt(n_samp)
   cat(
-    "NLL for est seq Vecc is ",
+    "NLL for seq Vecc is ",
     -mean(dnorm(y[mask_cens],
       mean = y_pred_cens_seq_Vecc,
       sd = sd_cens_seq_Vecc
+    )), "\n"
+  )
+  cat(
+    "CRPS for seq Vecc is ",
+    mean(scoringRules::crps_sample(
+      y = y[mask_cens], 
+      dat = y_samp_seq_Vecc[mask_cens, , drop = FALSE]
     )), "\n"
   )
 }
@@ -168,6 +176,13 @@ if (run_CB) {
         floor((n_iter_MC - n_burn) / thin))
     )),
     "\n"
+  )
+  cat(
+    "CRPS for CB is ",
+    mean(scoringRules::crps_sample(
+      y = y[mask_cens], 
+      dat = y_samp_CB$Y.pred.samp
+    )), "\n"
   )
 }
 
@@ -271,6 +286,13 @@ if (run_est_seq_Vecc) {
       sd = sd_cens_est_seq_Vecc
     )), "\n"
   )
+  cat(
+    "CRPS for est seq Vecc is ",
+    mean(scoringRules::crps_sample(
+      y = y[mask_cens], 
+      dat = y_samp_est_seq_Vecc[mask_cens, , drop = FALSE]
+    )), "\n"
+  )
 }
 
 # VeccTMVN and TruncatedNormal -----------------------
@@ -278,13 +300,15 @@ if (run_VT || run_TN) {
   if (run_VT) {
     y_pred_VT <- y_obs
     sd_pred_VT <- rep(0, length(y_obs))
-    y_samp_VT <- y_obs
+    y_samp_VT <- matrix(y_obs, nrow = length(y_obs), 
+                        ncol = n_samp, byrow = FALSE)
     time_VT <- 0
   }
   if (run_TN) {
     y_pred_TN <- y_obs
     sd_pred_TN <- rep(0, length(y_obs))
-    y_samp_TN <- y_obs
+    y_samp_TN <- matrix(y_obs, nrow = length(y_obs), 
+                        ncol = n_samp, byrow = FALSE)
     time_TN <- 0
   }
   for (i in 1:5) {
@@ -321,7 +345,7 @@ if (run_VT || run_TN) {
         y_pred_VT[mask_ij_env][mask_inner_ij_env] <- rowMeans(samp_ij_env_VT)[mask_inner_ij_env]
         sd_pred_VT[mask_ij_env][mask_inner_ij_env] <-
           apply(samp_ij_env_VT, 1, sd)[mask_inner_ij_env] / sqrt(n_samp)
-        y_samp_VT[mask_ij_env][mask_inner_ij_env] <- samp_ij_env_VT[mask_inner_ij_env, 1]
+        y_samp_VT[mask_ij_env, ][mask_inner_ij_env, ] <- samp_ij_env_VT[mask_inner_ij_env, ]
         end_time <- Sys.time()
         time_VT <- time_VT + difftime(end_time, bgn_time, units = "secs")[[1]]
       }
@@ -359,8 +383,8 @@ if (run_VT || run_TN) {
           rowMeans(samp_ij_env_TN)[mask_cens_inner_ij_env]
         sd_pred_TN[mask_ij_env][mask_inner_ij_env & mask_cens_ij_env] <-
           apply(samp_ij_env_TN, 1, sd)[mask_cens_inner_ij_env] / sqrt(n_samp)
-        y_samp_TN[mask_ij_env][mask_inner_ij_env & mask_cens_ij_env] <-
-          samp_ij_env_TN[mask_cens_inner_ij_env, 1]
+        y_samp_TN[mask_ij_env, ][mask_inner_ij_env & mask_cens_ij_env, ] <-
+          samp_ij_env_TN[mask_cens_inner_ij_env, ]
         end_time <- Sys.time()
         time_TN <- time_TN + difftime(end_time, bgn_time, units = "secs")[[1]]
       }
@@ -384,6 +408,12 @@ if (run_VT || run_TN) {
         sd = sd_pred_VT[mask_cens]
       )), "\n"
     )
+    cat(
+      "CRPS for VT is ",
+      mean(scoringRules::crps_sample(
+        y = y[mask_cens], dat = y_samp_VT[mask_cens, ]
+      )), "\n"
+    )
   }
   if (run_TN) {
     if (!file.exists("results")) {
@@ -401,6 +431,12 @@ if (run_VT || run_TN) {
       -mean(dnorm(y[mask_cens],
         mean = y_pred_TN[mask_cens],
         sd = sd_pred_TN[mask_cens]
+      )), "\n"
+    )
+    cat(
+      "CRPS for TN is ",
+      mean(scoringRules::crps_sample(
+        y = y[mask_cens], dat = y_samp_TN[mask_cens, ]
       )), "\n"
     )
   }

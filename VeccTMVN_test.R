@@ -2,6 +2,7 @@ library(fields)
 library(TruncatedNormal)
 library(GpGp)
 library(VeccTMVN)
+library(scoringRules)
 
 # sim setup ---------------------------------------
 rm(list = ls())
@@ -94,3 +95,12 @@ cat("nll for MET is ", -mean(
     sd = apply(y_cens_samp_MET, 1, sd) / sqrt(n_samp), log = T
   )
 ), "\n")
+
+# compute CRPS ------------------------------------
+cat("CRPS for VMET is ", mean(
+  scoringRules::crps_sample(y = y[mask_cens], dat = samp_VeccTMVN)
+), "\n")
+cat("CRPS for MET is ", mean(
+  scoringRules::crps_sample(y = y[mask_cens], dat = y_cens_samp_MET)
+), "\n")
+

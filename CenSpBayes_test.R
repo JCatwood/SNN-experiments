@@ -1,5 +1,6 @@
 library(fields)
 library(CensSpBayes)
+library(scoringRules)
 
 # sim setup ---------------------------------------
 rm(list = ls())
@@ -97,4 +98,12 @@ cat("nll for MET is ", -mean(
     mean = rowMeans(y_cens_samp_MET),
     sd = apply(y_cens_samp_MET, 1, sd) / sqrt(n_samp), log = T
   )
+), "\n")
+
+# compute CRPS ------------------------------------
+cat("CRPS for CSB is ", mean(
+  scoringRules::crps_sample(y = y[mask_cens], dat = samp_CSB)
+), "\n")
+cat("CRPS for MET is ", mean(
+  scoringRules::crps_sample(y = y[mask_cens], dat = y_cens_samp_MET)
 ), "\n")

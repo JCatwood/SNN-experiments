@@ -5,6 +5,7 @@ library(RANN)
 library(doParallel)
 library(GpGp)
 library(nntmvn)
+library(scoringRules)
 
 # input args ---------------------------------------
 rm(list = ls())
@@ -98,16 +99,16 @@ cond_mean_cens <- as.vector(covmat[mask_cens, !mask_cens] %*%
   y[!mask_cens])
 cond_covmat_cens <- covmat[mask_cens, mask_cens] - covmat[mask_cens, !mask_cens] %*%
   solve(covmat[!mask_cens, !mask_cens]) %*% covmat[!mask_cens, mask_cens]
-y_cens_samp_TN <- t(TruncatedNormal::rtmvnorm(n_samp,
+y_cens_samp_MET <- t(TruncatedNormal::rtmvnorm(n_samp,
   mu = cond_mean_cens, sigma = cond_covmat_cens,
   lb = rep(-Inf, n_cens),
   ub = levl_censor[mask_cens]
 ))
-plot(y[mask_cens], rowMeans(y_cens_samp_TN),
+plot(y[mask_cens], rowMeans(y_cens_samp_MET),
   xlab = "true y at censored locs",
   ylab = "predicted y by MET",
-  xlim = range(y[mask_cens], rowMeans(y_cens_samp_TN)),
-  ylim = range(y[mask_cens], rowMeans(y_cens_samp_TN))
+  xlim = range(y[mask_cens], rowMeans(y_cens_samp_MET)),
+  ylim = range(y[mask_cens], rowMeans(y_cens_samp_MET))
 )
 abline(a = 0, b = 1, col = "red")
 plot(y[mask_cens], rowMeans(y_cens_samp_seq_Vecc),
@@ -125,11 +126,11 @@ pdf(
   width = 5, height = 5
 )
 par(mar = c(4, 4, 1, 1))
-qqplot(as.vector(y_cens_samp_TN), as.vector(y_cens_samp_seq_Vecc),
+qqplot(as.vector(y_cens_samp_MET), as.vector(y_cens_samp_seq_Vecc),
   xlab = "samples from MET",
   ylab = "samples from SNN",
-  xlim = range(y_cens_samp_TN, y_cens_samp_seq_Vecc),
-  ylim = range(y_cens_samp_TN, y_cens_samp_seq_Vecc),
+  xlim = range(y_cens_samp_MET, y_cens_samp_seq_Vecc),
+  ylim = range(y_cens_samp_MET, y_cens_samp_seq_Vecc),
   cex.lab = 1.3, cex.axis = 1.3
 )
 abline(a = 0, b = 1, col = "red", lwd = 2)
@@ -144,11 +145,11 @@ sd(mvtnorm::dmvnorm(t(y_cens_samp_seq_Vecc),
   mean = cond_mean_cens,
   sigma = cond_covmat_cens, log = TRUE
 )) / sqrt(n_samp)
-mean(mvtnorm::dmvnorm(t(y_cens_samp_TN),
+mean(mvtnorm::dmvnorm(t(y_cens_samp_MET),
   mean = cond_mean_cens,
   sigma = cond_covmat_cens, log = TRUE
 ))
-sd(mvtnorm::dmvnorm(t(y_cens_samp_TN),
+sd(mvtnorm::dmvnorm(t(y_cens_samp_MET),
   mean = cond_mean_cens,
   sigma = cond_covmat_cens, log = TRUE
 )) / sqrt(n_samp)
@@ -161,7 +162,7 @@ cat(
 )
 cat(
   "RMSE for MET is ",
-  sqrt(mean((rowMeans(y_cens_samp_TN) - y[mask_cens])^2)), "\n"
+  sqrt(mean((rowMeans(y_cens_samp_MET) - y[mask_cens])^2)), "\n"
 )
 
 # compute nll ------------------------------------
@@ -173,7 +174,15 @@ cat("nll for seq_Vecc is ", -mean(
 ), "\n")
 cat("nll for MET is ", -mean(
   dnorm(y[mask_cens],
-    mean = rowMeans(y_cens_samp_TN),
-    sd = apply(y_cens_samp_TN, 1, sd) / sqrt(n_samp), log = T
+    mean = rowMeans(y_cens_samp_MET),
+    sd = apply(y_cens_samp_MET, 1, sd) / sqrt(n_samp), log = T
   )
+), "\n")
+
+# compute CRPS ------------------------------------
+cat("CRPS for seq_Vecc is ", mean(
+  scoringRules::crps_sample(y = y[mask_cens], dat = y_cens_samp_seq_Vecc)
+), "\n")
+cat("CRPS for MET is ", mean(
+  scoringRules::crps_sample(y = y[mask_cens], dat = y_cens_samp_MET)
 ), "\n")
