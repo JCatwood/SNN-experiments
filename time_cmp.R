@@ -103,7 +103,7 @@ for (n_sub in n_vec) {
   # mtd 3 ours
   time_bgn <- Sys.time()
   for (i in 1:n_samp) {
-    nntmvn::seq_Vecc_samp_func(
+    nntmvn::rtmvn_snn(
       y = rep(NA, n_sub), cens_lb = lb_sub, cens_ub = ub_sub,
       mask_cens = rep(TRUE, n_sub), NN = NN, covmat = covmat, seed = i
     )

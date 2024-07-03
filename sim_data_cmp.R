@@ -88,7 +88,7 @@ if (run_seq_Vecc) {
     covmat_order <- covmat[order, order]
   }
   y_samp_seq_Vecc_order <- foreach(i = 1:n_samp, .packages = c("nntmvn")) %dopar% {
-    nntmvn::seq_Vecc_samp_func(y_obs_order, rep(-Inf, n), levl_cens_order,
+    nntmvn::rtmvn_snn(y_obs_order, rep(-Inf, n), levl_cens_order,
       mask_cens_order, NN_order,
       covmat = covmat_order,
       seed = i
@@ -247,7 +247,7 @@ if (run_est_seq_Vecc) {
   NN_order <- RANN::nn2(locs_order, k = m + 1)[[1]]
   covmat_order <- getFromNamespace(cov_name, "GpGp")(cov_parms_est, locs_order)
   y_samp_est_seq_Vecc_order <- foreach(i = 1:n_samp, .packages = c("nntmvn")) %dopar% {
-    nntmvn::seq_Vecc_samp_func(y_obs_order, rep(-Inf, n), levl_cens_order,
+    nntmvn::rtmvn_snn(y_obs_order, rep(-Inf, n), levl_cens_order,
       mask_cens_order, NN_order,
       covmat = covmat_order,
       seed = i

@@ -70,8 +70,8 @@ if (reorder_mtd == 1) { # maximin
 ncores <- 4
 cl <- makeCluster(ncores)
 registerDoParallel(cl)
-y_samp_seq_Vecc <- foreach(i = 1:n_samp, .packages = c("nntmvn")) %dopar% {
-  seq_Vecc_samp_func(y_obs, rep(-Inf, n), levl_censor, mask_cens, NN,
+y_samp_SNN <- foreach(i = 1:n_samp, .packages = c("nntmvn")) %dopar% {
+  rtmvn_snn(y_obs, rep(-Inf, n), levl_censor, mask_cens, NN,
     covmat = covmat, seed = i
   )
 }
@@ -79,15 +79,15 @@ stopCluster(cl)
 if (!is.null(order_new)) {
   order_new_rev <- 1:n
   order_new_rev[order_new] <- 1:n
-  y_samp_seq_Vecc <- lapply(y_samp_seq_Vecc, function(x) {
+  y_samp_SNN <- lapply(y_samp_SNN, function(x) {
     x[order_new_rev]
   })
   mask_cens <- mask_cens[order_new_rev]
   NN <- nn2(locs, k = m + 1)[[1]]
   levl_censor <- levl_censor[order_new_rev]
 }
-y_samp_seq_Vecc <- matrix(unlist(y_samp_seq_Vecc), n, n_samp, byrow = FALSE)
-y_cens_samp_seq_Vecc <- y_samp_seq_Vecc[mask_cens, ]
+y_samp_SNN <- matrix(unlist(y_samp_SNN), n, n_samp, byrow = FALSE)
+y_cens_samp_SNN <- y_samp_SNN[mask_cens, ]
 
 # sample TMVN with TruncatedNormal ---------------------------------------
 covmat <- fields::Matern(as.matrix(dist(locs)),
@@ -111,11 +111,11 @@ plot(y[mask_cens], rowMeans(y_cens_samp_MET),
   ylim = range(y[mask_cens], rowMeans(y_cens_samp_MET))
 )
 abline(a = 0, b = 1, col = "red")
-plot(y[mask_cens], rowMeans(y_cens_samp_seq_Vecc),
+plot(y[mask_cens], rowMeans(y_cens_samp_SNN),
   xlab = "true y at censored locs",
   ylab = "predicted y by SNN",
-  xlim = range(y[mask_cens], rowMeans(y_cens_samp_seq_Vecc)),
-  ylim = range(y[mask_cens], rowMeans(y_cens_samp_seq_Vecc))
+  xlim = range(y[mask_cens], rowMeans(y_cens_samp_SNN)),
+  ylim = range(y[mask_cens], rowMeans(y_cens_samp_SNN))
 )
 abline(a = 0, b = 1, col = "red")
 if (!file.exists("plots")) {
@@ -126,22 +126,22 @@ pdf(
   width = 5, height = 5
 )
 par(mar = c(4, 4, 1, 1))
-qqplot(as.vector(y_cens_samp_MET), as.vector(y_cens_samp_seq_Vecc),
+qqplot(as.vector(y_cens_samp_MET), as.vector(y_cens_samp_SNN),
   xlab = "samples from MET",
   ylab = "samples from SNN",
-  xlim = range(y_cens_samp_MET, y_cens_samp_seq_Vecc),
-  ylim = range(y_cens_samp_MET, y_cens_samp_seq_Vecc),
+  xlim = range(y_cens_samp_MET, y_cens_samp_SNN),
+  ylim = range(y_cens_samp_MET, y_cens_samp_SNN),
   cex.lab = 1.3, cex.axis = 1.3
 )
 abline(a = 0, b = 1, col = "red", lwd = 2)
 dev.off()
 
 # compute log-score for the samples -----------------------------
-mean(mvtnorm::dmvnorm(t(y_cens_samp_seq_Vecc),
+mean(mvtnorm::dmvnorm(t(y_cens_samp_SNN),
   mean = cond_mean_cens,
   sigma = cond_covmat_cens, log = TRUE
 ))
-sd(mvtnorm::dmvnorm(t(y_cens_samp_seq_Vecc),
+sd(mvtnorm::dmvnorm(t(y_cens_samp_SNN),
   mean = cond_mean_cens,
   sigma = cond_covmat_cens, log = TRUE
 )) / sqrt(n_samp)
@@ -157,8 +157,8 @@ cat("Log-score may not make sense as we are not estimating a model\n")
 
 # compute RMSE ------------------------------------
 cat(
-  "RMSE for seq_Vecc is ",
-  sqrt(mean((rowMeans(y_cens_samp_seq_Vecc) - y[mask_cens])^2)), "\n"
+  "RMSE for SNN is ",
+  sqrt(mean((rowMeans(y_cens_samp_SNN) - y[mask_cens])^2)), "\n"
 )
 cat(
   "RMSE for MET is ",
@@ -166,10 +166,10 @@ cat(
 )
 
 # compute nll ------------------------------------
-cat("nll for seq_Vecc is ", -mean(
+cat("nll for SNN is ", -mean(
   dnorm(y[mask_cens],
-    mean = rowMeans(y_cens_samp_seq_Vecc),
-    sd = apply(y_cens_samp_seq_Vecc, 1, sd) / sqrt(n_samp), log = T
+    mean = rowMeans(y_cens_samp_SNN),
+    sd = apply(y_cens_samp_SNN, 1, sd) / sqrt(n_samp), log = T
   )
 ), "\n")
 cat("nll for MET is ", -mean(
@@ -180,8 +180,8 @@ cat("nll for MET is ", -mean(
 ), "\n")
 
 # compute CRPS ------------------------------------
-cat("CRPS for seq_Vecc is ", mean(
-  scoringRules::crps_sample(y = y[mask_cens], dat = y_cens_samp_seq_Vecc)
+cat("CRPS for SNN is ", mean(
+  scoringRules::crps_sample(y = y[mask_cens], dat = y_cens_samp_SNN)
 ), "\n")
 cat("CRPS for MET is ", mean(
   scoringRules::crps_sample(y = y[mask_cens], dat = y_cens_samp_MET)

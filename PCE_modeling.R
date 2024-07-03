@@ -154,7 +154,7 @@ if (run_seq_Vecc) {
   cl <- makeCluster(ncores)
   registerDoParallel(cl)
   samp_seq_Vecc_all <- foreach(i = 1:n_samp, .packages = c("nntmvn")) %dopar% {
-    nntmvn::seq_Vecc_samp_func(
+    nntmvn::rtmvn_snn(
       y = y_scaled, cens_lb = rep(-Inf, n),
       cens_ub = b_scaled,
       mask_cens = is.na(y_scaled), locs = locs_scaled,
