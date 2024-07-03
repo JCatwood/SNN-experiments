@@ -87,7 +87,7 @@ time_df <- pivot_longer(time_df, c(2:(n_mtd + 1)),
                         values_to = "time"
 )
 ggplot(time_df, aes(x = n, y = time)) +
-  geom_line(linewidth = 2) +
+  geom_line(linewidth = 2, color = "#00BFC4", linetype = "longdash") +
   theme(
     legend.position.inside = c(0.8, 0.8), legend.text = element_text(size = 12),
     legend.title = element_blank(), text = element_text(size = 16)
