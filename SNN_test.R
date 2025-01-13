@@ -71,7 +71,8 @@ ncores <- 4
 cl <- makeCluster(ncores)
 registerDoParallel(cl)
 y_samp_SNN <- foreach(i = 1:n_samp, .packages = c("nntmvn")) %dopar% {
-  rtmvn_snn(y_obs, rep(-Inf, n), levl_censor, mask_cens, NN,
+  rtmvn_snn(y_obs, rep(-Inf, n), levl_censor, mask_cens,
+    m = m,
     covmat = covmat, seed = i
   )
 }
