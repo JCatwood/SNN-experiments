@@ -7,44 +7,35 @@ library(scoringRules)
 # simulation settings ---------------
 rm(list = ls())
 set.seed(123)
-# general
 scene_ID <- 1 # Matern 1.5 kernel
 m <- 30 # number of nearest neighbors
 reorder <- 0 # 0 no reorder, 1 maximin
 n_samp <- 50 # samples generated for posterior inference
 subset_size <- 2500
 run_est_seq_Vecc <- TRUE
-run_CB <- FALSE
+run_CB <- TRUE
 use_parallel <- FALSE
 plot_heatmap <- FALSE
+args <- commandArgs(trailingOnly = TRUE)
+if (length(args) > 0) {
+  k <- as.integer(args[1]) # k is the index for GP realizations
+} else {
+  k <- 1
+}
 # CensSpBayes
 n_burn <- 20000
 n_iter_MC <- 25000
 thin <- 5
 
 # data simulation ----------------------
-if (scene_ID == 1) {
-  tmp_vec <- seq(from = 0, to = 1, length.out = 50)
-  locs <- as.matrix(expand.grid(tmp_vec, tmp_vec))
-  cov_func <- GpGp::matern15_isotropic
-  cov_parms <- c(1.0, 0.03, 0.0001)
-  cov_name <- "matern15_isotropic"
-  covmat <- cov_func(cov_parms, locs)
-  cat("Generating GP ...", "\n")
-  y <- as.vector(t(chol(covmat)) %*% rnorm(nrow(locs)))
-  cat("GP generated", "\n")
-  n <- nrow(locs)
-  levl_cens <- rep(1, n)
-  rm(tmp_vec)
-}
-if (scene_ID == 2) {
-  tmp_vec <- seq(from = 0, to = 1, length.out = 100)
-  locs <- as.matrix(expand.grid(tmp_vec, tmp_vec))
-}
-
-mask_cens <- y < levl_cens
+source("data_simulation.R")
+y <- y_list[[k]]
+mask_cens <- (y < cens_ub) & (y > cens_lb)
 y_obs <- y
-y_obs[mask_cens] <- levl_cens[mask_cens]
+y_obs[mask_cens] <- NA
+if (!exists("cov_name")) {
+  cov_name <- "matern15_isotropic"
+}
 
 # CenSpBayes ------------------------------
 if (run_CB) {
@@ -60,7 +51,7 @@ if (run_CB) {
   X.pred <- matrix(1, sum(mask_cens), 1)
   y_samp_CB <- CensSpBayes::CensSpBayes(
     Y = y_obs, S = locs, X = X.obs,
-    cutoff.Y = levl_cens,
+    cutoff.Y = cens_ub,
     S.pred = locs[mask_cens, ], X.pred = X.pred,
     inla.mats = inla.mats,
     rho.init = 0.1, rho.upper = 5,
@@ -73,15 +64,15 @@ if (run_CB) {
   }
   save(time_CB, y_samp_CB, file = paste0(
     "results/sim_data_CB_scene",
-    scene_ID, ".RData"
+    scene_ID, "_rep", k, ".RData"
   ))
   cat(
-    "RMSE for CB is ",
+    "> ", scene_ID, ", RMSE, CB, unknown, ",
     sqrt(mean((y[mask_cens] - y_samp_CB$Y.pred.posmean)^2)),
     "\n"
   )
   cat(
-    "NLL for CB is ",
+    "> ", scene_ID, ", NLL, CB, unknown, ",
     -mean(dnorm(y[mask_cens],
       mean = y_samp_CB$Y.pred.posmean,
       sd = sqrt(y_samp_CB$Y.pred.posvar /
@@ -90,7 +81,7 @@ if (run_CB) {
     "\n"
   )
   cat(
-    "CRPS for CB is ",
+    "> ", scene_ID, ", CRPS, CB, unknown, ",
     mean(scoringRules::crps_sample(
       y = y[mask_cens],
       dat = y_samp_CB$Y.pred.samp
@@ -114,7 +105,8 @@ if (run_est_seq_Vecc) {
     }
   }
   y_obs_order <- y_obs[order]
-  levl_cens_order <- levl_cens[order]
+  cens_ub_order <- cens_ub[order]
+  cens_lb_order <- cens_lb[order]
   mask_cens_order <- mask_cens[order]
   locs_order <- locs[order, , drop = FALSE]
   if (sum(mask_cens_order) == min(subset_size, n)) {
@@ -124,7 +116,7 @@ if (run_est_seq_Vecc) {
     parms <- exp(log_parms)
     set.seed(123)
     ll <- VeccTMVN::loglk_censor_MVN(locs_order, which(mask_cens_order),
-      y_obs_order, levl_cens_order,
+      y_obs_order, cens_ub_order,
       covName = cov_name, covParms = parms, m = m
     )
     cat("Parms = ", parms, ", nll = ", -ll, "\n")
@@ -148,7 +140,8 @@ if (run_est_seq_Vecc) {
   cat("SNN sampling...\n")
   bgn_time <- Sys.time()
   y_obs_order <- y_obs[order]
-  levl_cens_order <- levl_cens[order]
+  cens_ub_order <- cens_ub[order]
+  cens_lb_order <- cens_lb[order]
   mask_cens_order <- mask_cens[order]
   locs_order <- locs[order, , drop = FALSE]
   covmat_order <- getFromNamespace(cov_name, "GpGp")(cov_parms_est, locs_order)
@@ -162,7 +155,7 @@ if (run_est_seq_Vecc) {
       order <- GpGp::order_maxmin(locs)
     }
     y_samp_est_seq_Vecc_order <- foreach(i = 1:n_samp, .packages = c("nntmvn")) %dopar% {
-      nntmvn::rtmvn_snn(y_obs_order, rep(-Inf, n), levl_cens_order,
+      nntmvn::rtmvn_snn(y_obs_order, cens_lb_order, cens_ub_order,
         mask_cens_order,
         m = m,
         covmat = covmat_order, locs = locs_order,
@@ -172,7 +165,7 @@ if (run_est_seq_Vecc) {
     stopCluster(cl)
   } else {
     y_samp_est_seq_Vecc_order <- lapply(1:n_samp, function(seed_id) {
-      nntmvn::rtmvn_snn(y_obs_order, rep(-Inf, n), levl_cens_order,
+      nntmvn::rtmvn_snn(y_obs_order, cens_lb_order, cens_ub_order,
         mask_cens_order,
         m = m,
         covmat = covmat_order, locs = locs_order,
@@ -198,24 +191,24 @@ if (run_est_seq_Vecc) {
   save(time_parm_est_seq_Vecc, time_est_seq_Vecc, y_samp_est_seq_Vecc,
     file = paste0(
       "results/sim_data_est_seq_Vecc_scene",
-      scene_ID, "_m", m, "_order", reorder, "_subset", subset_size, ".RData"
+      scene_ID, "_m", m, "_order", reorder, "_subset", subset_size, "_rep", k, ".RData"
     )
   )
   cat(
-    "RMSE for est seq Vecc is ",
+    "> ", scene_ID, ", RMSE, SNN, unknown, ",
     sqrt(mean((y[mask_cens] - y_pred_cens_est_seq_Vecc)^2)), "\n"
   )
   sd_cens_est_seq_Vecc <- apply(y_samp_est_seq_Vecc, 1, sd)[mask_cens] /
     sqrt(n_samp)
   cat(
-    "NLL for est seq Vecc is ",
+    "> ", scene_ID, ", NLL, SNN, unknown, ",
     -mean(dnorm(y[mask_cens],
       mean = y_pred_cens_est_seq_Vecc,
       sd = sd_cens_est_seq_Vecc
     )), "\n"
   )
   cat(
-    "CRPS for est seq Vecc is ",
+    "> ", scene_ID, ", CRPS, SNN, unknown, ",
     mean(scoringRules::crps_sample(
       y = y[mask_cens],
       dat = y_samp_est_seq_Vecc[mask_cens, , drop = FALSE]
@@ -227,11 +220,11 @@ if (plot_heatmap) {
   library(fields)
   load(paste0(
     "results/sim_data_CB_scene",
-    scene_ID, ".RData"
+    scene_ID, "_rep", k, ".RData"
   ))
   load(paste0(
     "results/sim_data_est_seq_Vecc_scene",
-    scene_ID, "_m", m, "_order", reorder, ".RData"
+    scene_ID, "_m", m, "_order", reorder, "_rep", k, ".RData"
   ))
   y_samp_CB_tmp <- y_obs
   y_samp_CB_tmp[mask_cens] <- y_samp_CB$Y.pred.samp[, ncol(y_samp_CB$Y.pred.samp)]
