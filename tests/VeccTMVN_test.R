@@ -103,4 +103,3 @@ cat("CRPS for VMET is ", mean(
 cat("CRPS for MET is ", mean(
   scoringRules::crps_sample(y = y[mask_cens], dat = y_cens_samp_MET)
 ), "\n")
-
