@@ -7,7 +7,10 @@ library(scoringRules)
 # simulation settings ------------------------------
 rm(list = ls())
 set.seed(123)
-scene_ID <- 1 # Matern 1.5 kernel
+scene_ID <- 1 
+if(scene_ID == 2) {
+  stop("Scenario 2 does not have a known covariance structure\n")
+}
 m <- 30 # number of nearest neighbors
 reorder <- 0 # 0 no reorder, 1 maximin
 n_samp <- 50 # samples generated for posterior inference

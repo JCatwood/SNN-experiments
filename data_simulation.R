@@ -49,9 +49,18 @@ if (scene_ID == 2) {
   locs <- as.matrix(expand.grid(tmp_vec, tmp_vec))
   y <- (((locs[, 1] - 0.5) * 5)^2 + ((locs[, 2] - 0.5) * 5) - 11) +
     (((locs[, 1] - 0.5) * 10) + ((locs[, 2] - 0.5) * 10)^2 - 7)
-  y <- y / sd(y) + rnorm(length(y), sd = 0.1)
+  y <- y / sd(y)
   n <- nrow(locs)
   cens_lb <- rep(0, n)
   cens_ub <- rep(Inf, n)
-  rm(tmp_vec)
+  # take the negative of y because CensSpBayes only supports lower truncation
+  y <- -y
+  cens_ub <- rep(0, n)
+  cens_lb <- rep(-Inf, n)
+  # generate replicates
+  N <- 20
+  y_list <- lapply(c(1:N), function(x) {
+    y + rnorm(length(y), sd = 0.1)
+  })
+  rm(tmp_vec, y)
 }

@@ -7,7 +7,7 @@ library(scoringRules)
 # simulation settings ---------------
 rm(list = ls())
 set.seed(123)
-scene_ID <- 1 # Matern 1.5 kernel
+scene_ID <- 1
 m <- 30 # number of nearest neighbors
 reorder <- 0 # 0 no reorder, 1 maximin
 n_samp <- 50 # samples generated for posterior inference
@@ -32,7 +32,7 @@ source("data_simulation.R")
 y <- y_list[[k]]
 mask_cens <- (y < cens_ub) & (y > cens_lb)
 y_obs <- y
-y_obs[mask_cens] <- NA
+y_obs[mask_cens] <- cens_ub[mask_cens] # CensSpBayes does not allow NA
 if (!exists("cov_name")) {
   cov_name <- "matern15_isotropic"
 }
@@ -49,6 +49,7 @@ if (run_CB) {
   )
   X.obs <- matrix(1, nrow(locs), 1)
   X.pred <- matrix(1, sum(mask_cens), 1)
+  cat("CB sampling begins...\n")
   y_samp_CB <- CensSpBayes::CensSpBayes(
     Y = y_obs, S = locs, X = X.obs,
     cutoff.Y = cens_ub,
@@ -57,6 +58,7 @@ if (run_CB) {
     rho.init = 0.1, rho.upper = 5,
     iters = n_iter_MC, burn = n_burn, thin = thin, ret_samp = TRUE
   )
+  cat("CB sampling done\n")
   end_time <- Sys.time()
   time_CB <- difftime(end_time, bgn_time, units = "secs")[[1]]
   if (!file.exists("results")) {
