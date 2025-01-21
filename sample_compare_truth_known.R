@@ -7,10 +7,7 @@ library(scoringRules)
 # simulation settings ------------------------------
 rm(list = ls())
 set.seed(123)
-scene_ID <- 1 
-if(scene_ID == 2) {
-  stop("Scenario 2 does not have a known covariance structure\n")
-}
+scene_ID <- 1
 m <- 30 # number of nearest neighbors
 reorder <- 0 # 0 no reorder, 1 maximin
 n_samp <- 50 # samples generated for posterior inference
@@ -142,6 +139,8 @@ if (run_VT || run_TN) {
       mask_cens_ij_env <- mask_cens[mask_ij_env]
       cens_ub_ij_env <- cens_ub[mask_ij_env]
       cens_lb_ij_env <- cens_lb[mask_ij_env]
+      covmat_ij_env <- covmat[mask_ij_env, mask_ij_env, drop = FALSE]
+      locs_cens_ij_env <- locs_ij_env[mask_cens_ij_env, , drop = FALSE]
       mask_inner_ij_env <- locs_ij_env[, 1] >= (i - 1) * 0.2 &
         locs_ij_env[, 1] <= i * 0.2 &
         locs_ij_env[, 2] >= (j - 1) * 0.2 & locs_ij_env[, 2] <= j * 0.2
@@ -149,24 +148,43 @@ if (run_VT || run_TN) {
         bgn_time <- Sys.time()
         set.seed(123)
         cat("VT sampling at i =", i, "j =", j, "\n")
+        # if all responses are censored
         if (sum(mask_cens_ij_env) == length(y_obs_ij_env)) {
           samp_ij_env_VT <- VeccTMVN::mvrandn(
-            lower = cens_lb_ij_env, upper = cens_ub_ij_env, mean = 0, locs = locs_ij_env,
-            covName = cov_name, covParms = cov_parms,
+            lower = cens_lb_ij_env, upper = cens_ub_ij_env, mean = 0,
+            sigma = covmat_ij_env,
             m = min(m, length(mask_cens_ij_env) - 1), N = n_samp
           )
         } else {
-          samp_ij_env_VT <- VeccTMVN::ptmvrandn(
-            locs_ij_env, which(mask_cens_ij_env),
-            y_obs_ij_env, cens_ub_ij_env,
-            cov_name, cov_parms,
-            m = min(m, length(mask_cens_ij_env) - 1), N = n_samp
+          tmp_mat <- solve(
+            covmat_ij_env[!mask_cens_ij_env, !mask_cens_ij_env, drop = FALSE],
+            covmat_ij_env[!mask_cens_ij_env, mask_cens_ij_env, drop = FALSE]
+          )
+          cond_covmat_ij_env_cens <-
+            covmat_ij_env[mask_cens_ij_env, mask_cens_ij_env, drop = FALSE] -
+            covmat_ij_env[mask_cens_ij_env, !mask_cens_ij_env, drop = FALSE] %*%
+            tmp_mat
+          cond_mean_ij_env_cens <- as.vector(
+            t(y_obs_ij_env[!mask_cens_ij_env]) %*% tmp_mat
+          )
+          samp_ij_env_VT <- VeccTMVN::mvrandn(
+            lower = cens_lb_ij_env[mask_cens_ij_env],
+            upper = cens_ub_ij_env[mask_cens_ij_env],
+            mean = cond_mean_ij_env_cens,
+            sigma = cond_covmat_ij_env_cens,
+            m = min(m, length(cond_mean_ij_env_cens) - 1), N = n_samp
           )
         }
-        y_pred_VT[mask_ij_env][mask_inner_ij_env] <- rowMeans(samp_ij_env_VT)[mask_inner_ij_env]
-        sd_pred_VT[mask_ij_env][mask_inner_ij_env] <-
-          apply(samp_ij_env_VT, 1, sd)[mask_inner_ij_env] / sqrt(n_samp)
-        y_samp_VT[mask_ij_env, ][mask_inner_ij_env, ] <- samp_ij_env_VT[mask_inner_ij_env, ]
+        locs_cens_ij_env <- locs_ij_env[mask_cens_ij_env, , drop = FALSE]
+        mask_cens_inner_ij_env <- locs_cens_ij_env[, 1] >= (i - 1) * 0.2 &
+          locs_cens_ij_env[, 1] <= i * 0.2 &
+          locs_cens_ij_env[, 2] >= (j - 1) * 0.2 & locs_cens_ij_env[, 2] <= j * 0.2
+        y_pred_VT[mask_ij_env][mask_inner_ij_env & mask_cens_ij_env] <-
+          rowMeans(samp_ij_env_VT)[mask_cens_inner_ij_env]
+        sd_pred_VT[mask_ij_env][mask_inner_ij_env & mask_cens_ij_env] <-
+          apply(samp_ij_env_VT, 1, sd)[mask_cens_inner_ij_env] / sqrt(n_samp)
+        y_samp_VT[mask_ij_env, ][mask_inner_ij_env & mask_cens_ij_env, ] <-
+          samp_ij_env_VT[mask_cens_inner_ij_env, ]
         end_time <- Sys.time()
         time_VT <- time_VT + difftime(end_time, bgn_time, units = "secs")[[1]]
       }
@@ -175,22 +193,24 @@ if (run_VT || run_TN) {
         bgn_time <- Sys.time()
         set.seed(123)
         cat("TN sampling at i =", i, "j =", j, "\n")
-        covmat_ij_env <- getFromNamespace(cov_name, "GpGp")(cov_parms,
-          locs_ij_env)
+        covmat_ij_env <- covmat[mask_ij_env, mask_ij_env, drop = FALSE]
         if (sum(mask_cens_ij_env) == sum(mask_ij_env)) {
           cond_mean_ij_env_cens <- rep(0, sum(mask_ij_env))
           cond_covmat_ij_env_cens <- covmat_ij_env
         } else {
-          cond_mean_ij_env_cens <- as.vector(covmat_ij_env[mask_cens_ij_env, !mask_cens_ij_env, drop = FALSE] %*%
-            solve(
-              covmat_ij_env[!mask_cens_ij_env, !mask_cens_ij_env],
-              y_obs_ij_env[!mask_cens_ij_env]
-            ))
-          cond_covmat_ij_env_cens <- covmat_ij_env[mask_cens_ij_env, mask_cens_ij_env] -
+          tmp_mat <- solve(
+            covmat_ij_env[!mask_cens_ij_env, !mask_cens_ij_env, drop = FALSE],
+            covmat_ij_env[!mask_cens_ij_env, mask_cens_ij_env, drop = FALSE]
+          )
+          cond_covmat_ij_env_cens <-
+            covmat_ij_env[mask_cens_ij_env, mask_cens_ij_env, drop = FALSE] -
             covmat_ij_env[mask_cens_ij_env, !mask_cens_ij_env, drop = FALSE] %*%
-            solve(covmat_ij_env[!mask_cens_ij_env, !mask_cens_ij_env]) %*%
-            covmat_ij_env[!mask_cens_ij_env, mask_cens_ij_env]
+            tmp_mat
+          cond_mean_ij_env_cens <- as.vector(
+            t(y_obs_ij_env[!mask_cens_ij_env]) %*% tmp_mat
+          )
         }
+        # guarantee symmetry
         cond_covmat_ij_env_cens[lower.tri(cond_covmat_ij_env_cens)] <-
           t(cond_covmat_ij_env_cens)[lower.tri(cond_covmat_ij_env_cens)]
         samp_ij_env_TN <- t(TruncatedNormal::rtmvnorm(
@@ -201,7 +221,8 @@ if (run_VT || run_TN) {
         locs_cens_ij_env <- locs_ij_env[mask_cens_ij_env, , drop = FALSE]
         mask_cens_inner_ij_env <- locs_cens_ij_env[, 1] >= (i - 1) * 0.2 &
           locs_cens_ij_env[, 1] <= i * 0.2 &
-          locs_cens_ij_env[, 2] >= (j - 1) * 0.2 & locs_cens_ij_env[, 2] <= j * 0.2
+          locs_cens_ij_env[, 2] >= (j - 1) * 0.2 & 
+          locs_cens_ij_env[, 2] <= j * 0.2
         y_pred_TN[mask_ij_env][mask_inner_ij_env & mask_cens_ij_env] <-
           rowMeans(samp_ij_env_TN)[mask_cens_inner_ij_env]
         sd_pred_TN[mask_ij_env][mask_inner_ij_env & mask_cens_ij_env] <-
