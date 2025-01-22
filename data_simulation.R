@@ -95,7 +95,7 @@ if (scene_ID == 2) {
 
 # Scenario 3 is the same as Scenario 1 but with ub generated from N(0, 1)
 # The GP field is censored below 1.
-if (scene_ID == 1) {
+if (scene_ID == 3) {
   set.seed(123)
   tmp_vec <- seq(from = 0, to = 1, length.out = 100)
   locs <- as.matrix(expand.grid(tmp_vec, tmp_vec))
