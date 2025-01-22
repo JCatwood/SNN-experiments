@@ -47,3 +47,9 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+# R data files
+results/*.RData
+
+# Mac tmp files
+.DS_Store
