@@ -92,3 +92,43 @@ if (scene_ID == 2) {
   cens_ub <- rep(1, n)
   rm(tmp_vec)
 }
+
+# Scenario 3 is the same as Scenario 1 but with ub generated from N(0, 1)
+# The GP field is censored below 1.
+if (scene_ID == 1) {
+  set.seed(123)
+  tmp_vec <- seq(from = 0, to = 1, length.out = 100)
+  locs <- as.matrix(expand.grid(tmp_vec, tmp_vec))
+  cov_func <- GpGp::matern15_isotropic
+  cov_parms <- c(1.0, 0.03, 0.0001)
+  cov_name <- "matern15_isotropic"
+  covmat <- cov_func(cov_parms, locs)
+  N <- 20
+  if (!file.exists("data/scenario_1")) {
+    dir.create("data/scenario_1", recursive = TRUE)
+  }
+  if (all(file.exists(paste0("data/scenario_1/y", c(1:N), ".txt")))) {
+    cat("Using previously generated GP realizations \n")
+    y_list <- lapply(c(1:N), function(x) {
+      as.vector(read.table(paste0("data/scenario_1/y", x, ".txt"), header = FALSE)[, 1])
+    })
+  } else {
+    cat("Generating GP ...", "\n")
+    L <- t(chol(covmat))
+    y_list <- lapply(c(1:N), function(x) {
+      as.vector(L %*% rnorm(nrow(locs)))
+    })
+    lapply(c(1:N), function(x) {
+      write.table(y_list[[x]],
+        file = paste0("data/scenario_1/y", x, ".txt"),
+        row.names = FALSE, col.names = FALSE,
+      )
+    })
+    rm(L)
+    cat("GP generated", "\n")
+  }
+  n <- nrow(locs)
+  cens_lb <- rep(-Inf, n)
+  cens_ub <- rnorm(n)
+  rm(tmp_vec)
+}
