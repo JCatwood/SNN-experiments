@@ -11,7 +11,7 @@ scene_ID <- 1
 m <- 30 # number of nearest neighbors
 reorder <- 0 # 0 no reorder, 1 maximin
 n_samp <- 50 # samples generated for posterior inference
-run_seq_Vecc <- TRUE
+run_SNN <- TRUE
 run_VT <- TRUE
 run_TN <- TRUE
 use_parallel <- FALSE
@@ -31,7 +31,7 @@ y_obs <- y
 y_obs[mask_cens] <- NA
 
 # nntmvn ---------------------------------------
-if (run_seq_Vecc) {
+if (run_SNN) {
   if (reorder == 0) {
     order <- 1:n
   } else if (reorder == 1) {
@@ -49,7 +49,7 @@ if (run_seq_Vecc) {
     ncores <- 4
     cl <- makeCluster(ncores)
     registerDoParallel(cl)
-    y_samp_seq_Vecc_order <- foreach(i = 1:n_samp, .packages = c("nntmvn")) %dopar% {
+    y_samp_SNN_order <- foreach(i = 1:n_samp, .packages = c("nntmvn")) %dopar% {
       nntmvn::rtmvn_snn(y_obs_order, cens_lb_order, cens_ub_order,
         mask_cens_order,
         m = m,
@@ -59,7 +59,7 @@ if (run_seq_Vecc) {
     }
     stopCluster(cl)
   } else {
-    y_samp_seq_Vecc_order <- lapply(1:n_samp, function(seed_id) {
+    y_samp_SNN_order <- lapply(1:n_samp, function(seed_id) {
       nntmvn::rtmvn_snn(y_obs_order, cens_lb_order, cens_ub_order,
         mask_cens_order,
         m = m,
@@ -70,40 +70,40 @@ if (run_seq_Vecc) {
   }
   end_time <- Sys.time()
   cat("SNN sampling is done\n")
-  time_seq_Vecc <- difftime(end_time, bgn_time, units = "secs")[[1]]
+  time_SNN <- difftime(end_time, bgn_time, units = "secs")[[1]]
   rev_order <- 1:n
   rev_order[order] <- 1:n
-  y_samp_seq_Vecc <- matrix(unlist(y_samp_seq_Vecc_order), n,
+  y_samp_SNN <- matrix(unlist(y_samp_SNN_order), n,
     n_samp,
     byrow = FALSE
   )[rev_order, , drop = FALSE]
-  y_pred_seq_Vecc <- rowMeans(y_samp_seq_Vecc)
-  y_pred_cens_seq_Vecc <- y_pred_seq_Vecc[mask_cens]
+  y_pred_SNN <- rowMeans(y_samp_SNN)
+  y_pred_cens_SNN <- y_pred_SNN[mask_cens]
   if (!file.exists("results")) {
     dir.create("results")
   }
-  save(time_seq_Vecc, y_samp_seq_Vecc, file = paste0(
-    "results/sim_data_seq_Vecc_scene",
+  save(time_SNN, y_samp_SNN, file = paste0(
+    "results/samp_cmp_known_SNN_scene",
     scene_ID, "_m", m, "_order", reorder, "_rep", k, ".RData"
   ))
   cat(
     "> ", scene_ID, ", RMSE, SNN, known, ",
-    sqrt(mean((y[mask_cens] - y_pred_cens_seq_Vecc)^2)), "\n"
+    sqrt(mean((y[mask_cens] - y_pred_cens_SNN)^2)), "\n"
   )
-  sd_cens_seq_Vecc <- apply(y_samp_seq_Vecc, 1, sd)[mask_cens] /
+  sd_cens_SNN <- apply(y_samp_SNN, 1, sd)[mask_cens] /
     sqrt(n_samp)
   cat(
     "> ", scene_ID, ", NLL, SNN, known, ",
     -mean(dnorm(y[mask_cens],
-      mean = y_pred_cens_seq_Vecc,
-      sd = sd_cens_seq_Vecc
+      mean = y_pred_cens_SNN,
+      sd = sd_cens_SNN
     )), "\n"
   )
   cat(
     "> ", scene_ID, ", CRPS, SNN, known, ",
     mean(scoringRules::crps_sample(
       y = y[mask_cens],
-      dat = y_samp_seq_Vecc[mask_cens, , drop = FALSE]
+      dat = y_samp_SNN[mask_cens, , drop = FALSE]
     )), "\n"
   )
 }
@@ -221,7 +221,7 @@ if (run_VT || run_TN) {
         locs_cens_ij_env <- locs_ij_env[mask_cens_ij_env, , drop = FALSE]
         mask_cens_inner_ij_env <- locs_cens_ij_env[, 1] >= (i - 1) * 0.2 &
           locs_cens_ij_env[, 1] <= i * 0.2 &
-          locs_cens_ij_env[, 2] >= (j - 1) * 0.2 & 
+          locs_cens_ij_env[, 2] >= (j - 1) * 0.2 &
           locs_cens_ij_env[, 2] <= j * 0.2
         y_pred_TN[mask_ij_env][mask_inner_ij_env & mask_cens_ij_env] <-
           rowMeans(samp_ij_env_TN)[mask_cens_inner_ij_env]
@@ -239,7 +239,7 @@ if (run_VT || run_TN) {
       dir.create("results")
     }
     save(y_pred_VT, sd_pred_VT, y_samp_VT, time_VT,
-      file = paste0("results/sim_data_VT_scene", scene_ID, "_rep", k, ".RData")
+      file = paste0("results/samp_cmp_known_VT_scene", scene_ID, "_rep", k, ".RData")
     )
     cat(
       "> ", scene_ID, ", RMSE, VT, known, ",
@@ -264,7 +264,7 @@ if (run_VT || run_TN) {
       dir.create("results")
     }
     save(y_pred_TN, sd_pred_TN, y_samp_TN, time_TN,
-      file = paste0("results/sim_data_TN_scene", scene_ID, "_rep", k, ".RData")
+      file = paste0("results/samp_cmp_known_TN_scene", scene_ID, "_rep", k, ".RData")
     )
     cat(
       "> ", scene_ID, ", RMSE, TN, known, ",
@@ -290,12 +290,12 @@ if (run_VT || run_TN) {
 if (plot_heatmap) {
   library(fields)
   load(paste0(
-    "results/sim_data_seq_Vecc_scene",
+    "results/samp_cmp_known_SNN_scene",
     scene_ID, "_m", m, "_order", reorder, "_rep", k, ".RData"
   ))
-  load(paste0("results/sim_data_VT_scene", scene_ID, "_rep", k, ".RData"))
-  load(paste0("results/sim_data_TN_scene", scene_ID, "_rep", k, ".RData"))
-  zlim <- range(y_samp_seq_Vecc, y_samp_TN, y_samp_VT)
+  load(paste0("results/samp_cmp_known_VT_scene", scene_ID, "_rep", k, ".RData"))
+  load(paste0("results/samp_cmp_known_TN_scene", scene_ID, "_rep", k, ".RData"))
+  zlim <- range(y_samp_SNN, y_samp_TN, y_samp_VT)
   if (!file.exists("plots")) {
     dir.create("plots")
   }
@@ -307,21 +307,21 @@ if (plot_heatmap) {
   dev.off()
   pdf(
     file = paste0(
-      "plots/sim_data_seq_Vecc_scene", scene_ID, "_m", m,
+      "plots/samp_cmp_known_SNN_scene", scene_ID, "_m", m,
       "_order", reorder, ".pdf"
     ),
     width = 5, height = 5
   )
-  fields::image.plot(matrix(y_samp_seq_Vecc, sqrt(n), sqrt(n)), zlim = zlim)
+  fields::image.plot(matrix(y_samp_SNN, sqrt(n), sqrt(n)), zlim = zlim)
   dev.off()
   pdf(
-    file = paste0("plots/sim_data_VT_scene", scene_ID, ".pdf"),
+    file = paste0("plots/samp_cmp_known_VT_scene", scene_ID, ".pdf"),
     width = 5, height = 5
   )
   fields::image.plot(matrix(y_samp_VT, sqrt(n), sqrt(n)), zlim = zlim)
   dev.off()
   pdf(
-    file = paste0("plots/sim_data_TN_scene", scene_ID, ".pdf"),
+    file = paste0("plots/samp_cmp_known_TN_scene", scene_ID, ".pdf"),
     width = 5, height = 5
   )
   fields::image.plot(matrix(y_samp_TN, sqrt(n), sqrt(n)), zlim = zlim)
