@@ -8,16 +8,17 @@ library(scoringRules)
 rm(list = ls())
 set.seed(123)
 scene_ID <- 1
+k <- 1
 m_seq <- seq(from = 10, to = 50, by = 10) # number of nearest neighbors
 reorder <- 0 # 0 no reorder, 1 maximin
 n_samp <- 50 # samples generated for posterior inference
 run_seq_Vecc <- TRUE
 use_parallel <- FALSE
 args <- commandArgs(trailingOnly = TRUE)
+# use command line args when running in batch on clusters
 if (length(args) > 0) {
   k <- as.integer(args[1]) # k is the index for GP realizations
-} else {
-  k <- 1
+  scene_ID <- as.integer(args[2]) # simulation scenario ID
 }
 
 # data simulation ----------------------
