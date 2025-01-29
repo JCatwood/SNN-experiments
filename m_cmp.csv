@@ -1,900 +1,900 @@
->  1 , 10 , RMSE, SNN, known,  0.7055567 
->  1 , 10 , NLL, SNN, known,  -0.7560109 
->  1 , 10 , CRPS, SNN, known,  0.3895651 
->  1 , 20 , RMSE, SNN, known,  0.6676525 
->  1 , 20 , NLL, SNN, known,  -0.9237027 
->  1 , 20 , CRPS, SNN, known,  0.3567791 
->  1 , 30 , RMSE, SNN, known,  0.6412275 
->  1 , 30 , NLL, SNN, known,  -0.9184906 
->  1 , 30 , CRPS, SNN, known,  0.341863 
->  1 , 40 , RMSE, SNN, known,  0.6310845 
->  1 , 40 , NLL, SNN, known,  -0.9309237 
->  1 , 40 , CRPS, SNN, known,  0.3350679 
->  1 , 50 , RMSE, SNN, known,  0.6233945 
->  1 , 50 , NLL, SNN, known,  -0.9629606 
->  1 , 50 , CRPS, SNN, known,  0.3314016 
->  1 , 10 , RMSE, SNN, known,  0.6423484 
->  1 , 10 , NLL, SNN, known,  -0.9455258 
->  1 , 10 , CRPS, SNN, known,  0.3420834 
->  1 , 20 , RMSE, SNN, known,  0.605679 
->  1 , 20 , NLL, SNN, known,  -1.105806 
->  1 , 20 , CRPS, SNN, known,  0.3129236 
->  1 , 30 , RMSE, SNN, known,  0.5998499 
->  1 , 30 , NLL, SNN, known,  -1.12632 
->  1 , 30 , CRPS, SNN, known,  0.3073049 
->  1 , 40 , RMSE, SNN, known,  0.5929255 
->  1 , 40 , NLL, SNN, known,  -1.149505 
->  1 , 40 , CRPS, SNN, known,  0.304404 
->  1 , 50 , RMSE, SNN, known,  0.5703218 
->  1 , 50 , NLL, SNN, known,  -1.209087 
->  1 , 50 , CRPS, SNN, known,  0.2910514 
->  1 , 10 , RMSE, SNN, known,  0.6606698 
->  1 , 10 , NLL, SNN, known,  -0.7960899 
->  1 , 10 , CRPS, SNN, known,  0.3625234 
->  1 , 20 , RMSE, SNN, known,  0.6101211 
->  1 , 20 , NLL, SNN, known,  -0.943634 
->  1 , 20 , CRPS, SNN, known,  0.3247391 
->  1 , 30 , RMSE, SNN, known,  0.5818915 
->  1 , 30 , NLL, SNN, known,  -0.9625258 
->  1 , 30 , CRPS, SNN, known,  0.3097691 
->  1 , 40 , RMSE, SNN, known,  0.5839329 
->  1 , 40 , NLL, SNN, known,  -0.9725766 
->  1 , 40 , CRPS, SNN, known,  0.3096828 
->  1 , 50 , RMSE, SNN, known,  0.5703788 
->  1 , 50 , NLL, SNN, known,  -1.040987 
->  1 , 50 , CRPS, SNN, known,  0.3009229 
->  1 , 10 , RMSE, SNN, known,  0.7233363 
->  1 , 10 , NLL, SNN, known,  -0.8456702 
->  1 , 10 , CRPS, SNN, known,  0.3913676 
->  1 , 20 , RMSE, SNN, known,  0.6577589 
->  1 , 20 , NLL, SNN, known,  -0.9164062 
->  1 , 20 , CRPS, SNN, known,  0.3439199 
->  1 , 30 , RMSE, SNN, known,  0.6380595 
->  1 , 30 , NLL, SNN, known,  -0.9427583 
->  1 , 30 , CRPS, SNN, known,  0.3317072 
->  1 , 40 , RMSE, SNN, known,  0.6199587 
->  1 , 40 , NLL, SNN, known,  -0.9635809 
->  1 , 40 , CRPS, SNN, known,  0.3239345 
->  1 , 50 , RMSE, SNN, known,  0.6139215 
->  1 , 50 , NLL, SNN, known,  -0.9940803 
->  1 , 50 , CRPS, SNN, known,  0.3196002 
->  1 , 10 , RMSE, SNN, known,  0.6441332 
->  1 , 10 , NLL, SNN, known,  -0.8607159 
->  1 , 10 , CRPS, SNN, known,  0.3492956 
->  1 , 20 , RMSE, SNN, known,  0.6226119 
->  1 , 20 , NLL, SNN, known,  -0.9386691 
->  1 , 20 , CRPS, SNN, known,  0.33176 
->  1 , 30 , RMSE, SNN, known,  0.5896344 
->  1 , 30 , NLL, SNN, known,  -0.9675314 
->  1 , 30 , CRPS, SNN, known,  0.3131067 
->  1 , 40 , RMSE, SNN, known,  0.5782529 
->  1 , 40 , NLL, SNN, known,  -0.9896126 
->  1 , 40 , CRPS, SNN, known,  0.3068708 
->  1 , 50 , RMSE, SNN, known,  0.576913 
->  1 , 50 , NLL, SNN, known,  -0.9946995 
->  1 , 50 , CRPS, SNN, known,  0.3041178 
->  1 , 10 , RMSE, SNN, known,  0.6645758 
->  1 , 10 , NLL, SNN, known,  -0.8483356 
->  1 , 10 , CRPS, SNN, known,  0.3592274 
->  1 , 20 , RMSE, SNN, known,  0.6728789 
->  1 , 20 , NLL, SNN, known,  -0.8866683 
->  1 , 20 , CRPS, SNN, known,  0.3547809 
->  1 , 30 , RMSE, SNN, known,  0.6302935 
->  1 , 30 , NLL, SNN, known,  -0.9429034 
->  1 , 30 , CRPS, SNN, known,  0.3311033 
->  1 , 40 , RMSE, SNN, known,  0.6124522 
->  1 , 40 , NLL, SNN, known,  -0.970229 
->  1 , 40 , CRPS, SNN, known,  0.3197263 
->  1 , 50 , RMSE, SNN, known,  0.6262403 
->  1 , 50 , NLL, SNN, known,  -0.9354167 
->  1 , 50 , CRPS, SNN, known,  0.3294014 
->  1 , 10 , RMSE, SNN, known,  0.5588332 
->  1 , 10 , NLL, SNN, known,  -1.003811 
->  1 , 10 , CRPS, SNN, known,  0.2998514 
->  1 , 20 , RMSE, SNN, known,  0.5212513 
->  1 , 20 , NLL, SNN, known,  -1.129072 
->  1 , 20 , CRPS, SNN, known,  0.2769476 
->  1 , 30 , RMSE, SNN, known,  0.5144107 
->  1 , 30 , NLL, SNN, known,  -1.177659 
->  1 , 30 , CRPS, SNN, known,  0.2707055 
->  1 , 40 , RMSE, SNN, known,  0.5090199 
->  1 , 40 , NLL, SNN, known,  -1.143787 
->  1 , 40 , CRPS, SNN, known,  0.2681774 
->  1 , 50 , RMSE, SNN, known,  0.5115546 
->  1 , 50 , NLL, SNN, known,  -1.153594 
->  1 , 50 , CRPS, SNN, known,  0.2692367 
->  1 , 10 , RMSE, SNN, known,  0.6571253 
->  1 , 10 , NLL, SNN, known,  -0.8147162 
->  1 , 10 , CRPS, SNN, known,  0.3624431 
->  1 , 20 , RMSE, SNN, known,  0.6217787 
->  1 , 20 , NLL, SNN, known,  -0.8511695 
->  1 , 20 , CRPS, SNN, known,  0.3399021 
->  1 , 30 , RMSE, SNN, known,  0.5996118 
->  1 , 30 , NLL, SNN, known,  -0.8659355 
->  1 , 30 , CRPS, SNN, known,  0.3260634 
->  1 , 40 , RMSE, SNN, known,  0.6029895 
->  1 , 40 , NLL, SNN, known,  -0.8935267 
->  1 , 40 , CRPS, SNN, known,  0.326151 
->  1 , 50 , RMSE, SNN, known,  0.5967781 
->  1 , 50 , NLL, SNN, known,  -0.9026835 
->  1 , 50 , CRPS, SNN, known,  0.323288 
->  1 , 10 , RMSE, SNN, known,  0.698848 
->  1 , 10 , NLL, SNN, known,  -0.9120343 
->  1 , 10 , CRPS, SNN, known,  0.3794129 
->  1 , 20 , RMSE, SNN, known,  0.664117 
->  1 , 20 , NLL, SNN, known,  -0.8903581 
->  1 , 20 , CRPS, SNN, known,  0.3551103 
->  1 , 30 , RMSE, SNN, known,  0.6253215 
->  1 , 30 , NLL, SNN, known,  -0.9040497 
->  1 , 30 , CRPS, SNN, known,  0.3329131 
->  1 , 40 , RMSE, SNN, known,  0.6245005 
->  1 , 40 , NLL, SNN, known,  -0.9068759 
->  1 , 40 , CRPS, SNN, known,  0.3315624 
->  1 , 50 , RMSE, SNN, known,  0.6175591 
->  1 , 50 , NLL, SNN, known,  -0.8954088 
->  1 , 50 , CRPS, SNN, known,  0.3271556 
->  1 , 10 , RMSE, SNN, known,  0.6869519 
->  1 , 10 , NLL, SNN, known,  -0.8717957 
->  1 , 10 , CRPS, SNN, known,  0.3732214 
->  1 , 20 , RMSE, SNN, known,  0.647994 
->  1 , 20 , NLL, SNN, known,  -0.8996774 
->  1 , 20 , CRPS, SNN, known,  0.3444762 
->  1 , 30 , RMSE, SNN, known,  0.6298299 
->  1 , 30 , NLL, SNN, known,  -1.045464 
->  1 , 30 , CRPS, SNN, known,  0.3320536 
->  1 , 40 , RMSE, SNN, known,  0.6252594 
->  1 , 40 , NLL, SNN, known,  -1.042994 
->  1 , 40 , CRPS, SNN, known,  0.3290287 
->  1 , 50 , RMSE, SNN, known,  0.6106037 
->  1 , 50 , NLL, SNN, known,  -1.074719 
->  1 , 50 , CRPS, SNN, known,  0.322413 
->  1 , 10 , RMSE, SNN, known,  0.6185724 
->  1 , 10 , NLL, SNN, known,  -0.8786043 
->  1 , 10 , CRPS, SNN, known,  0.3410604 
->  1 , 20 , RMSE, SNN, known,  0.5616202 
->  1 , 20 , NLL, SNN, known,  -1.01267 
->  1 , 20 , CRPS, SNN, known,  0.3050947 
->  1 , 30 , RMSE, SNN, known,  0.5380242 
->  1 , 30 , NLL, SNN, known,  -1.033477 
->  1 , 30 , CRPS, SNN, known,  0.2893607 
->  1 , 40 , RMSE, SNN, known,  0.543998 
->  1 , 40 , NLL, SNN, known,  -1.062622 
->  1 , 40 , CRPS, SNN, known,  0.2907838 
->  1 , 50 , RMSE, SNN, known,  0.5293912 
->  1 , 50 , NLL, SNN, known,  -1.035288 
->  1 , 50 , CRPS, SNN, known,  0.2845235 
->  1 , 10 , RMSE, SNN, known,  0.5949291 
->  1 , 10 , NLL, SNN, known,  -0.9701343 
->  1 , 10 , CRPS, SNN, known,  0.3238699 
->  1 , 20 , RMSE, SNN, known,  0.5362277 
->  1 , 20 , NLL, SNN, known,  -1.022748 
->  1 , 20 , CRPS, SNN, known,  0.2860321 
->  1 , 30 , RMSE, SNN, known,  0.5302268 
->  1 , 30 , NLL, SNN, known,  -1.130018 
->  1 , 30 , CRPS, SNN, known,  0.2814573 
->  1 , 40 , RMSE, SNN, known,  0.5261971 
->  1 , 40 , NLL, SNN, known,  -1.091731 
->  1 , 40 , CRPS, SNN, known,  0.2785273 
->  1 , 50 , RMSE, SNN, known,  0.5131319 
->  1 , 50 , NLL, SNN, known,  -1.123163 
->  1 , 50 , CRPS, SNN, known,  0.27167 
->  1 , 10 , RMSE, SNN, known,  0.6995771 
->  1 , 10 , NLL, SNN, known,  -0.8405361 
->  1 , 10 , CRPS, SNN, known,  0.3852121 
->  1 , 20 , RMSE, SNN, known,  0.6476329 
->  1 , 20 , NLL, SNN, known,  -0.9069348 
->  1 , 20 , CRPS, SNN, known,  0.3486744 
->  1 , 30 , RMSE, SNN, known,  0.6160994 
->  1 , 30 , NLL, SNN, known,  -1.003567 
->  1 , 30 , CRPS, SNN, known,  0.3290693 
->  1 , 40 , RMSE, SNN, known,  0.6160471 
->  1 , 40 , NLL, SNN, known,  -0.9918739 
->  1 , 40 , CRPS, SNN, known,  0.3279177 
->  1 , 50 , RMSE, SNN, known,  0.5981523 
->  1 , 50 , NLL, SNN, known,  -1.020459 
->  1 , 50 , CRPS, SNN, known,  0.3190312 
->  1 , 10 , RMSE, SNN, known,  0.7638585 
->  1 , 10 , NLL, SNN, known,  -0.7226167 
->  1 , 10 , CRPS, SNN, known,  0.4257502 
->  1 , 20 , RMSE, SNN, known,  0.7500356 
->  1 , 20 , NLL, SNN, known,  -0.8274595 
->  1 , 20 , CRPS, SNN, known,  0.4093592 
->  1 , 30 , RMSE, SNN, known,  0.7015657 
->  1 , 30 , NLL, SNN, known,  -0.8499011 
->  1 , 30 , CRPS, SNN, known,  0.3787018 
->  1 , 40 , RMSE, SNN, known,  0.6899595 
->  1 , 40 , NLL, SNN, known,  -0.8531513 
->  1 , 40 , CRPS, SNN, known,  0.372369 
->  1 , 50 , RMSE, SNN, known,  0.6853603 
->  1 , 50 , NLL, SNN, known,  -0.9043655 
->  1 , 50 , CRPS, SNN, known,  0.3695743 
->  1 , 10 , RMSE, SNN, known,  0.635769 
->  1 , 10 , NLL, SNN, known,  -0.8635168 
->  1 , 10 , CRPS, SNN, known,  0.3491515 
->  1 , 20 , RMSE, SNN, known,  0.5889576 
->  1 , 20 , NLL, SNN, known,  -0.9522932 
->  1 , 20 , CRPS, SNN, known,  0.3176092 
->  1 , 30 , RMSE, SNN, known,  0.5648436 
->  1 , 30 , NLL, SNN, known,  -0.9840728 
->  1 , 30 , CRPS, SNN, known,  0.3041337 
->  1 , 40 , RMSE, SNN, known,  0.5538193 
->  1 , 40 , NLL, SNN, known,  -0.9617989 
->  1 , 40 , CRPS, SNN, known,  0.2983453 
->  1 , 50 , RMSE, SNN, known,  0.5447296 
->  1 , 50 , NLL, SNN, known,  -1.029666 
->  1 , 50 , CRPS, SNN, known,  0.2916048 
->  1 , 10 , RMSE, SNN, known,  0.618343 
->  1 , 10 , NLL, SNN, known,  -0.9860939 
->  1 , 10 , CRPS, SNN, known,  0.3302711 
->  1 , 20 , RMSE, SNN, known,  0.5634253 
->  1 , 20 , NLL, SNN, known,  -1.014187 
->  1 , 20 , CRPS, SNN, known,  0.2946242 
->  1 , 30 , RMSE, SNN, known,  0.540199 
->  1 , 30 , NLL, SNN, known,  -1.144369 
->  1 , 30 , CRPS, SNN, known,  0.2785919 
->  1 , 40 , RMSE, SNN, known,  0.5332686 
->  1 , 40 , NLL, SNN, known,  -1.210641 
->  1 , 40 , CRPS, SNN, known,  0.2755078 
->  1 , 50 , RMSE, SNN, known,  0.5245716 
->  1 , 50 , NLL, SNN, known,  -1.196444 
->  1 , 50 , CRPS, SNN, known,  0.2722681 
->  1 , 10 , RMSE, SNN, known,  0.6918332 
->  1 , 10 , NLL, SNN, known,  -0.865431 
->  1 , 10 , CRPS, SNN, known,  0.373514 
->  1 , 20 , RMSE, SNN, known,  0.6437268 
->  1 , 20 , NLL, SNN, known,  -0.9240316 
->  1 , 20 , CRPS, SNN, known,  0.341089 
->  1 , 30 , RMSE, SNN, known,  0.6210906 
->  1 , 30 , NLL, SNN, known,  -1.014643 
->  1 , 30 , CRPS, SNN, known,  0.3260221 
->  1 , 40 , RMSE, SNN, known,  0.6140387 
->  1 , 40 , NLL, SNN, known,  -1.031355 
->  1 , 40 , CRPS, SNN, known,  0.322079 
->  1 , 50 , RMSE, SNN, known,  0.6014634 
->  1 , 50 , NLL, SNN, known,  -1.066574 
->  1 , 50 , CRPS, SNN, known,  0.3140499 
->  1 , 10 , RMSE, SNN, known,  0.6427959 
->  1 , 10 , NLL, SNN, known,  -0.8528302 
->  1 , 10 , CRPS, SNN, known,  0.3475623 
->  1 , 20 , RMSE, SNN, known,  0.6047967 
->  1 , 20 , NLL, SNN, known,  -0.9323528 
->  1 , 20 , CRPS, SNN, known,  0.3206076 
->  1 , 30 , RMSE, SNN, known,  0.5842665 
->  1 , 30 , NLL, SNN, known,  -1.045859 
->  1 , 30 , CRPS, SNN, known,  0.3078578 
->  1 , 40 , RMSE, SNN, known,  0.5748225 
->  1 , 40 , NLL, SNN, known,  -1.044001 
->  1 , 40 , CRPS, SNN, known,  0.30405 
->  1 , 50 , RMSE, SNN, known,  0.5575535 
->  1 , 50 , NLL, SNN, known,  -1.053624 
->  1 , 50 , CRPS, SNN, known,  0.2930192 
->  1 , 10 , RMSE, SNN, known,  0.6015004 
->  1 , 10 , NLL, SNN, known,  -0.9105409 
->  1 , 10 , CRPS, SNN, known,  0.3282071 
->  1 , 20 , RMSE, SNN, known,  0.5622297 
->  1 , 20 , NLL, SNN, known,  -1.008813 
->  1 , 20 , CRPS, SNN, known,  0.3007071 
->  1 , 30 , RMSE, SNN, known,  0.5486111 
->  1 , 30 , NLL, SNN, known,  -1.098527 
->  1 , 30 , CRPS, SNN, known,  0.2911343 
->  1 , 40 , RMSE, SNN, known,  0.5391757 
->  1 , 40 , NLL, SNN, known,  -1.090938 
->  1 , 40 , CRPS, SNN, known,  0.2852272 
->  1 , 50 , RMSE, SNN, known,  0.5375064 
->  1 , 50 , NLL, SNN, known,  -1.14443 
->  1 , 50 , CRPS, SNN, known,  0.2833087 
->  1 , 10 , RMSE, SNN, known,  0.6588101 
->  1 , 10 , NLL, SNN, known,  -0.9002002 
->  1 , 10 , CRPS, SNN, known,  0.3603616 
->  1 , 20 , RMSE, SNN, known,  0.5998239 
->  1 , 20 , NLL, SNN, known,  -1.016588 
->  1 , 20 , CRPS, SNN, known,  0.3143885 
->  1 , 30 , RMSE, SNN, known,  0.5714321 
->  1 , 30 , NLL, SNN, known,  -1.11608 
->  1 , 30 , CRPS, SNN, known,  0.2990868 
->  1 , 40 , RMSE, SNN, known,  0.5697214 
->  1 , 40 , NLL, SNN, known,  -1.084062 
->  1 , 40 , CRPS, SNN, known,  0.2971395 
->  1 , 50 , RMSE, SNN, known,  0.5739285 
->  1 , 50 , NLL, SNN, known,  -1.160724 
->  1 , 50 , CRPS, SNN, known,  0.2990778 
->  2 , 10 , RMSE, SNN, known,  0.7310793 
->  2 , 10 , NLL, SNN, known,  -0.6155793 
->  2 , 10 , CRPS, SNN, known,  0.403695 
->  2 , 20 , RMSE, SNN, known,  0.730294 
->  2 , 20 , NLL, SNN, known,  -0.7277742 
->  2 , 20 , CRPS, SNN, known,  0.3969018 
->  2 , 30 , RMSE, SNN, known,  0.7152332 
->  2 , 30 , NLL, SNN, known,  -0.8096878 
->  2 , 30 , CRPS, SNN, known,  0.3822977 
->  2 , 40 , RMSE, SNN, known,  0.7227896 
->  2 , 40 , NLL, SNN, known,  -0.760022 
->  2 , 40 , CRPS, SNN, known,  0.3858161 
->  2 , 50 , RMSE, SNN, known,  0.7234427 
->  2 , 50 , NLL, SNN, known,  -0.7692186 
->  2 , 50 , CRPS, SNN, known,  0.3857357 
->  2 , 10 , RMSE, SNN, known,  0.6971382 
->  2 , 10 , NLL, SNN, known,  -0.9430914 
->  2 , 10 , CRPS, SNN, known,  0.3715441 
->  2 , 20 , RMSE, SNN, known,  0.6429878 
->  2 , 20 , NLL, SNN, known,  -0.9892556 
->  2 , 20 , CRPS, SNN, known,  0.335219 
->  2 , 30 , RMSE, SNN, known,  0.6064023 
->  2 , 30 , NLL, SNN, known,  -0.9685653 
->  2 , 30 , CRPS, SNN, known,  0.3150898 
->  2 , 40 , RMSE, SNN, known,  0.5969967 
->  2 , 40 , NLL, SNN, known,  -1.020155 
->  2 , 40 , CRPS, SNN, known,  0.307639 
->  2 , 50 , RMSE, SNN, known,  0.5981104 
->  2 , 50 , NLL, SNN, known,  -1.047725 
->  2 , 50 , CRPS, SNN, known,  0.3076187 
->  2 , 10 , RMSE, SNN, known,  0.677639 
->  2 , 10 , NLL, SNN, known,  -0.7060632 
->  2 , 10 , CRPS, SNN, known,  0.3798239 
->  2 , 20 , RMSE, SNN, known,  0.6718991 
->  2 , 20 , NLL, SNN, known,  -0.8552768 
->  2 , 20 , CRPS, SNN, known,  0.3668563 
->  2 , 30 , RMSE, SNN, known,  0.6295944 
->  2 , 30 , NLL, SNN, known,  -0.9210839 
->  2 , 30 , CRPS, SNN, known,  0.3392892 
->  2 , 40 , RMSE, SNN, known,  0.5909253 
->  2 , 40 , NLL, SNN, known,  -0.9263656 
->  2 , 40 , CRPS, SNN, known,  0.3169365 
->  2 , 50 , RMSE, SNN, known,  0.5817998 
->  2 , 50 , NLL, SNN, known,  -0.9485845 
->  2 , 50 , CRPS, SNN, known,  0.3110605 
->  2 , 10 , RMSE, SNN, known,  0.7678241 
->  2 , 10 , NLL, SNN, known,  -0.7122408 
->  2 , 10 , CRPS, SNN, known,  0.4210707 
->  2 , 20 , RMSE, SNN, known,  0.718926 
->  2 , 20 , NLL, SNN, known,  -0.7470309 
->  2 , 20 , CRPS, SNN, known,  0.3904708 
->  2 , 30 , RMSE, SNN, known,  0.7143365 
->  2 , 30 , NLL, SNN, known,  -0.8008756 
->  2 , 30 , CRPS, SNN, known,  0.3818 
->  2 , 40 , RMSE, SNN, known,  0.7037637 
->  2 , 40 , NLL, SNN, known,  -0.8568136 
->  2 , 40 , CRPS, SNN, known,  0.3740953 
->  2 , 50 , RMSE, SNN, known,  0.714392 
->  2 , 50 , NLL, SNN, known,  -0.8059349 
->  2 , 50 , CRPS, SNN, known,  0.378826 
->  2 , 10 , RMSE, SNN, known,  0.7275224 
->  2 , 10 , NLL, SNN, known,  -0.7336039 
->  2 , 10 , CRPS, SNN, known,  0.3957871 
->  2 , 20 , RMSE, SNN, known,  0.730902 
->  2 , 20 , NLL, SNN, known,  -0.7934018 
->  2 , 20 , CRPS, SNN, known,  0.393602 
->  2 , 30 , RMSE, SNN, known,  0.6877394 
->  2 , 30 , NLL, SNN, known,  -0.8684174 
->  2 , 30 , CRPS, SNN, known,  0.3631054 
->  2 , 40 , RMSE, SNN, known,  0.6433142 
->  2 , 40 , NLL, SNN, known,  -0.866346 
->  2 , 40 , CRPS, SNN, known,  0.3381767 
->  2 , 50 , RMSE, SNN, known,  0.6544117 
->  2 , 50 , NLL, SNN, known,  -0.8948665 
->  2 , 50 , CRPS, SNN, known,  0.3424276 
->  2 , 10 , RMSE, SNN, known,  0.6868603 
->  2 , 10 , NLL, SNN, known,  -0.7334275 
->  2 , 10 , CRPS, SNN, known,  0.3682223 
->  2 , 20 , RMSE, SNN, known,  0.6755988 
->  2 , 20 , NLL, SNN, known,  -0.775728 
->  2 , 20 , CRPS, SNN, known,  0.366359 
->  2 , 30 , RMSE, SNN, known,  0.6516247 
->  2 , 30 , NLL, SNN, known,  -0.8537032 
->  2 , 30 , CRPS, SNN, known,  0.3471771 
->  2 , 40 , RMSE, SNN, known,  0.6459091 
->  2 , 40 , NLL, SNN, known,  -0.8462585 
->  2 , 40 , CRPS, SNN, known,  0.3403836 
->  2 , 50 , RMSE, SNN, known,  0.6447626 
->  2 , 50 , NLL, SNN, known,  -0.881548 
->  2 , 50 , CRPS, SNN, known,  0.3390047 
->  2 , 10 , RMSE, SNN, known,  0.6592916 
->  2 , 10 , NLL, SNN, known,  -0.6876766 
->  2 , 10 , CRPS, SNN, known,  0.3627929 
->  2 , 20 , RMSE, SNN, known,  0.6187466 
->  2 , 20 , NLL, SNN, known,  -0.8509211 
->  2 , 20 , CRPS, SNN, known,  0.3348493 
->  2 , 30 , RMSE, SNN, known,  0.6124121 
->  2 , 30 , NLL, SNN, known,  -0.8740369 
->  2 , 30 , CRPS, SNN, known,  0.3279563 
->  2 , 40 , RMSE, SNN, known,  0.6032481 
->  2 , 40 , NLL, SNN, known,  -0.8671567 
->  2 , 40 , CRPS, SNN, known,  0.3236815 
->  2 , 50 , RMSE, SNN, known,  0.5912191 
->  2 , 50 , NLL, SNN, known,  -0.8835437 
->  2 , 50 , CRPS, SNN, known,  0.3158552 
->  2 , 10 , RMSE, SNN, known,  0.7227446 
->  2 , 10 , NLL, SNN, known,  -0.649154 
->  2 , 10 , CRPS, SNN, known,  0.4016971 
->  2 , 20 , RMSE, SNN, known,  0.6972074 
->  2 , 20 , NLL, SNN, known,  -0.754796 
->  2 , 20 , CRPS, SNN, known,  0.3784135 
->  2 , 30 , RMSE, SNN, known,  0.6774625 
->  2 , 30 , NLL, SNN, known,  -0.7894683 
->  2 , 30 , CRPS, SNN, known,  0.3634647 
->  2 , 40 , RMSE, SNN, known,  0.6624674 
->  2 , 40 , NLL, SNN, known,  -0.7924447 
->  2 , 40 , CRPS, SNN, known,  0.3553408 
->  2 , 50 , RMSE, SNN, known,  0.6313925 
->  2 , 50 , NLL, SNN, known,  -0.7934784 
->  2 , 50 , CRPS, SNN, known,  0.3403702 
->  2 , 10 , RMSE, SNN, known,  0.683394 
->  2 , 10 , NLL, SNN, known,  -0.7837304 
->  2 , 10 , CRPS, SNN, known,  0.3639619 
->  2 , 20 , RMSE, SNN, known,  0.6943229 
->  2 , 20 , NLL, SNN, known,  -0.8635056 
->  2 , 20 , CRPS, SNN, known,  0.3682212 
->  2 , 30 , RMSE, SNN, known,  0.6378697 
->  2 , 30 , NLL, SNN, known,  -0.8919859 
->  2 , 30 , CRPS, SNN, known,  0.3344269 
->  2 , 40 , RMSE, SNN, known,  0.6341413 
->  2 , 40 , NLL, SNN, known,  -0.91088 
->  2 , 40 , CRPS, SNN, known,  0.3320962 
->  2 , 50 , RMSE, SNN, known,  0.6302071 
->  2 , 50 , NLL, SNN, known,  -0.9407832 
->  2 , 50 , CRPS, SNN, known,  0.3289052 
->  2 , 10 , RMSE, SNN, known,  0.6597699 
->  2 , 10 , NLL, SNN, known,  -0.7478406 
->  2 , 10 , CRPS, SNN, known,  0.363141 
->  2 , 20 , RMSE, SNN, known,  0.6883789 
->  2 , 20 , NLL, SNN, known,  -0.8073877 
->  2 , 20 , CRPS, SNN, known,  0.3684407 
->  2 , 30 , RMSE, SNN, known,  0.6468861 
->  2 , 30 , NLL, SNN, known,  -0.9021669 
->  2 , 30 , CRPS, SNN, known,  0.341119 
->  2 , 40 , RMSE, SNN, known,  0.615651 
->  2 , 40 , NLL, SNN, known,  -0.939805 
->  2 , 40 , CRPS, SNN, known,  0.3233783 
->  2 , 50 , RMSE, SNN, known,  0.6005747 
->  2 , 50 , NLL, SNN, known,  -0.9502478 
->  2 , 50 , CRPS, SNN, known,  0.3163266 
->  2 , 10 , RMSE, SNN, known,  0.6906137 
->  2 , 10 , NLL, SNN, known,  -0.7107273 
->  2 , 10 , CRPS, SNN, known,  0.3783922 
->  2 , 20 , RMSE, SNN, known,  0.655445 
->  2 , 20 , NLL, SNN, known,  -0.8264001 
->  2 , 20 , CRPS, SNN, known,  0.3519689 
->  2 , 30 , RMSE, SNN, known,  0.6132056 
->  2 , 30 , NLL, SNN, known,  -0.8995993 
->  2 , 30 , CRPS, SNN, known,  0.3290502 
->  2 , 40 , RMSE, SNN, known,  0.5971201 
->  2 , 40 , NLL, SNN, known,  -0.9111986 
->  2 , 40 , CRPS, SNN, known,  0.3194863 
->  2 , 50 , RMSE, SNN, known,  0.6005228 
->  2 , 50 , NLL, SNN, known,  -0.9623686 
->  2 , 50 , CRPS, SNN, known,  0.3190667 
->  2 , 10 , RMSE, SNN, known,  0.731993 
->  2 , 10 , NLL, SNN, known,  -0.7231933 
->  2 , 10 , CRPS, SNN, known,  0.401392 
->  2 , 20 , RMSE, SNN, known,  0.6691951 
->  2 , 20 , NLL, SNN, known,  -0.8944524 
->  2 , 20 , CRPS, SNN, known,  0.3527167 
->  2 , 30 , RMSE, SNN, known,  0.6584487 
->  2 , 30 , NLL, SNN, known,  -1.009966 
->  2 , 30 , CRPS, SNN, known,  0.3389501 
->  2 , 40 , RMSE, SNN, known,  0.6328895 
->  2 , 40 , NLL, SNN, known,  -1.015884 
->  2 , 40 , CRPS, SNN, known,  0.3251413 
->  2 , 50 , RMSE, SNN, known,  0.6422329 
->  2 , 50 , NLL, SNN, known,  -1.04021 
->  2 , 50 , CRPS, SNN, known,  0.3310771 
->  2 , 10 , RMSE, SNN, known,  0.6454822 
->  2 , 10 , NLL, SNN, known,  -0.9277041 
->  2 , 10 , CRPS, SNN, known,  0.3438984 
->  2 , 20 , RMSE, SNN, known,  0.5942715 
->  2 , 20 , NLL, SNN, known,  -0.9550453 
->  2 , 20 , CRPS, SNN, known,  0.3117125 
->  2 , 30 , RMSE, SNN, known,  0.5540515 
->  2 , 30 , NLL, SNN, known,  -1.033138 
->  2 , 30 , CRPS, SNN, known,  0.2897786 
->  2 , 40 , RMSE, SNN, known,  0.5508738 
->  2 , 40 , NLL, SNN, known,  -1.099771 
->  2 , 40 , CRPS, SNN, known,  0.2882441 
->  2 , 50 , RMSE, SNN, known,  0.5650162 
->  2 , 50 , NLL, SNN, known,  -1.037892 
->  2 , 50 , CRPS, SNN, known,  0.2947645 
->  2 , 10 , RMSE, SNN, known,  0.7499955 
->  2 , 10 , NLL, SNN, known,  -0.6904144 
->  2 , 10 , CRPS, SNN, known,  0.4135421 
->  2 , 20 , RMSE, SNN, known,  0.7100404 
->  2 , 20 , NLL, SNN, known,  -0.8359322 
->  2 , 20 , CRPS, SNN, known,  0.387813 
->  2 , 30 , RMSE, SNN, known,  0.6711344 
->  2 , 30 , NLL, SNN, known,  -0.8515838 
->  2 , 30 , CRPS, SNN, known,  0.3621133 
->  2 , 40 , RMSE, SNN, known,  0.6734851 
->  2 , 40 , NLL, SNN, known,  -0.8830175 
->  2 , 40 , CRPS, SNN, known,  0.3617859 
->  2 , 50 , RMSE, SNN, known,  0.6774987 
->  2 , 50 , NLL, SNN, known,  -0.8453596 
->  2 , 50 , CRPS, SNN, known,  0.3645337 
->  2 , 10 , RMSE, SNN, known,  0.6552791 
->  2 , 10 , NLL, SNN, known,  -0.8601512 
->  2 , 10 , CRPS, SNN, known,  0.3525691 
->  2 , 20 , RMSE, SNN, known,  0.6017951 
->  2 , 20 , NLL, SNN, known,  -1.007253 
->  2 , 20 , CRPS, SNN, known,  0.3205512 
->  2 , 30 , RMSE, SNN, known,  0.5473542 
->  2 , 30 , NLL, SNN, known,  -1.014587 
->  2 , 30 , CRPS, SNN, known,  0.2898354 
->  2 , 40 , RMSE, SNN, known,  0.5367496 
->  2 , 40 , NLL, SNN, known,  -1.05275 
->  2 , 40 , CRPS, SNN, known,  0.2831851 
->  2 , 50 , RMSE, SNN, known,  0.5469331 
->  2 , 50 , NLL, SNN, known,  -1.026894 
->  2 , 50 , CRPS, SNN, known,  0.2864825 
->  2 , 10 , RMSE, SNN, known,  0.6918694 
->  2 , 10 , NLL, SNN, known,  -0.7634519 
->  2 , 10 , CRPS, SNN, known,  0.3746618 
->  2 , 20 , RMSE, SNN, known,  0.6583032 
->  2 , 20 , NLL, SNN, known,  -0.8685253 
->  2 , 20 , CRPS, SNN, known,  0.3437529 
->  2 , 30 , RMSE, SNN, known,  0.6247276 
->  2 , 30 , NLL, SNN, known,  -0.8841901 
->  2 , 30 , CRPS, SNN, known,  0.3268896 
->  2 , 40 , RMSE, SNN, known,  0.6056199 
->  2 , 40 , NLL, SNN, known,  -0.9218728 
->  2 , 40 , CRPS, SNN, known,  0.3144214 
->  2 , 50 , RMSE, SNN, known,  0.5996407 
->  2 , 50 , NLL, SNN, known,  -0.978381 
->  2 , 50 , CRPS, SNN, known,  0.3119386 
->  2 , 10 , RMSE, SNN, known,  0.6629649 
->  2 , 10 , NLL, SNN, known,  -0.7458587 
->  2 , 10 , CRPS, SNN, known,  0.3624832 
->  2 , 20 , RMSE, SNN, known,  0.6819893 
->  2 , 20 , NLL, SNN, known,  -0.7733904 
->  2 , 20 , CRPS, SNN, known,  0.3705959 
->  2 , 30 , RMSE, SNN, known,  0.6426179 
->  2 , 30 , NLL, SNN, known,  -0.8399227 
->  2 , 30 , CRPS, SNN, known,  0.3440156 
->  2 , 40 , RMSE, SNN, known,  0.6279083 
->  2 , 40 , NLL, SNN, known,  -0.8178738 
->  2 , 40 , CRPS, SNN, known,  0.3341566 
->  2 , 50 , RMSE, SNN, known,  0.6157358 
->  2 , 50 , NLL, SNN, known,  -0.8556139 
->  2 , 50 , CRPS, SNN, known,  0.3285799 
->  2 , 10 , RMSE, SNN, known,  0.6962383 
->  2 , 10 , NLL, SNN, known,  -0.7795638 
->  2 , 10 , CRPS, SNN, known,  0.3795219 
->  2 , 20 , RMSE, SNN, known,  0.6699414 
->  2 , 20 , NLL, SNN, known,  -0.8372664 
->  2 , 20 , CRPS, SNN, known,  0.3534666 
->  2 , 30 , RMSE, SNN, known,  0.6262166 
->  2 , 30 , NLL, SNN, known,  -0.9097954 
->  2 , 30 , CRPS, SNN, known,  0.3266294 
->  2 , 40 , RMSE, SNN, known,  0.5980237 
->  2 , 40 , NLL, SNN, known,  -0.9449357 
->  2 , 40 , CRPS, SNN, known,  0.3111153 
->  2 , 50 , RMSE, SNN, known,  0.5993096 
->  2 , 50 , NLL, SNN, known,  -0.9564987 
->  2 , 50 , CRPS, SNN, known,  0.3122751 
->  2 , 10 , RMSE, SNN, known,  0.7425667 
->  2 , 10 , NLL, SNN, known,  -0.7071793 
->  2 , 10 , CRPS, SNN, known,  0.4052803 
->  2 , 20 , RMSE, SNN, known,  0.7025266 
->  2 , 20 , NLL, SNN, known,  -0.8487581 
->  2 , 20 , CRPS, SNN, known,  0.3734713 
->  2 , 30 , RMSE, SNN, known,  0.652104 
->  2 , 30 , NLL, SNN, known,  -0.9246321 
->  2 , 30 , CRPS, SNN, known,  0.3363485 
->  2 , 40 , RMSE, SNN, known,  0.6427278 
->  2 , 40 , NLL, SNN, known,  -0.9367158 
->  2 , 40 , CRPS, SNN, known,  0.331947 
->  2 , 50 , RMSE, SNN, known,  0.6347418 
->  2 , 50 , NLL, SNN, known,  -0.946284 
->  2 , 50 , CRPS, SNN, known,  0.3264323 
->  2 , 10 , RMSE, SNN, known,  0.5825458 
->  2 , 10 , NLL, SNN, known,  -0.8362434 
->  2 , 10 , CRPS, SNN, known,  0.3144992 
->  2 , 20 , RMSE, SNN, known,  0.589973 
->  2 , 20 , NLL, SNN, known,  -0.9202894 
->  2 , 20 , CRPS, SNN, known,  0.3115939 
->  2 , 30 , RMSE, SNN, known,  0.5613476 
->  2 , 30 , NLL, SNN, known,  -1.018041 
->  2 , 30 , CRPS, SNN, known,  0.2938931 
->  2 , 40 , RMSE, SNN, known,  0.5534443 
->  2 , 40 , NLL, SNN, known,  -0.9993849 
->  2 , 40 , CRPS, SNN, known,  0.2890389 
->  2 , 50 , RMSE, SNN, known,  0.553842 
->  2 , 50 , NLL, SNN, known,  -0.9906168 
->  2 , 50 , CRPS, SNN, known,  0.2890084 
->  3 , 10 , RMSE, SNN, known,  0.2213131 
->  3 , 10 , NLL, SNN, known,  -2.533149 
->  3 , 10 , CRPS, SNN, known,  0.1116837 
->  3 , 20 , RMSE, SNN, known,  0.1950169 
->  3 , 20 , NLL, SNN, known,  -2.831355 
->  3 , 20 , CRPS, SNN, known,  0.09754596 
->  3 , 30 , RMSE, SNN, known,  0.1751825 
->  3 , 30 , NLL, SNN, known,  -2.937778 
->  3 , 30 , CRPS, SNN, known,  0.09021603 
->  3 , 40 , RMSE, SNN, known,  0.1714958 
->  3 , 40 , NLL, SNN, known,  -3.067384 
->  3 , 40 , CRPS, SNN, known,  0.08907229 
->  3 , 50 , RMSE, SNN, known,  0.1701406 
->  3 , 50 , NLL, SNN, known,  -3.012495 
->  3 , 50 , CRPS, SNN, known,  0.08850115 
->  3 , 10 , RMSE, SNN, known,  0.2256491 
->  3 , 10 , NLL, SNN, known,  -2.622933 
->  3 , 10 , CRPS, SNN, known,  0.1053685 
->  3 , 20 , RMSE, SNN, known,  0.1917533 
->  3 , 20 , NLL, SNN, known,  -3.038932 
->  3 , 20 , CRPS, SNN, known,  0.09118132 
->  3 , 30 , RMSE, SNN, known,  0.1797803 
->  3 , 30 , NLL, SNN, known,  -3.276063 
->  3 , 30 , CRPS, SNN, known,  0.08770224 
->  3 , 40 , RMSE, SNN, known,  0.1734764 
->  3 , 40 , NLL, SNN, known,  -3.135274 
->  3 , 40 , CRPS, SNN, known,  0.0859421 
->  3 , 50 , RMSE, SNN, known,  0.1692251 
->  3 , 50 , NLL, SNN, known,  -3.3072 
->  3 , 50 , CRPS, SNN, known,  0.08473343 
->  3 , 10 , RMSE, SNN, known,  0.2066936 
->  3 , 10 , NLL, SNN, known,  -2.794062 
->  3 , 10 , CRPS, SNN, known,  0.101515 
->  3 , 20 , RMSE, SNN, known,  0.1737969 
->  3 , 20 , NLL, SNN, known,  -3.016705 
->  3 , 20 , CRPS, SNN, known,  0.08650114 
->  3 , 30 , RMSE, SNN, known,  0.1689955 
->  3 , 30 , NLL, SNN, known,  -3.190693 
->  3 , 30 , CRPS, SNN, known,  0.08431641 
->  3 , 40 , RMSE, SNN, known,  0.1692702 
->  3 , 40 , NLL, SNN, known,  -3.277444 
->  3 , 40 , CRPS, SNN, known,  0.08480414 
->  3 , 50 , RMSE, SNN, known,  0.1681294 
->  3 , 50 , NLL, SNN, known,  -3.167178 
->  3 , 50 , CRPS, SNN, known,  0.08369026 
->  3 , 10 , RMSE, SNN, known,  0.2232317 
->  3 , 10 , NLL, SNN, known,  -2.829785 
->  3 , 10 , CRPS, SNN, known,  0.1086236 
->  3 , 20 , RMSE, SNN, known,  0.2022876 
->  3 , 20 , NLL, SNN, known,  -2.960394 
->  3 , 20 , CRPS, SNN, known,  0.09702356 
->  3 , 30 , RMSE, SNN, known,  0.1904217 
->  3 , 30 , NLL, SNN, known,  -3.14018 
->  3 , 30 , CRPS, SNN, known,  0.09279661 
->  3 , 40 , RMSE, SNN, known,  0.1875133 
->  3 , 40 , NLL, SNN, known,  -3.142515 
->  3 , 40 , CRPS, SNN, known,  0.09111892 
->  3 , 50 , RMSE, SNN, known,  0.1771761 
->  3 , 50 , NLL, SNN, known,  -3.102506 
->  3 , 50 , CRPS, SNN, known,  0.08826349 
->  3 , 10 , RMSE, SNN, known,  0.2099637 
->  3 , 10 , NLL, SNN, known,  -2.785581 
->  3 , 10 , CRPS, SNN, known,  0.1048071 
->  3 , 20 , RMSE, SNN, known,  0.1850698 
->  3 , 20 , NLL, SNN, known,  -2.962697 
->  3 , 20 , CRPS, SNN, known,  0.09261691 
->  3 , 30 , RMSE, SNN, known,  0.1785187 
->  3 , 30 , NLL, SNN, known,  -3.089267 
->  3 , 30 , CRPS, SNN, known,  0.08957326 
->  3 , 40 , RMSE, SNN, known,  0.1739154 
->  3 , 40 , NLL, SNN, known,  -3.175549 
->  3 , 40 , CRPS, SNN, known,  0.08818024 
->  3 , 50 , RMSE, SNN, known,  0.1723523 
->  3 , 50 , NLL, SNN, known,  -3.085485 
->  3 , 50 , CRPS, SNN, known,  0.08761785 
->  3 , 10 , RMSE, SNN, known,  0.2237065 
->  3 , 10 , NLL, SNN, known,  -2.724326 
->  3 , 10 , CRPS, SNN, known,  0.1091891 
->  3 , 20 , RMSE, SNN, known,  0.1929546 
->  3 , 20 , NLL, SNN, known,  -3.069469 
->  3 , 20 , CRPS, SNN, known,  0.09433878 
->  3 , 30 , RMSE, SNN, known,  0.1850964 
->  3 , 30 , NLL, SNN, known,  -2.936935 
->  3 , 30 , CRPS, SNN, known,  0.09121764 
->  3 , 40 , RMSE, SNN, known,  0.1795893 
->  3 , 40 , NLL, SNN, known,  -3.083199 
->  3 , 40 , CRPS, SNN, known,  0.08905602 
->  3 , 50 , RMSE, SNN, known,  0.1732319 
->  3 , 50 , NLL, SNN, known,  -3.177269 
->  3 , 50 , CRPS, SNN, known,  0.08725436 
->  3 , 10 , RMSE, SNN, known,  0.1969709 
->  3 , 10 , NLL, SNN, known,  -2.968113 
->  3 , 10 , CRPS, SNN, known,  0.09636784 
->  3 , 20 , RMSE, SNN, known,  0.1645503 
->  3 , 20 , NLL, SNN, known,  -3.234956 
->  3 , 20 , CRPS, SNN, known,  0.08393598 
->  3 , 30 , RMSE, SNN, known,  0.1702865 
->  3 , 30 , NLL, SNN, known,  -3.357926 
->  3 , 30 , CRPS, SNN, known,  0.08467795 
->  3 , 40 , RMSE, SNN, known,  0.1630367 
->  3 , 40 , NLL, SNN, known,  -3.198152 
->  3 , 40 , CRPS, SNN, known,  0.08226864 
->  3 , 50 , RMSE, SNN, known,  0.162861 
->  3 , 50 , NLL, SNN, known,  -3.351449 
->  3 , 50 , CRPS, SNN, known,  0.08203755 
->  3 , 10 , RMSE, SNN, known,  0.1943716 
->  3 , 10 , NLL, SNN, known,  -2.595466 
->  3 , 10 , CRPS, SNN, known,  0.101512 
->  3 , 20 , RMSE, SNN, known,  0.1730943 
->  3 , 20 , NLL, SNN, known,  -2.931922 
->  3 , 20 , CRPS, SNN, known,  0.08970674 
->  3 , 30 , RMSE, SNN, known,  0.1688373 
->  3 , 30 , NLL, SNN, known,  -3.00667 
->  3 , 30 , CRPS, SNN, known,  0.08744305 
->  3 , 40 , RMSE, SNN, known,  0.1629997 
->  3 , 40 , NLL, SNN, known,  -3.05206 
->  3 , 40 , CRPS, SNN, known,  0.08539713 
->  3 , 50 , RMSE, SNN, known,  0.1638458 
->  3 , 50 , NLL, SNN, known,  -3.039564 
->  3 , 50 , CRPS, SNN, known,  0.08562409 
->  3 , 10 , RMSE, SNN, known,  0.2247167 
->  3 , 10 , NLL, SNN, known,  -2.652796 
->  3 , 10 , CRPS, SNN, known,  0.1107208 
->  3 , 20 , RMSE, SNN, known,  0.1846711 
->  3 , 20 , NLL, SNN, known,  -2.90314 
->  3 , 20 , CRPS, SNN, known,  0.09331629 
->  3 , 30 , RMSE, SNN, known,  0.178524 
->  3 , 30 , NLL, SNN, known,  -2.975403 
->  3 , 30 , CRPS, SNN, known,  0.09000372 
->  3 , 40 , RMSE, SNN, known,  0.1747341 
->  3 , 40 , NLL, SNN, known,  -2.910445 
->  3 , 40 , CRPS, SNN, known,  0.0883693 
->  3 , 50 , RMSE, SNN, known,  0.171575 
->  3 , 50 , NLL, SNN, known,  -3.035001 
->  3 , 50 , CRPS, SNN, known,  0.08688488 
->  3 , 10 , RMSE, SNN, known,  0.2219041 
->  3 , 10 , NLL, SNN, known,  -2.719441 
->  3 , 10 , CRPS, SNN, known,  0.1111084 
->  3 , 20 , RMSE, SNN, known,  0.2060684 
->  3 , 20 , NLL, SNN, known,  -2.867837 
->  3 , 20 , CRPS, SNN, known,  0.1004907 
->  3 , 30 , RMSE, SNN, known,  0.1903094 
->  3 , 30 , NLL, SNN, known,  -2.950596 
->  3 , 30 , CRPS, SNN, known,  0.09398268 
->  3 , 40 , RMSE, SNN, known,  0.1919499 
->  3 , 40 , NLL, SNN, known,  -3.007772 
->  3 , 40 , CRPS, SNN, known,  0.09349087 
->  3 , 50 , RMSE, SNN, known,  0.1909323 
->  3 , 50 , NLL, SNN, known,  -2.999647 
->  3 , 50 , CRPS, SNN, known,  0.0931724 
->  3 , 10 , RMSE, SNN, known,  0.2241891 
->  3 , 10 , NLL, SNN, known,  -2.068233 
->  3 , 10 , CRPS, SNN, known,  0.1176622 
->  3 , 20 , RMSE, SNN, known,  0.1910548 
->  3 , 20 , NLL, SNN, known,  -2.267782 
->  3 , 20 , CRPS, SNN, known,  0.1013606 
->  3 , 30 , RMSE, SNN, known,  0.1764762 
->  3 , 30 , NLL, SNN, known,  -2.250238 
->  3 , 30 , CRPS, SNN, known,  0.09464358 
->  3 , 40 , RMSE, SNN, known,  0.1708618 
->  3 , 40 , NLL, SNN, known,  -2.296507 
->  3 , 40 , CRPS, SNN, known,  0.09172861 
->  3 , 50 , RMSE, SNN, known,  0.1681117 
->  3 , 50 , NLL, SNN, known,  -2.305716 
->  3 , 50 , CRPS, SNN, known,  0.091292 
->  3 , 10 , RMSE, SNN, known,  0.1856508 
->  3 , 10 , NLL, SNN, known,  -2.898379 
->  3 , 10 , CRPS, SNN, known,  0.09526445 
->  3 , 20 , RMSE, SNN, known,  0.1665301 
->  3 , 20 , NLL, SNN, known,  -3.133245 
->  3 , 20 , CRPS, SNN, known,  0.08408456 
->  3 , 30 , RMSE, SNN, known,  0.1580976 
->  3 , 30 , NLL, SNN, known,  -3.445684 
->  3 , 30 , CRPS, SNN, known,  0.08083367 
->  3 , 40 , RMSE, SNN, known,  0.1562491 
->  3 , 40 , NLL, SNN, known,  -3.318878 
->  3 , 40 , CRPS, SNN, known,  0.080063 
->  3 , 50 , RMSE, SNN, known,  0.1596006 
->  3 , 50 , NLL, SNN, known,  -3.320735 
->  3 , 50 , CRPS, SNN, known,  0.08108128 
->  3 , 10 , RMSE, SNN, known,  0.2316811 
->  3 , 10 , NLL, SNN, known,  -2.465248 
->  3 , 10 , CRPS, SNN, known,  0.1150054 
->  3 , 20 , RMSE, SNN, known,  0.200013 
->  3 , 20 , NLL, SNN, known,  -2.724245 
->  3 , 20 , CRPS, SNN, known,  0.1013877 
->  3 , 30 , RMSE, SNN, known,  0.1981462 
->  3 , 30 , NLL, SNN, known,  -2.94357 
->  3 , 30 , CRPS, SNN, known,  0.09850555 
->  3 , 40 , RMSE, SNN, known,  0.1935624 
->  3 , 40 , NLL, SNN, known,  -2.787403 
->  3 , 40 , CRPS, SNN, known,  0.09621492 
->  3 , 50 , RMSE, SNN, known,  0.1948424 
->  3 , 50 , NLL, SNN, known,  -2.863014 
->  3 , 50 , CRPS, SNN, known,  0.09660605 
->  3 , 10 , RMSE, SNN, known,  0.259448 
->  3 , 10 , NLL, SNN, known,  -2.382829 
->  3 , 10 , CRPS, SNN, known,  0.1256822 
->  3 , 20 , RMSE, SNN, known,  0.2193015 
->  3 , 20 , NLL, SNN, known,  -2.797268 
->  3 , 20 , CRPS, SNN, known,  0.1061236 
->  3 , 30 , RMSE, SNN, known,  0.1990886 
->  3 , 30 , NLL, SNN, known,  -2.794643 
->  3 , 30 , CRPS, SNN, known,  0.09915007 
->  3 , 40 , RMSE, SNN, known,  0.1968148 
->  3 , 40 , NLL, SNN, known,  -2.984021 
->  3 , 40 , CRPS, SNN, known,  0.09800033 
->  3 , 50 , RMSE, SNN, known,  0.1926477 
->  3 , 50 , NLL, SNN, known,  -2.888677 
->  3 , 50 , CRPS, SNN, known,  0.09589857 
->  3 , 10 , RMSE, SNN, known,  0.2115179 
->  3 , 10 , NLL, SNN, known,  -2.677751 
->  3 , 10 , CRPS, SNN, known,  0.105093 
->  3 , 20 , RMSE, SNN, known,  0.1896798 
->  3 , 20 , NLL, SNN, known,  -2.874493 
->  3 , 20 , CRPS, SNN, known,  0.09285643 
->  3 , 30 , RMSE, SNN, known,  0.17617 
->  3 , 30 , NLL, SNN, known,  -3.042317 
->  3 , 30 , CRPS, SNN, known,  0.08758726 
->  3 , 40 , RMSE, SNN, known,  0.1680836 
->  3 , 40 , NLL, SNN, known,  -3.119366 
->  3 , 40 , CRPS, SNN, known,  0.08513115 
->  3 , 50 , RMSE, SNN, known,  0.16789 
->  3 , 50 , NLL, SNN, known,  -3.132754 
->  3 , 50 , CRPS, SNN, known,  0.08520898 
->  3 , 10 , RMSE, SNN, known,  0.2160784 
->  3 , 10 , NLL, SNN, known,  -2.779441 
->  3 , 10 , CRPS, SNN, known,  0.1046439 
->  3 , 20 , RMSE, SNN, known,  0.1849985 
->  3 , 20 , NLL, SNN, known,  -3.147069 
->  3 , 20 , CRPS, SNN, known,  0.08981479 
->  3 , 30 , RMSE, SNN, known,  0.1816938 
->  3 , 30 , NLL, SNN, known,  -3.063871 
->  3 , 30 , CRPS, SNN, known,  0.0882216 
->  3 , 40 , RMSE, SNN, known,  0.1778681 
->  3 , 40 , NLL, SNN, known,  -3.069467 
->  3 , 40 , CRPS, SNN, known,  0.08633192 
->  3 , 50 , RMSE, SNN, known,  0.1801946 
->  3 , 50 , NLL, SNN, known,  -3.122442 
->  3 , 50 , CRPS, SNN, known,  0.08732352 
->  3 , 10 , RMSE, SNN, known,  0.232172 
->  3 , 10 , NLL, SNN, known,  -2.608038 
->  3 , 10 , CRPS, SNN, known,  0.112819 
->  3 , 20 , RMSE, SNN, known,  0.1969252 
->  3 , 20 , NLL, SNN, known,  -3.058736 
->  3 , 20 , CRPS, SNN, known,  0.09625662 
->  3 , 30 , RMSE, SNN, known,  0.1865462 
->  3 , 30 , NLL, SNN, known,  -2.909063 
->  3 , 30 , CRPS, SNN, known,  0.09188757 
->  3 , 40 , RMSE, SNN, known,  0.1791234 
->  3 , 40 , NLL, SNN, known,  -2.985783 
->  3 , 40 , CRPS, SNN, known,  0.08921788 
->  3 , 50 , RMSE, SNN, known,  0.1724139 
->  3 , 50 , NLL, SNN, known,  -3.072733 
->  3 , 50 , CRPS, SNN, known,  0.08672111 
->  3 , 10 , RMSE, SNN, known,  0.2134602 
->  3 , 10 , NLL, SNN, known,  -2.702905 
->  3 , 10 , CRPS, SNN, known,  0.1054971 
->  3 , 20 , RMSE, SNN, known,  0.1788816 
->  3 , 20 , NLL, SNN, known,  -2.872421 
->  3 , 20 , CRPS, SNN, known,  0.09042932 
->  3 , 30 , RMSE, SNN, known,  0.1722012 
->  3 , 30 , NLL, SNN, known,  -3.040278 
->  3 , 30 , CRPS, SNN, known,  0.0869183 
->  3 , 40 , RMSE, SNN, known,  0.169388 
->  3 , 40 , NLL, SNN, known,  -3.011684 
->  3 , 40 , CRPS, SNN, known,  0.0858969 
->  3 , 50 , RMSE, SNN, known,  0.1721932 
->  3 , 50 , NLL, SNN, known,  -3.089164 
->  3 , 50 , CRPS, SNN, known,  0.08646335 
->  3 , 10 , RMSE, SNN, known,  0.1911273 
->  3 , 10 , NLL, SNN, known,  -2.894595 
->  3 , 10 , CRPS, SNN, known,  0.0972088 
->  3 , 20 , RMSE, SNN, known,  0.159797 
->  3 , 20 , NLL, SNN, known,  -3.093383 
->  3 , 20 , CRPS, SNN, known,  0.08242158 
->  3 , 30 , RMSE, SNN, known,  0.1531487 
->  3 , 30 , NLL, SNN, known,  -3.230746 
->  3 , 30 , CRPS, SNN, known,  0.07921448 
->  3 , 40 , RMSE, SNN, known,  0.1524286 
->  3 , 40 , NLL, SNN, known,  -3.357236 
->  3 , 40 , CRPS, SNN, known,  0.07899809 
->  3 , 50 , RMSE, SNN, known,  0.1501702 
->  3 , 50 , NLL, SNN, known,  -3.282772 
->  3 , 50 , CRPS, SNN, known,  0.07784323 
->  3 , 10 , RMSE, SNN, known,  0.1961883 
->  3 , 10 , NLL, SNN, known,  -2.75874 
->  3 , 10 , CRPS, SNN, known,  0.09930317 
->  3 , 20 , RMSE, SNN, known,  0.166603 
->  3 , 20 , NLL, SNN, known,  -2.911424 
->  3 , 20 , CRPS, SNN, known,  0.0854388 
->  3 , 30 , RMSE, SNN, known,  0.1625124 
->  3 , 30 , NLL, SNN, known,  -3.238614 
->  3 , 30 , CRPS, SNN, known,  0.08307975 
->  3 , 40 , RMSE, SNN, known,  0.1613627 
->  3 , 40 , NLL, SNN, known,  -2.985158 
->  3 , 40 , CRPS, SNN, known,  0.08271497 
->  3 , 50 , RMSE, SNN, known,  0.1616564 
->  3 , 50 , NLL, SNN, known,  -3.201579 
->  3 , 50 , CRPS, SNN, known,  0.08286345 
+1 , 10 , RMSE, SNN, known,  0.7055567 
+1 , 10 , NLL, SNN, known,  -0.7560109 
+1 , 10 , CRPS, SNN, known,  0.3895651 
+1 , 20 , RMSE, SNN, known,  0.6676525 
+1 , 20 , NLL, SNN, known,  -0.9237027 
+1 , 20 , CRPS, SNN, known,  0.3567791 
+1 , 30 , RMSE, SNN, known,  0.6412275 
+1 , 30 , NLL, SNN, known,  -0.9184906 
+1 , 30 , CRPS, SNN, known,  0.341863 
+1 , 40 , RMSE, SNN, known,  0.6310845 
+1 , 40 , NLL, SNN, known,  -0.9309237 
+1 , 40 , CRPS, SNN, known,  0.3350679 
+1 , 50 , RMSE, SNN, known,  0.6233945 
+1 , 50 , NLL, SNN, known,  -0.9629606 
+1 , 50 , CRPS, SNN, known,  0.3314016 
+1 , 10 , RMSE, SNN, known,  0.6423484 
+1 , 10 , NLL, SNN, known,  -0.9455258 
+1 , 10 , CRPS, SNN, known,  0.3420834 
+1 , 20 , RMSE, SNN, known,  0.605679 
+1 , 20 , NLL, SNN, known,  -1.105806 
+1 , 20 , CRPS, SNN, known,  0.3129236 
+1 , 30 , RMSE, SNN, known,  0.5998499 
+1 , 30 , NLL, SNN, known,  -1.12632 
+1 , 30 , CRPS, SNN, known,  0.3073049 
+1 , 40 , RMSE, SNN, known,  0.5929255 
+1 , 40 , NLL, SNN, known,  -1.149505 
+1 , 40 , CRPS, SNN, known,  0.304404 
+1 , 50 , RMSE, SNN, known,  0.5703218 
+1 , 50 , NLL, SNN, known,  -1.209087 
+1 , 50 , CRPS, SNN, known,  0.2910514 
+1 , 10 , RMSE, SNN, known,  0.6606698 
+1 , 10 , NLL, SNN, known,  -0.7960899 
+1 , 10 , CRPS, SNN, known,  0.3625234 
+1 , 20 , RMSE, SNN, known,  0.6101211 
+1 , 20 , NLL, SNN, known,  -0.943634 
+1 , 20 , CRPS, SNN, known,  0.3247391 
+1 , 30 , RMSE, SNN, known,  0.5818915 
+1 , 30 , NLL, SNN, known,  -0.9625258 
+1 , 30 , CRPS, SNN, known,  0.3097691 
+1 , 40 , RMSE, SNN, known,  0.5839329 
+1 , 40 , NLL, SNN, known,  -0.9725766 
+1 , 40 , CRPS, SNN, known,  0.3096828 
+1 , 50 , RMSE, SNN, known,  0.5703788 
+1 , 50 , NLL, SNN, known,  -1.040987 
+1 , 50 , CRPS, SNN, known,  0.3009229 
+1 , 10 , RMSE, SNN, known,  0.7233363 
+1 , 10 , NLL, SNN, known,  -0.8456702 
+1 , 10 , CRPS, SNN, known,  0.3913676 
+1 , 20 , RMSE, SNN, known,  0.6577589 
+1 , 20 , NLL, SNN, known,  -0.9164062 
+1 , 20 , CRPS, SNN, known,  0.3439199 
+1 , 30 , RMSE, SNN, known,  0.6380595 
+1 , 30 , NLL, SNN, known,  -0.9427583 
+1 , 30 , CRPS, SNN, known,  0.3317072 
+1 , 40 , RMSE, SNN, known,  0.6199587 
+1 , 40 , NLL, SNN, known,  -0.9635809 
+1 , 40 , CRPS, SNN, known,  0.3239345 
+1 , 50 , RMSE, SNN, known,  0.6139215 
+1 , 50 , NLL, SNN, known,  -0.9940803 
+1 , 50 , CRPS, SNN, known,  0.3196002 
+1 , 10 , RMSE, SNN, known,  0.6441332 
+1 , 10 , NLL, SNN, known,  -0.8607159 
+1 , 10 , CRPS, SNN, known,  0.3492956 
+1 , 20 , RMSE, SNN, known,  0.6226119 
+1 , 20 , NLL, SNN, known,  -0.9386691 
+1 , 20 , CRPS, SNN, known,  0.33176 
+1 , 30 , RMSE, SNN, known,  0.5896344 
+1 , 30 , NLL, SNN, known,  -0.9675314 
+1 , 30 , CRPS, SNN, known,  0.3131067 
+1 , 40 , RMSE, SNN, known,  0.5782529 
+1 , 40 , NLL, SNN, known,  -0.9896126 
+1 , 40 , CRPS, SNN, known,  0.3068708 
+1 , 50 , RMSE, SNN, known,  0.576913 
+1 , 50 , NLL, SNN, known,  -0.9946995 
+1 , 50 , CRPS, SNN, known,  0.3041178 
+1 , 10 , RMSE, SNN, known,  0.6645758 
+1 , 10 , NLL, SNN, known,  -0.8483356 
+1 , 10 , CRPS, SNN, known,  0.3592274 
+1 , 20 , RMSE, SNN, known,  0.6728789 
+1 , 20 , NLL, SNN, known,  -0.8866683 
+1 , 20 , CRPS, SNN, known,  0.3547809 
+1 , 30 , RMSE, SNN, known,  0.6302935 
+1 , 30 , NLL, SNN, known,  -0.9429034 
+1 , 30 , CRPS, SNN, known,  0.3311033 
+1 , 40 , RMSE, SNN, known,  0.6124522 
+1 , 40 , NLL, SNN, known,  -0.970229 
+1 , 40 , CRPS, SNN, known,  0.3197263 
+1 , 50 , RMSE, SNN, known,  0.6262403 
+1 , 50 , NLL, SNN, known,  -0.9354167 
+1 , 50 , CRPS, SNN, known,  0.3294014 
+1 , 10 , RMSE, SNN, known,  0.5588332 
+1 , 10 , NLL, SNN, known,  -1.003811 
+1 , 10 , CRPS, SNN, known,  0.2998514 
+1 , 20 , RMSE, SNN, known,  0.5212513 
+1 , 20 , NLL, SNN, known,  -1.129072 
+1 , 20 , CRPS, SNN, known,  0.2769476 
+1 , 30 , RMSE, SNN, known,  0.5144107 
+1 , 30 , NLL, SNN, known,  -1.177659 
+1 , 30 , CRPS, SNN, known,  0.2707055 
+1 , 40 , RMSE, SNN, known,  0.5090199 
+1 , 40 , NLL, SNN, known,  -1.143787 
+1 , 40 , CRPS, SNN, known,  0.2681774 
+1 , 50 , RMSE, SNN, known,  0.5115546 
+1 , 50 , NLL, SNN, known,  -1.153594 
+1 , 50 , CRPS, SNN, known,  0.2692367 
+1 , 10 , RMSE, SNN, known,  0.6571253 
+1 , 10 , NLL, SNN, known,  -0.8147162 
+1 , 10 , CRPS, SNN, known,  0.3624431 
+1 , 20 , RMSE, SNN, known,  0.6217787 
+1 , 20 , NLL, SNN, known,  -0.8511695 
+1 , 20 , CRPS, SNN, known,  0.3399021 
+1 , 30 , RMSE, SNN, known,  0.5996118 
+1 , 30 , NLL, SNN, known,  -0.8659355 
+1 , 30 , CRPS, SNN, known,  0.3260634 
+1 , 40 , RMSE, SNN, known,  0.6029895 
+1 , 40 , NLL, SNN, known,  -0.8935267 
+1 , 40 , CRPS, SNN, known,  0.326151 
+1 , 50 , RMSE, SNN, known,  0.5967781 
+1 , 50 , NLL, SNN, known,  -0.9026835 
+1 , 50 , CRPS, SNN, known,  0.323288 
+1 , 10 , RMSE, SNN, known,  0.698848 
+1 , 10 , NLL, SNN, known,  -0.9120343 
+1 , 10 , CRPS, SNN, known,  0.3794129 
+1 , 20 , RMSE, SNN, known,  0.664117 
+1 , 20 , NLL, SNN, known,  -0.8903581 
+1 , 20 , CRPS, SNN, known,  0.3551103 
+1 , 30 , RMSE, SNN, known,  0.6253215 
+1 , 30 , NLL, SNN, known,  -0.9040497 
+1 , 30 , CRPS, SNN, known,  0.3329131 
+1 , 40 , RMSE, SNN, known,  0.6245005 
+1 , 40 , NLL, SNN, known,  -0.9068759 
+1 , 40 , CRPS, SNN, known,  0.3315624 
+1 , 50 , RMSE, SNN, known,  0.6175591 
+1 , 50 , NLL, SNN, known,  -0.8954088 
+1 , 50 , CRPS, SNN, known,  0.3271556 
+1 , 10 , RMSE, SNN, known,  0.6869519 
+1 , 10 , NLL, SNN, known,  -0.8717957 
+1 , 10 , CRPS, SNN, known,  0.3732214 
+1 , 20 , RMSE, SNN, known,  0.647994 
+1 , 20 , NLL, SNN, known,  -0.8996774 
+1 , 20 , CRPS, SNN, known,  0.3444762 
+1 , 30 , RMSE, SNN, known,  0.6298299 
+1 , 30 , NLL, SNN, known,  -1.045464 
+1 , 30 , CRPS, SNN, known,  0.3320536 
+1 , 40 , RMSE, SNN, known,  0.6252594 
+1 , 40 , NLL, SNN, known,  -1.042994 
+1 , 40 , CRPS, SNN, known,  0.3290287 
+1 , 50 , RMSE, SNN, known,  0.6106037 
+1 , 50 , NLL, SNN, known,  -1.074719 
+1 , 50 , CRPS, SNN, known,  0.322413 
+1 , 10 , RMSE, SNN, known,  0.6185724 
+1 , 10 , NLL, SNN, known,  -0.8786043 
+1 , 10 , CRPS, SNN, known,  0.3410604 
+1 , 20 , RMSE, SNN, known,  0.5616202 
+1 , 20 , NLL, SNN, known,  -1.01267 
+1 , 20 , CRPS, SNN, known,  0.3050947 
+1 , 30 , RMSE, SNN, known,  0.5380242 
+1 , 30 , NLL, SNN, known,  -1.033477 
+1 , 30 , CRPS, SNN, known,  0.2893607 
+1 , 40 , RMSE, SNN, known,  0.543998 
+1 , 40 , NLL, SNN, known,  -1.062622 
+1 , 40 , CRPS, SNN, known,  0.2907838 
+1 , 50 , RMSE, SNN, known,  0.5293912 
+1 , 50 , NLL, SNN, known,  -1.035288 
+1 , 50 , CRPS, SNN, known,  0.2845235 
+1 , 10 , RMSE, SNN, known,  0.5949291 
+1 , 10 , NLL, SNN, known,  -0.9701343 
+1 , 10 , CRPS, SNN, known,  0.3238699 
+1 , 20 , RMSE, SNN, known,  0.5362277 
+1 , 20 , NLL, SNN, known,  -1.022748 
+1 , 20 , CRPS, SNN, known,  0.2860321 
+1 , 30 , RMSE, SNN, known,  0.5302268 
+1 , 30 , NLL, SNN, known,  -1.130018 
+1 , 30 , CRPS, SNN, known,  0.2814573 
+1 , 40 , RMSE, SNN, known,  0.5261971 
+1 , 40 , NLL, SNN, known,  -1.091731 
+1 , 40 , CRPS, SNN, known,  0.2785273 
+1 , 50 , RMSE, SNN, known,  0.5131319 
+1 , 50 , NLL, SNN, known,  -1.123163 
+1 , 50 , CRPS, SNN, known,  0.27167 
+1 , 10 , RMSE, SNN, known,  0.6995771 
+1 , 10 , NLL, SNN, known,  -0.8405361 
+1 , 10 , CRPS, SNN, known,  0.3852121 
+1 , 20 , RMSE, SNN, known,  0.6476329 
+1 , 20 , NLL, SNN, known,  -0.9069348 
+1 , 20 , CRPS, SNN, known,  0.3486744 
+1 , 30 , RMSE, SNN, known,  0.6160994 
+1 , 30 , NLL, SNN, known,  -1.003567 
+1 , 30 , CRPS, SNN, known,  0.3290693 
+1 , 40 , RMSE, SNN, known,  0.6160471 
+1 , 40 , NLL, SNN, known,  -0.9918739 
+1 , 40 , CRPS, SNN, known,  0.3279177 
+1 , 50 , RMSE, SNN, known,  0.5981523 
+1 , 50 , NLL, SNN, known,  -1.020459 
+1 , 50 , CRPS, SNN, known,  0.3190312 
+1 , 10 , RMSE, SNN, known,  0.7638585 
+1 , 10 , NLL, SNN, known,  -0.7226167 
+1 , 10 , CRPS, SNN, known,  0.4257502 
+1 , 20 , RMSE, SNN, known,  0.7500356 
+1 , 20 , NLL, SNN, known,  -0.8274595 
+1 , 20 , CRPS, SNN, known,  0.4093592 
+1 , 30 , RMSE, SNN, known,  0.7015657 
+1 , 30 , NLL, SNN, known,  -0.8499011 
+1 , 30 , CRPS, SNN, known,  0.3787018 
+1 , 40 , RMSE, SNN, known,  0.6899595 
+1 , 40 , NLL, SNN, known,  -0.8531513 
+1 , 40 , CRPS, SNN, known,  0.372369 
+1 , 50 , RMSE, SNN, known,  0.6853603 
+1 , 50 , NLL, SNN, known,  -0.9043655 
+1 , 50 , CRPS, SNN, known,  0.3695743 
+1 , 10 , RMSE, SNN, known,  0.635769 
+1 , 10 , NLL, SNN, known,  -0.8635168 
+1 , 10 , CRPS, SNN, known,  0.3491515 
+1 , 20 , RMSE, SNN, known,  0.5889576 
+1 , 20 , NLL, SNN, known,  -0.9522932 
+1 , 20 , CRPS, SNN, known,  0.3176092 
+1 , 30 , RMSE, SNN, known,  0.5648436 
+1 , 30 , NLL, SNN, known,  -0.9840728 
+1 , 30 , CRPS, SNN, known,  0.3041337 
+1 , 40 , RMSE, SNN, known,  0.5538193 
+1 , 40 , NLL, SNN, known,  -0.9617989 
+1 , 40 , CRPS, SNN, known,  0.2983453 
+1 , 50 , RMSE, SNN, known,  0.5447296 
+1 , 50 , NLL, SNN, known,  -1.029666 
+1 , 50 , CRPS, SNN, known,  0.2916048 
+1 , 10 , RMSE, SNN, known,  0.618343 
+1 , 10 , NLL, SNN, known,  -0.9860939 
+1 , 10 , CRPS, SNN, known,  0.3302711 
+1 , 20 , RMSE, SNN, known,  0.5634253 
+1 , 20 , NLL, SNN, known,  -1.014187 
+1 , 20 , CRPS, SNN, known,  0.2946242 
+1 , 30 , RMSE, SNN, known,  0.540199 
+1 , 30 , NLL, SNN, known,  -1.144369 
+1 , 30 , CRPS, SNN, known,  0.2785919 
+1 , 40 , RMSE, SNN, known,  0.5332686 
+1 , 40 , NLL, SNN, known,  -1.210641 
+1 , 40 , CRPS, SNN, known,  0.2755078 
+1 , 50 , RMSE, SNN, known,  0.5245716 
+1 , 50 , NLL, SNN, known,  -1.196444 
+1 , 50 , CRPS, SNN, known,  0.2722681 
+1 , 10 , RMSE, SNN, known,  0.6918332 
+1 , 10 , NLL, SNN, known,  -0.865431 
+1 , 10 , CRPS, SNN, known,  0.373514 
+1 , 20 , RMSE, SNN, known,  0.6437268 
+1 , 20 , NLL, SNN, known,  -0.9240316 
+1 , 20 , CRPS, SNN, known,  0.341089 
+1 , 30 , RMSE, SNN, known,  0.6210906 
+1 , 30 , NLL, SNN, known,  -1.014643 
+1 , 30 , CRPS, SNN, known,  0.3260221 
+1 , 40 , RMSE, SNN, known,  0.6140387 
+1 , 40 , NLL, SNN, known,  -1.031355 
+1 , 40 , CRPS, SNN, known,  0.322079 
+1 , 50 , RMSE, SNN, known,  0.6014634 
+1 , 50 , NLL, SNN, known,  -1.066574 
+1 , 50 , CRPS, SNN, known,  0.3140499 
+1 , 10 , RMSE, SNN, known,  0.6427959 
+1 , 10 , NLL, SNN, known,  -0.8528302 
+1 , 10 , CRPS, SNN, known,  0.3475623 
+1 , 20 , RMSE, SNN, known,  0.6047967 
+1 , 20 , NLL, SNN, known,  -0.9323528 
+1 , 20 , CRPS, SNN, known,  0.3206076 
+1 , 30 , RMSE, SNN, known,  0.5842665 
+1 , 30 , NLL, SNN, known,  -1.045859 
+1 , 30 , CRPS, SNN, known,  0.3078578 
+1 , 40 , RMSE, SNN, known,  0.5748225 
+1 , 40 , NLL, SNN, known,  -1.044001 
+1 , 40 , CRPS, SNN, known,  0.30405 
+1 , 50 , RMSE, SNN, known,  0.5575535 
+1 , 50 , NLL, SNN, known,  -1.053624 
+1 , 50 , CRPS, SNN, known,  0.2930192 
+1 , 10 , RMSE, SNN, known,  0.6015004 
+1 , 10 , NLL, SNN, known,  -0.9105409 
+1 , 10 , CRPS, SNN, known,  0.3282071 
+1 , 20 , RMSE, SNN, known,  0.5622297 
+1 , 20 , NLL, SNN, known,  -1.008813 
+1 , 20 , CRPS, SNN, known,  0.3007071 
+1 , 30 , RMSE, SNN, known,  0.5486111 
+1 , 30 , NLL, SNN, known,  -1.098527 
+1 , 30 , CRPS, SNN, known,  0.2911343 
+1 , 40 , RMSE, SNN, known,  0.5391757 
+1 , 40 , NLL, SNN, known,  -1.090938 
+1 , 40 , CRPS, SNN, known,  0.2852272 
+1 , 50 , RMSE, SNN, known,  0.5375064 
+1 , 50 , NLL, SNN, known,  -1.14443 
+1 , 50 , CRPS, SNN, known,  0.2833087 
+1 , 10 , RMSE, SNN, known,  0.6588101 
+1 , 10 , NLL, SNN, known,  -0.9002002 
+1 , 10 , CRPS, SNN, known,  0.3603616 
+1 , 20 , RMSE, SNN, known,  0.5998239 
+1 , 20 , NLL, SNN, known,  -1.016588 
+1 , 20 , CRPS, SNN, known,  0.3143885 
+1 , 30 , RMSE, SNN, known,  0.5714321 
+1 , 30 , NLL, SNN, known,  -1.11608 
+1 , 30 , CRPS, SNN, known,  0.2990868 
+1 , 40 , RMSE, SNN, known,  0.5697214 
+1 , 40 , NLL, SNN, known,  -1.084062 
+1 , 40 , CRPS, SNN, known,  0.2971395 
+1 , 50 , RMSE, SNN, known,  0.5739285 
+1 , 50 , NLL, SNN, known,  -1.160724 
+1 , 50 , CRPS, SNN, known,  0.2990778 
+2 , 10 , RMSE, SNN, known,  0.7310793 
+2 , 10 , NLL, SNN, known,  -0.6155793 
+2 , 10 , CRPS, SNN, known,  0.403695 
+2 , 20 , RMSE, SNN, known,  0.730294 
+2 , 20 , NLL, SNN, known,  -0.7277742 
+2 , 20 , CRPS, SNN, known,  0.3969018 
+2 , 30 , RMSE, SNN, known,  0.7152332 
+2 , 30 , NLL, SNN, known,  -0.8096878 
+2 , 30 , CRPS, SNN, known,  0.3822977 
+2 , 40 , RMSE, SNN, known,  0.7227896 
+2 , 40 , NLL, SNN, known,  -0.760022 
+2 , 40 , CRPS, SNN, known,  0.3858161 
+2 , 50 , RMSE, SNN, known,  0.7234427 
+2 , 50 , NLL, SNN, known,  -0.7692186 
+2 , 50 , CRPS, SNN, known,  0.3857357 
+2 , 10 , RMSE, SNN, known,  0.6971382 
+2 , 10 , NLL, SNN, known,  -0.9430914 
+2 , 10 , CRPS, SNN, known,  0.3715441 
+2 , 20 , RMSE, SNN, known,  0.6429878 
+2 , 20 , NLL, SNN, known,  -0.9892556 
+2 , 20 , CRPS, SNN, known,  0.335219 
+2 , 30 , RMSE, SNN, known,  0.6064023 
+2 , 30 , NLL, SNN, known,  -0.9685653 
+2 , 30 , CRPS, SNN, known,  0.3150898 
+2 , 40 , RMSE, SNN, known,  0.5969967 
+2 , 40 , NLL, SNN, known,  -1.020155 
+2 , 40 , CRPS, SNN, known,  0.307639 
+2 , 50 , RMSE, SNN, known,  0.5981104 
+2 , 50 , NLL, SNN, known,  -1.047725 
+2 , 50 , CRPS, SNN, known,  0.3076187 
+2 , 10 , RMSE, SNN, known,  0.677639 
+2 , 10 , NLL, SNN, known,  -0.7060632 
+2 , 10 , CRPS, SNN, known,  0.3798239 
+2 , 20 , RMSE, SNN, known,  0.6718991 
+2 , 20 , NLL, SNN, known,  -0.8552768 
+2 , 20 , CRPS, SNN, known,  0.3668563 
+2 , 30 , RMSE, SNN, known,  0.6295944 
+2 , 30 , NLL, SNN, known,  -0.9210839 
+2 , 30 , CRPS, SNN, known,  0.3392892 
+2 , 40 , RMSE, SNN, known,  0.5909253 
+2 , 40 , NLL, SNN, known,  -0.9263656 
+2 , 40 , CRPS, SNN, known,  0.3169365 
+2 , 50 , RMSE, SNN, known,  0.5817998 
+2 , 50 , NLL, SNN, known,  -0.9485845 
+2 , 50 , CRPS, SNN, known,  0.3110605 
+2 , 10 , RMSE, SNN, known,  0.7678241 
+2 , 10 , NLL, SNN, known,  -0.7122408 
+2 , 10 , CRPS, SNN, known,  0.4210707 
+2 , 20 , RMSE, SNN, known,  0.718926 
+2 , 20 , NLL, SNN, known,  -0.7470309 
+2 , 20 , CRPS, SNN, known,  0.3904708 
+2 , 30 , RMSE, SNN, known,  0.7143365 
+2 , 30 , NLL, SNN, known,  -0.8008756 
+2 , 30 , CRPS, SNN, known,  0.3818 
+2 , 40 , RMSE, SNN, known,  0.7037637 
+2 , 40 , NLL, SNN, known,  -0.8568136 
+2 , 40 , CRPS, SNN, known,  0.3740953 
+2 , 50 , RMSE, SNN, known,  0.714392 
+2 , 50 , NLL, SNN, known,  -0.8059349 
+2 , 50 , CRPS, SNN, known,  0.378826 
+2 , 10 , RMSE, SNN, known,  0.7275224 
+2 , 10 , NLL, SNN, known,  -0.7336039 
+2 , 10 , CRPS, SNN, known,  0.3957871 
+2 , 20 , RMSE, SNN, known,  0.730902 
+2 , 20 , NLL, SNN, known,  -0.7934018 
+2 , 20 , CRPS, SNN, known,  0.393602 
+2 , 30 , RMSE, SNN, known,  0.6877394 
+2 , 30 , NLL, SNN, known,  -0.8684174 
+2 , 30 , CRPS, SNN, known,  0.3631054 
+2 , 40 , RMSE, SNN, known,  0.6433142 
+2 , 40 , NLL, SNN, known,  -0.866346 
+2 , 40 , CRPS, SNN, known,  0.3381767 
+2 , 50 , RMSE, SNN, known,  0.6544117 
+2 , 50 , NLL, SNN, known,  -0.8948665 
+2 , 50 , CRPS, SNN, known,  0.3424276 
+2 , 10 , RMSE, SNN, known,  0.6868603 
+2 , 10 , NLL, SNN, known,  -0.7334275 
+2 , 10 , CRPS, SNN, known,  0.3682223 
+2 , 20 , RMSE, SNN, known,  0.6755988 
+2 , 20 , NLL, SNN, known,  -0.775728 
+2 , 20 , CRPS, SNN, known,  0.366359 
+2 , 30 , RMSE, SNN, known,  0.6516247 
+2 , 30 , NLL, SNN, known,  -0.8537032 
+2 , 30 , CRPS, SNN, known,  0.3471771 
+2 , 40 , RMSE, SNN, known,  0.6459091 
+2 , 40 , NLL, SNN, known,  -0.8462585 
+2 , 40 , CRPS, SNN, known,  0.3403836 
+2 , 50 , RMSE, SNN, known,  0.6447626 
+2 , 50 , NLL, SNN, known,  -0.881548 
+2 , 50 , CRPS, SNN, known,  0.3390047 
+2 , 10 , RMSE, SNN, known,  0.6592916 
+2 , 10 , NLL, SNN, known,  -0.6876766 
+2 , 10 , CRPS, SNN, known,  0.3627929 
+2 , 20 , RMSE, SNN, known,  0.6187466 
+2 , 20 , NLL, SNN, known,  -0.8509211 
+2 , 20 , CRPS, SNN, known,  0.3348493 
+2 , 30 , RMSE, SNN, known,  0.6124121 
+2 , 30 , NLL, SNN, known,  -0.8740369 
+2 , 30 , CRPS, SNN, known,  0.3279563 
+2 , 40 , RMSE, SNN, known,  0.6032481 
+2 , 40 , NLL, SNN, known,  -0.8671567 
+2 , 40 , CRPS, SNN, known,  0.3236815 
+2 , 50 , RMSE, SNN, known,  0.5912191 
+2 , 50 , NLL, SNN, known,  -0.8835437 
+2 , 50 , CRPS, SNN, known,  0.3158552 
+2 , 10 , RMSE, SNN, known,  0.7227446 
+2 , 10 , NLL, SNN, known,  -0.649154 
+2 , 10 , CRPS, SNN, known,  0.4016971 
+2 , 20 , RMSE, SNN, known,  0.6972074 
+2 , 20 , NLL, SNN, known,  -0.754796 
+2 , 20 , CRPS, SNN, known,  0.3784135 
+2 , 30 , RMSE, SNN, known,  0.6774625 
+2 , 30 , NLL, SNN, known,  -0.7894683 
+2 , 30 , CRPS, SNN, known,  0.3634647 
+2 , 40 , RMSE, SNN, known,  0.6624674 
+2 , 40 , NLL, SNN, known,  -0.7924447 
+2 , 40 , CRPS, SNN, known,  0.3553408 
+2 , 50 , RMSE, SNN, known,  0.6313925 
+2 , 50 , NLL, SNN, known,  -0.7934784 
+2 , 50 , CRPS, SNN, known,  0.3403702 
+2 , 10 , RMSE, SNN, known,  0.683394 
+2 , 10 , NLL, SNN, known,  -0.7837304 
+2 , 10 , CRPS, SNN, known,  0.3639619 
+2 , 20 , RMSE, SNN, known,  0.6943229 
+2 , 20 , NLL, SNN, known,  -0.8635056 
+2 , 20 , CRPS, SNN, known,  0.3682212 
+2 , 30 , RMSE, SNN, known,  0.6378697 
+2 , 30 , NLL, SNN, known,  -0.8919859 
+2 , 30 , CRPS, SNN, known,  0.3344269 
+2 , 40 , RMSE, SNN, known,  0.6341413 
+2 , 40 , NLL, SNN, known,  -0.91088 
+2 , 40 , CRPS, SNN, known,  0.3320962 
+2 , 50 , RMSE, SNN, known,  0.6302071 
+2 , 50 , NLL, SNN, known,  -0.9407832 
+2 , 50 , CRPS, SNN, known,  0.3289052 
+2 , 10 , RMSE, SNN, known,  0.6597699 
+2 , 10 , NLL, SNN, known,  -0.7478406 
+2 , 10 , CRPS, SNN, known,  0.363141 
+2 , 20 , RMSE, SNN, known,  0.6883789 
+2 , 20 , NLL, SNN, known,  -0.8073877 
+2 , 20 , CRPS, SNN, known,  0.3684407 
+2 , 30 , RMSE, SNN, known,  0.6468861 
+2 , 30 , NLL, SNN, known,  -0.9021669 
+2 , 30 , CRPS, SNN, known,  0.341119 
+2 , 40 , RMSE, SNN, known,  0.615651 
+2 , 40 , NLL, SNN, known,  -0.939805 
+2 , 40 , CRPS, SNN, known,  0.3233783 
+2 , 50 , RMSE, SNN, known,  0.6005747 
+2 , 50 , NLL, SNN, known,  -0.9502478 
+2 , 50 , CRPS, SNN, known,  0.3163266 
+2 , 10 , RMSE, SNN, known,  0.6906137 
+2 , 10 , NLL, SNN, known,  -0.7107273 
+2 , 10 , CRPS, SNN, known,  0.3783922 
+2 , 20 , RMSE, SNN, known,  0.655445 
+2 , 20 , NLL, SNN, known,  -0.8264001 
+2 , 20 , CRPS, SNN, known,  0.3519689 
+2 , 30 , RMSE, SNN, known,  0.6132056 
+2 , 30 , NLL, SNN, known,  -0.8995993 
+2 , 30 , CRPS, SNN, known,  0.3290502 
+2 , 40 , RMSE, SNN, known,  0.5971201 
+2 , 40 , NLL, SNN, known,  -0.9111986 
+2 , 40 , CRPS, SNN, known,  0.3194863 
+2 , 50 , RMSE, SNN, known,  0.6005228 
+2 , 50 , NLL, SNN, known,  -0.9623686 
+2 , 50 , CRPS, SNN, known,  0.3190667 
+2 , 10 , RMSE, SNN, known,  0.731993 
+2 , 10 , NLL, SNN, known,  -0.7231933 
+2 , 10 , CRPS, SNN, known,  0.401392 
+2 , 20 , RMSE, SNN, known,  0.6691951 
+2 , 20 , NLL, SNN, known,  -0.8944524 
+2 , 20 , CRPS, SNN, known,  0.3527167 
+2 , 30 , RMSE, SNN, known,  0.6584487 
+2 , 30 , NLL, SNN, known,  -1.009966 
+2 , 30 , CRPS, SNN, known,  0.3389501 
+2 , 40 , RMSE, SNN, known,  0.6328895 
+2 , 40 , NLL, SNN, known,  -1.015884 
+2 , 40 , CRPS, SNN, known,  0.3251413 
+2 , 50 , RMSE, SNN, known,  0.6422329 
+2 , 50 , NLL, SNN, known,  -1.04021 
+2 , 50 , CRPS, SNN, known,  0.3310771 
+2 , 10 , RMSE, SNN, known,  0.6454822 
+2 , 10 , NLL, SNN, known,  -0.9277041 
+2 , 10 , CRPS, SNN, known,  0.3438984 
+2 , 20 , RMSE, SNN, known,  0.5942715 
+2 , 20 , NLL, SNN, known,  -0.9550453 
+2 , 20 , CRPS, SNN, known,  0.3117125 
+2 , 30 , RMSE, SNN, known,  0.5540515 
+2 , 30 , NLL, SNN, known,  -1.033138 
+2 , 30 , CRPS, SNN, known,  0.2897786 
+2 , 40 , RMSE, SNN, known,  0.5508738 
+2 , 40 , NLL, SNN, known,  -1.099771 
+2 , 40 , CRPS, SNN, known,  0.2882441 
+2 , 50 , RMSE, SNN, known,  0.5650162 
+2 , 50 , NLL, SNN, known,  -1.037892 
+2 , 50 , CRPS, SNN, known,  0.2947645 
+2 , 10 , RMSE, SNN, known,  0.7499955 
+2 , 10 , NLL, SNN, known,  -0.6904144 
+2 , 10 , CRPS, SNN, known,  0.4135421 
+2 , 20 , RMSE, SNN, known,  0.7100404 
+2 , 20 , NLL, SNN, known,  -0.8359322 
+2 , 20 , CRPS, SNN, known,  0.387813 
+2 , 30 , RMSE, SNN, known,  0.6711344 
+2 , 30 , NLL, SNN, known,  -0.8515838 
+2 , 30 , CRPS, SNN, known,  0.3621133 
+2 , 40 , RMSE, SNN, known,  0.6734851 
+2 , 40 , NLL, SNN, known,  -0.8830175 
+2 , 40 , CRPS, SNN, known,  0.3617859 
+2 , 50 , RMSE, SNN, known,  0.6774987 
+2 , 50 , NLL, SNN, known,  -0.8453596 
+2 , 50 , CRPS, SNN, known,  0.3645337 
+2 , 10 , RMSE, SNN, known,  0.6552791 
+2 , 10 , NLL, SNN, known,  -0.8601512 
+2 , 10 , CRPS, SNN, known,  0.3525691 
+2 , 20 , RMSE, SNN, known,  0.6017951 
+2 , 20 , NLL, SNN, known,  -1.007253 
+2 , 20 , CRPS, SNN, known,  0.3205512 
+2 , 30 , RMSE, SNN, known,  0.5473542 
+2 , 30 , NLL, SNN, known,  -1.014587 
+2 , 30 , CRPS, SNN, known,  0.2898354 
+2 , 40 , RMSE, SNN, known,  0.5367496 
+2 , 40 , NLL, SNN, known,  -1.05275 
+2 , 40 , CRPS, SNN, known,  0.2831851 
+2 , 50 , RMSE, SNN, known,  0.5469331 
+2 , 50 , NLL, SNN, known,  -1.026894 
+2 , 50 , CRPS, SNN, known,  0.2864825 
+2 , 10 , RMSE, SNN, known,  0.6918694 
+2 , 10 , NLL, SNN, known,  -0.7634519 
+2 , 10 , CRPS, SNN, known,  0.3746618 
+2 , 20 , RMSE, SNN, known,  0.6583032 
+2 , 20 , NLL, SNN, known,  -0.8685253 
+2 , 20 , CRPS, SNN, known,  0.3437529 
+2 , 30 , RMSE, SNN, known,  0.6247276 
+2 , 30 , NLL, SNN, known,  -0.8841901 
+2 , 30 , CRPS, SNN, known,  0.3268896 
+2 , 40 , RMSE, SNN, known,  0.6056199 
+2 , 40 , NLL, SNN, known,  -0.9218728 
+2 , 40 , CRPS, SNN, known,  0.3144214 
+2 , 50 , RMSE, SNN, known,  0.5996407 
+2 , 50 , NLL, SNN, known,  -0.978381 
+2 , 50 , CRPS, SNN, known,  0.3119386 
+2 , 10 , RMSE, SNN, known,  0.6629649 
+2 , 10 , NLL, SNN, known,  -0.7458587 
+2 , 10 , CRPS, SNN, known,  0.3624832 
+2 , 20 , RMSE, SNN, known,  0.6819893 
+2 , 20 , NLL, SNN, known,  -0.7733904 
+2 , 20 , CRPS, SNN, known,  0.3705959 
+2 , 30 , RMSE, SNN, known,  0.6426179 
+2 , 30 , NLL, SNN, known,  -0.8399227 
+2 , 30 , CRPS, SNN, known,  0.3440156 
+2 , 40 , RMSE, SNN, known,  0.6279083 
+2 , 40 , NLL, SNN, known,  -0.8178738 
+2 , 40 , CRPS, SNN, known,  0.3341566 
+2 , 50 , RMSE, SNN, known,  0.6157358 
+2 , 50 , NLL, SNN, known,  -0.8556139 
+2 , 50 , CRPS, SNN, known,  0.3285799 
+2 , 10 , RMSE, SNN, known,  0.6962383 
+2 , 10 , NLL, SNN, known,  -0.7795638 
+2 , 10 , CRPS, SNN, known,  0.3795219 
+2 , 20 , RMSE, SNN, known,  0.6699414 
+2 , 20 , NLL, SNN, known,  -0.8372664 
+2 , 20 , CRPS, SNN, known,  0.3534666 
+2 , 30 , RMSE, SNN, known,  0.6262166 
+2 , 30 , NLL, SNN, known,  -0.9097954 
+2 , 30 , CRPS, SNN, known,  0.3266294 
+2 , 40 , RMSE, SNN, known,  0.5980237 
+2 , 40 , NLL, SNN, known,  -0.9449357 
+2 , 40 , CRPS, SNN, known,  0.3111153 
+2 , 50 , RMSE, SNN, known,  0.5993096 
+2 , 50 , NLL, SNN, known,  -0.9564987 
+2 , 50 , CRPS, SNN, known,  0.3122751 
+2 , 10 , RMSE, SNN, known,  0.7425667 
+2 , 10 , NLL, SNN, known,  -0.7071793 
+2 , 10 , CRPS, SNN, known,  0.4052803 
+2 , 20 , RMSE, SNN, known,  0.7025266 
+2 , 20 , NLL, SNN, known,  -0.8487581 
+2 , 20 , CRPS, SNN, known,  0.3734713 
+2 , 30 , RMSE, SNN, known,  0.652104 
+2 , 30 , NLL, SNN, known,  -0.9246321 
+2 , 30 , CRPS, SNN, known,  0.3363485 
+2 , 40 , RMSE, SNN, known,  0.6427278 
+2 , 40 , NLL, SNN, known,  -0.9367158 
+2 , 40 , CRPS, SNN, known,  0.331947 
+2 , 50 , RMSE, SNN, known,  0.6347418 
+2 , 50 , NLL, SNN, known,  -0.946284 
+2 , 50 , CRPS, SNN, known,  0.3264323 
+2 , 10 , RMSE, SNN, known,  0.5825458 
+2 , 10 , NLL, SNN, known,  -0.8362434 
+2 , 10 , CRPS, SNN, known,  0.3144992 
+2 , 20 , RMSE, SNN, known,  0.589973 
+2 , 20 , NLL, SNN, known,  -0.9202894 
+2 , 20 , CRPS, SNN, known,  0.3115939 
+2 , 30 , RMSE, SNN, known,  0.5613476 
+2 , 30 , NLL, SNN, known,  -1.018041 
+2 , 30 , CRPS, SNN, known,  0.2938931 
+2 , 40 , RMSE, SNN, known,  0.5534443 
+2 , 40 , NLL, SNN, known,  -0.9993849 
+2 , 40 , CRPS, SNN, known,  0.2890389 
+2 , 50 , RMSE, SNN, known,  0.553842 
+2 , 50 , NLL, SNN, known,  -0.9906168 
+2 , 50 , CRPS, SNN, known,  0.2890084 
+3 , 10 , RMSE, SNN, known,  0.2213131 
+3 , 10 , NLL, SNN, known,  -2.533149 
+3 , 10 , CRPS, SNN, known,  0.1116837 
+3 , 20 , RMSE, SNN, known,  0.1950169 
+3 , 20 , NLL, SNN, known,  -2.831355 
+3 , 20 , CRPS, SNN, known,  0.09754596 
+3 , 30 , RMSE, SNN, known,  0.1751825 
+3 , 30 , NLL, SNN, known,  -2.937778 
+3 , 30 , CRPS, SNN, known,  0.09021603 
+3 , 40 , RMSE, SNN, known,  0.1714958 
+3 , 40 , NLL, SNN, known,  -3.067384 
+3 , 40 , CRPS, SNN, known,  0.08907229 
+3 , 50 , RMSE, SNN, known,  0.1701406 
+3 , 50 , NLL, SNN, known,  -3.012495 
+3 , 50 , CRPS, SNN, known,  0.08850115 
+3 , 10 , RMSE, SNN, known,  0.2256491 
+3 , 10 , NLL, SNN, known,  -2.622933 
+3 , 10 , CRPS, SNN, known,  0.1053685 
+3 , 20 , RMSE, SNN, known,  0.1917533 
+3 , 20 , NLL, SNN, known,  -3.038932 
+3 , 20 , CRPS, SNN, known,  0.09118132 
+3 , 30 , RMSE, SNN, known,  0.1797803 
+3 , 30 , NLL, SNN, known,  -3.276063 
+3 , 30 , CRPS, SNN, known,  0.08770224 
+3 , 40 , RMSE, SNN, known,  0.1734764 
+3 , 40 , NLL, SNN, known,  -3.135274 
+3 , 40 , CRPS, SNN, known,  0.0859421 
+3 , 50 , RMSE, SNN, known,  0.1692251 
+3 , 50 , NLL, SNN, known,  -3.3072 
+3 , 50 , CRPS, SNN, known,  0.08473343 
+3 , 10 , RMSE, SNN, known,  0.2066936 
+3 , 10 , NLL, SNN, known,  -2.794062 
+3 , 10 , CRPS, SNN, known,  0.101515 
+3 , 20 , RMSE, SNN, known,  0.1737969 
+3 , 20 , NLL, SNN, known,  -3.016705 
+3 , 20 , CRPS, SNN, known,  0.08650114 
+3 , 30 , RMSE, SNN, known,  0.1689955 
+3 , 30 , NLL, SNN, known,  -3.190693 
+3 , 30 , CRPS, SNN, known,  0.08431641 
+3 , 40 , RMSE, SNN, known,  0.1692702 
+3 , 40 , NLL, SNN, known,  -3.277444 
+3 , 40 , CRPS, SNN, known,  0.08480414 
+3 , 50 , RMSE, SNN, known,  0.1681294 
+3 , 50 , NLL, SNN, known,  -3.167178 
+3 , 50 , CRPS, SNN, known,  0.08369026 
+3 , 10 , RMSE, SNN, known,  0.2232317 
+3 , 10 , NLL, SNN, known,  -2.829785 
+3 , 10 , CRPS, SNN, known,  0.1086236 
+3 , 20 , RMSE, SNN, known,  0.2022876 
+3 , 20 , NLL, SNN, known,  -2.960394 
+3 , 20 , CRPS, SNN, known,  0.09702356 
+3 , 30 , RMSE, SNN, known,  0.1904217 
+3 , 30 , NLL, SNN, known,  -3.14018 
+3 , 30 , CRPS, SNN, known,  0.09279661 
+3 , 40 , RMSE, SNN, known,  0.1875133 
+3 , 40 , NLL, SNN, known,  -3.142515 
+3 , 40 , CRPS, SNN, known,  0.09111892 
+3 , 50 , RMSE, SNN, known,  0.1771761 
+3 , 50 , NLL, SNN, known,  -3.102506 
+3 , 50 , CRPS, SNN, known,  0.08826349 
+3 , 10 , RMSE, SNN, known,  0.2099637 
+3 , 10 , NLL, SNN, known,  -2.785581 
+3 , 10 , CRPS, SNN, known,  0.1048071 
+3 , 20 , RMSE, SNN, known,  0.1850698 
+3 , 20 , NLL, SNN, known,  -2.962697 
+3 , 20 , CRPS, SNN, known,  0.09261691 
+3 , 30 , RMSE, SNN, known,  0.1785187 
+3 , 30 , NLL, SNN, known,  -3.089267 
+3 , 30 , CRPS, SNN, known,  0.08957326 
+3 , 40 , RMSE, SNN, known,  0.1739154 
+3 , 40 , NLL, SNN, known,  -3.175549 
+3 , 40 , CRPS, SNN, known,  0.08818024 
+3 , 50 , RMSE, SNN, known,  0.1723523 
+3 , 50 , NLL, SNN, known,  -3.085485 
+3 , 50 , CRPS, SNN, known,  0.08761785 
+3 , 10 , RMSE, SNN, known,  0.2237065 
+3 , 10 , NLL, SNN, known,  -2.724326 
+3 , 10 , CRPS, SNN, known,  0.1091891 
+3 , 20 , RMSE, SNN, known,  0.1929546 
+3 , 20 , NLL, SNN, known,  -3.069469 
+3 , 20 , CRPS, SNN, known,  0.09433878 
+3 , 30 , RMSE, SNN, known,  0.1850964 
+3 , 30 , NLL, SNN, known,  -2.936935 
+3 , 30 , CRPS, SNN, known,  0.09121764 
+3 , 40 , RMSE, SNN, known,  0.1795893 
+3 , 40 , NLL, SNN, known,  -3.083199 
+3 , 40 , CRPS, SNN, known,  0.08905602 
+3 , 50 , RMSE, SNN, known,  0.1732319 
+3 , 50 , NLL, SNN, known,  -3.177269 
+3 , 50 , CRPS, SNN, known,  0.08725436 
+3 , 10 , RMSE, SNN, known,  0.1969709 
+3 , 10 , NLL, SNN, known,  -2.968113 
+3 , 10 , CRPS, SNN, known,  0.09636784 
+3 , 20 , RMSE, SNN, known,  0.1645503 
+3 , 20 , NLL, SNN, known,  -3.234956 
+3 , 20 , CRPS, SNN, known,  0.08393598 
+3 , 30 , RMSE, SNN, known,  0.1702865 
+3 , 30 , NLL, SNN, known,  -3.357926 
+3 , 30 , CRPS, SNN, known,  0.08467795 
+3 , 40 , RMSE, SNN, known,  0.1630367 
+3 , 40 , NLL, SNN, known,  -3.198152 
+3 , 40 , CRPS, SNN, known,  0.08226864 
+3 , 50 , RMSE, SNN, known,  0.162861 
+3 , 50 , NLL, SNN, known,  -3.351449 
+3 , 50 , CRPS, SNN, known,  0.08203755 
+3 , 10 , RMSE, SNN, known,  0.1943716 
+3 , 10 , NLL, SNN, known,  -2.595466 
+3 , 10 , CRPS, SNN, known,  0.101512 
+3 , 20 , RMSE, SNN, known,  0.1730943 
+3 , 20 , NLL, SNN, known,  -2.931922 
+3 , 20 , CRPS, SNN, known,  0.08970674 
+3 , 30 , RMSE, SNN, known,  0.1688373 
+3 , 30 , NLL, SNN, known,  -3.00667 
+3 , 30 , CRPS, SNN, known,  0.08744305 
+3 , 40 , RMSE, SNN, known,  0.1629997 
+3 , 40 , NLL, SNN, known,  -3.05206 
+3 , 40 , CRPS, SNN, known,  0.08539713 
+3 , 50 , RMSE, SNN, known,  0.1638458 
+3 , 50 , NLL, SNN, known,  -3.039564 
+3 , 50 , CRPS, SNN, known,  0.08562409 
+3 , 10 , RMSE, SNN, known,  0.2247167 
+3 , 10 , NLL, SNN, known,  -2.652796 
+3 , 10 , CRPS, SNN, known,  0.1107208 
+3 , 20 , RMSE, SNN, known,  0.1846711 
+3 , 20 , NLL, SNN, known,  -2.90314 
+3 , 20 , CRPS, SNN, known,  0.09331629 
+3 , 30 , RMSE, SNN, known,  0.178524 
+3 , 30 , NLL, SNN, known,  -2.975403 
+3 , 30 , CRPS, SNN, known,  0.09000372 
+3 , 40 , RMSE, SNN, known,  0.1747341 
+3 , 40 , NLL, SNN, known,  -2.910445 
+3 , 40 , CRPS, SNN, known,  0.0883693 
+3 , 50 , RMSE, SNN, known,  0.171575 
+3 , 50 , NLL, SNN, known,  -3.035001 
+3 , 50 , CRPS, SNN, known,  0.08688488 
+3 , 10 , RMSE, SNN, known,  0.2219041 
+3 , 10 , NLL, SNN, known,  -2.719441 
+3 , 10 , CRPS, SNN, known,  0.1111084 
+3 , 20 , RMSE, SNN, known,  0.2060684 
+3 , 20 , NLL, SNN, known,  -2.867837 
+3 , 20 , CRPS, SNN, known,  0.1004907 
+3 , 30 , RMSE, SNN, known,  0.1903094 
+3 , 30 , NLL, SNN, known,  -2.950596 
+3 , 30 , CRPS, SNN, known,  0.09398268 
+3 , 40 , RMSE, SNN, known,  0.1919499 
+3 , 40 , NLL, SNN, known,  -3.007772 
+3 , 40 , CRPS, SNN, known,  0.09349087 
+3 , 50 , RMSE, SNN, known,  0.1909323 
+3 , 50 , NLL, SNN, known,  -2.999647 
+3 , 50 , CRPS, SNN, known,  0.0931724 
+3 , 10 , RMSE, SNN, known,  0.2241891 
+3 , 10 , NLL, SNN, known,  -2.068233 
+3 , 10 , CRPS, SNN, known,  0.1176622 
+3 , 20 , RMSE, SNN, known,  0.1910548 
+3 , 20 , NLL, SNN, known,  -2.267782 
+3 , 20 , CRPS, SNN, known,  0.1013606 
+3 , 30 , RMSE, SNN, known,  0.1764762 
+3 , 30 , NLL, SNN, known,  -2.250238 
+3 , 30 , CRPS, SNN, known,  0.09464358 
+3 , 40 , RMSE, SNN, known,  0.1708618 
+3 , 40 , NLL, SNN, known,  -2.296507 
+3 , 40 , CRPS, SNN, known,  0.09172861 
+3 , 50 , RMSE, SNN, known,  0.1681117 
+3 , 50 , NLL, SNN, known,  -2.305716 
+3 , 50 , CRPS, SNN, known,  0.091292 
+3 , 10 , RMSE, SNN, known,  0.1856508 
+3 , 10 , NLL, SNN, known,  -2.898379 
+3 , 10 , CRPS, SNN, known,  0.09526445 
+3 , 20 , RMSE, SNN, known,  0.1665301 
+3 , 20 , NLL, SNN, known,  -3.133245 
+3 , 20 , CRPS, SNN, known,  0.08408456 
+3 , 30 , RMSE, SNN, known,  0.1580976 
+3 , 30 , NLL, SNN, known,  -3.445684 
+3 , 30 , CRPS, SNN, known,  0.08083367 
+3 , 40 , RMSE, SNN, known,  0.1562491 
+3 , 40 , NLL, SNN, known,  -3.318878 
+3 , 40 , CRPS, SNN, known,  0.080063 
+3 , 50 , RMSE, SNN, known,  0.1596006 
+3 , 50 , NLL, SNN, known,  -3.320735 
+3 , 50 , CRPS, SNN, known,  0.08108128 
+3 , 10 , RMSE, SNN, known,  0.2316811 
+3 , 10 , NLL, SNN, known,  -2.465248 
+3 , 10 , CRPS, SNN, known,  0.1150054 
+3 , 20 , RMSE, SNN, known,  0.200013 
+3 , 20 , NLL, SNN, known,  -2.724245 
+3 , 20 , CRPS, SNN, known,  0.1013877 
+3 , 30 , RMSE, SNN, known,  0.1981462 
+3 , 30 , NLL, SNN, known,  -2.94357 
+3 , 30 , CRPS, SNN, known,  0.09850555 
+3 , 40 , RMSE, SNN, known,  0.1935624 
+3 , 40 , NLL, SNN, known,  -2.787403 
+3 , 40 , CRPS, SNN, known,  0.09621492 
+3 , 50 , RMSE, SNN, known,  0.1948424 
+3 , 50 , NLL, SNN, known,  -2.863014 
+3 , 50 , CRPS, SNN, known,  0.09660605 
+3 , 10 , RMSE, SNN, known,  0.259448 
+3 , 10 , NLL, SNN, known,  -2.382829 
+3 , 10 , CRPS, SNN, known,  0.1256822 
+3 , 20 , RMSE, SNN, known,  0.2193015 
+3 , 20 , NLL, SNN, known,  -2.797268 
+3 , 20 , CRPS, SNN, known,  0.1061236 
+3 , 30 , RMSE, SNN, known,  0.1990886 
+3 , 30 , NLL, SNN, known,  -2.794643 
+3 , 30 , CRPS, SNN, known,  0.09915007 
+3 , 40 , RMSE, SNN, known,  0.1968148 
+3 , 40 , NLL, SNN, known,  -2.984021 
+3 , 40 , CRPS, SNN, known,  0.09800033 
+3 , 50 , RMSE, SNN, known,  0.1926477 
+3 , 50 , NLL, SNN, known,  -2.888677 
+3 , 50 , CRPS, SNN, known,  0.09589857 
+3 , 10 , RMSE, SNN, known,  0.2115179 
+3 , 10 , NLL, SNN, known,  -2.677751 
+3 , 10 , CRPS, SNN, known,  0.105093 
+3 , 20 , RMSE, SNN, known,  0.1896798 
+3 , 20 , NLL, SNN, known,  -2.874493 
+3 , 20 , CRPS, SNN, known,  0.09285643 
+3 , 30 , RMSE, SNN, known,  0.17617 
+3 , 30 , NLL, SNN, known,  -3.042317 
+3 , 30 , CRPS, SNN, known,  0.08758726 
+3 , 40 , RMSE, SNN, known,  0.1680836 
+3 , 40 , NLL, SNN, known,  -3.119366 
+3 , 40 , CRPS, SNN, known,  0.08513115 
+3 , 50 , RMSE, SNN, known,  0.16789 
+3 , 50 , NLL, SNN, known,  -3.132754 
+3 , 50 , CRPS, SNN, known,  0.08520898 
+3 , 10 , RMSE, SNN, known,  0.2160784 
+3 , 10 , NLL, SNN, known,  -2.779441 
+3 , 10 , CRPS, SNN, known,  0.1046439 
+3 , 20 , RMSE, SNN, known,  0.1849985 
+3 , 20 , NLL, SNN, known,  -3.147069 
+3 , 20 , CRPS, SNN, known,  0.08981479 
+3 , 30 , RMSE, SNN, known,  0.1816938 
+3 , 30 , NLL, SNN, known,  -3.063871 
+3 , 30 , CRPS, SNN, known,  0.0882216 
+3 , 40 , RMSE, SNN, known,  0.1778681 
+3 , 40 , NLL, SNN, known,  -3.069467 
+3 , 40 , CRPS, SNN, known,  0.08633192 
+3 , 50 , RMSE, SNN, known,  0.1801946 
+3 , 50 , NLL, SNN, known,  -3.122442 
+3 , 50 , CRPS, SNN, known,  0.08732352 
+3 , 10 , RMSE, SNN, known,  0.232172 
+3 , 10 , NLL, SNN, known,  -2.608038 
+3 , 10 , CRPS, SNN, known,  0.112819 
+3 , 20 , RMSE, SNN, known,  0.1969252 
+3 , 20 , NLL, SNN, known,  -3.058736 
+3 , 20 , CRPS, SNN, known,  0.09625662 
+3 , 30 , RMSE, SNN, known,  0.1865462 
+3 , 30 , NLL, SNN, known,  -2.909063 
+3 , 30 , CRPS, SNN, known,  0.09188757 
+3 , 40 , RMSE, SNN, known,  0.1791234 
+3 , 40 , NLL, SNN, known,  -2.985783 
+3 , 40 , CRPS, SNN, known,  0.08921788 
+3 , 50 , RMSE, SNN, known,  0.1724139 
+3 , 50 , NLL, SNN, known,  -3.072733 
+3 , 50 , CRPS, SNN, known,  0.08672111 
+3 , 10 , RMSE, SNN, known,  0.2134602 
+3 , 10 , NLL, SNN, known,  -2.702905 
+3 , 10 , CRPS, SNN, known,  0.1054971 
+3 , 20 , RMSE, SNN, known,  0.1788816 
+3 , 20 , NLL, SNN, known,  -2.872421 
+3 , 20 , CRPS, SNN, known,  0.09042932 
+3 , 30 , RMSE, SNN, known,  0.1722012 
+3 , 30 , NLL, SNN, known,  -3.040278 
+3 , 30 , CRPS, SNN, known,  0.0869183 
+3 , 40 , RMSE, SNN, known,  0.169388 
+3 , 40 , NLL, SNN, known,  -3.011684 
+3 , 40 , CRPS, SNN, known,  0.0858969 
+3 , 50 , RMSE, SNN, known,  0.1721932 
+3 , 50 , NLL, SNN, known,  -3.089164 
+3 , 50 , CRPS, SNN, known,  0.08646335 
+3 , 10 , RMSE, SNN, known,  0.1911273 
+3 , 10 , NLL, SNN, known,  -2.894595 
+3 , 10 , CRPS, SNN, known,  0.0972088 
+3 , 20 , RMSE, SNN, known,  0.159797 
+3 , 20 , NLL, SNN, known,  -3.093383 
+3 , 20 , CRPS, SNN, known,  0.08242158 
+3 , 30 , RMSE, SNN, known,  0.1531487 
+3 , 30 , NLL, SNN, known,  -3.230746 
+3 , 30 , CRPS, SNN, known,  0.07921448 
+3 , 40 , RMSE, SNN, known,  0.1524286 
+3 , 40 , NLL, SNN, known,  -3.357236 
+3 , 40 , CRPS, SNN, known,  0.07899809 
+3 , 50 , RMSE, SNN, known,  0.1501702 
+3 , 50 , NLL, SNN, known,  -3.282772 
+3 , 50 , CRPS, SNN, known,  0.07784323 
+3 , 10 , RMSE, SNN, known,  0.1961883 
+3 , 10 , NLL, SNN, known,  -2.75874 
+3 , 10 , CRPS, SNN, known,  0.09930317 
+3 , 20 , RMSE, SNN, known,  0.166603 
+3 , 20 , NLL, SNN, known,  -2.911424 
+3 , 20 , CRPS, SNN, known,  0.0854388 
+3 , 30 , RMSE, SNN, known,  0.1625124 
+3 , 30 , NLL, SNN, known,  -3.238614 
+3 , 30 , CRPS, SNN, known,  0.08307975 
+3 , 40 , RMSE, SNN, known,  0.1613627 
+3 , 40 , NLL, SNN, known,  -2.985158 
+3 , 40 , CRPS, SNN, known,  0.08271497 
+3 , 50 , RMSE, SNN, known,  0.1616564 
+3 , 50 , NLL, SNN, known,  -3.201579 
+3 , 50 , CRPS, SNN, known,  0.08286345 
