@@ -38,11 +38,8 @@ if (scene_ID == 1) {
   rm(tmp_vec)
 }
 
-# Scenario 2 is the Himmelblau's function (https://en.wikipedia.org/wiki/Himmelblau%27s_function)
-# defined in the region of [-2.5, 2.5]^2.
-# The values from the Himmelblau's function is normalized to have standard
-# deviation of 1, after which normal noise with standard deviation 0.1 is added.
-# The random field is censored above 0.
+# Scenario 2 is a 2d periodic covariance function over [0, 1]^2.
+# The GP field is censored below 1.
 if (scene_ID == 2) {
   set.seed(123)
   tmp_vec <- seq(from = 0, to = 1, length.out = 100)
@@ -59,7 +56,7 @@ if (scene_ID == 2) {
       exp(-2 * sin(pi * dist_mat_y / period)^2 / range^2) +
       diag(rep(nugget * variance, nrow(locs)))
   }
-  cov_parms <- c(1.0, 0.5, 0.3, 0.01)
+  cov_parms <- c(1.0, 0.5, 0.3, 0.0001)
   # cov_name used for model fitting, not the true covariance model
   cov_name <- "matern15_isotropic"
   covmat <- cov_func(cov_parms, locs)
