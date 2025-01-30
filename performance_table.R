@@ -7,7 +7,7 @@ mtd_cmp_rslt$m[mtd_cmp_rslt$method == "SNN"] <- 30
 mtd_cmp_rslt <- mtd_cmp_rslt[c(1, 6, 2, 3, 4, 5)]
 all_rslt <- rbind(m_cmp_rslt, mtd_cmp_rslt)
 
-score <- "RMSE"
+score <- "CRPS"
 m_vec <- sort(unique(m_cmp_rslt$m))
 m_length <- length(m_vec)
 for (scenario in sort(unique(m_cmp_rslt$scenario))) {
@@ -44,7 +44,7 @@ for (scenario in sort(unique(m_cmp_rslt$scenario))) {
       }
     }
   }
-  cat(sprintf("\\multirow{2}{*}{Case %d}", scenario),
+  cat(sprintf("\\multirow{2}{*}{Scene %d}", scenario),
     sapply(score_vec, FUN = function(x) {
       sprintf("%.2f", x)
     }),
@@ -52,7 +52,7 @@ for (scenario in sort(unique(m_cmp_rslt$scenario))) {
   )
   cat("\\\\\n")
   cat(" ", sapply(score_sd_vec, FUN = function(x) {
-    sprintf("%.4f", x)
+    sprintf("(%.3f)", x)
   }), sep = " & ")
   cat("\\\\\n")
   cat("\\hline\n")
