@@ -10,7 +10,8 @@ set.seed(123)
 scene_ID <- 1
 k <- 1
 m_seq <- seq(from = 10, to = 50, by = 10) # number of nearest neighbors
-reorder <- 0 # 0 no reorder, 1 maximin
+use_maxmin_order <- 0 # 0 no reorder, 1 maximin
+use_snn_order <- 0
 n_samp <- 50 # samples generated for posterior inference
 run_seq_Vecc <- TRUE
 use_parallel <- FALSE
@@ -30,9 +31,9 @@ y_obs[mask_cens] <- NA
 
 # nntmvn ---------------------------------------
 if (run_seq_Vecc) {
-  if (reorder == 0) {
+  if (use_maxmin_order == 0) {
     order <- 1:n
-  } else if (reorder == 1) {
+  } else if (use_maxmin_order == 1) {
     order <- GpGp::order_maxmin(locs)
   }
   y_obs_order <- y_obs[order]
@@ -52,7 +53,7 @@ if (run_seq_Vecc) {
         nntmvn::rtmvn_snn(y_obs_order, cens_lb_order, cens_ub_order,
           mask_cens_order,
           m = m,
-          covmat = covmat_order, locs = locs_order,
+          covmat = covmat_order, locs = locs_order, ordering = use_snn_order,
           seed = i
         )
       }
@@ -62,7 +63,7 @@ if (run_seq_Vecc) {
         nntmvn::rtmvn_snn(y_obs_order, cens_lb_order, cens_ub_order,
           mask_cens_order,
           m = m,
-          covmat = covmat_order, locs = locs_order,
+          covmat = covmat_order, locs = locs_order, ordering = use_snn_order,
           seed = seed_id
         )
       })
@@ -83,27 +84,50 @@ if (run_seq_Vecc) {
     }
     save(time_seq_Vecc, y_samp_seq_Vecc, file = paste0(
       "results/m_cmp_known_SNN_scene",
-      scene_ID, "_m", m, "_order", reorder, "_rep", k, ".RData"
+      scene_ID, "_m", m, "_order", use_snn_order, "_rep", k, ".RData"
     ))
-    cat(
-      "> ", scene_ID, ",", m, ", RMSE, SNN, known, ",
-      sqrt(mean((y[mask_cens] - y_pred_cens_seq_Vecc)^2)), "\n"
-    )
-    sd_cens_seq_Vecc <- apply(y_samp_seq_Vecc, 1, sd)[mask_cens] /
-      sqrt(n_samp)
-    cat(
-      "> ", scene_ID, ",", m, ", NLL, SNN, known, ",
-      -mean(dnorm(y[mask_cens],
-        mean = y_pred_cens_seq_Vecc,
-        sd = sd_cens_seq_Vecc
-      )), "\n"
-    )
-    cat(
-      "> ", scene_ID, ",", m, ", CRPS, SNN, known, ",
-      mean(scoringRules::crps_sample(
-        y = y[mask_cens],
-        dat = y_samp_seq_Vecc[mask_cens, , drop = FALSE]
-      )), "\n"
-    )
+    if (use_snn_order == 0) {
+      cat(
+        "> ", scene_ID, ",", m, ", RMSE, SNN, known, ",
+        sqrt(mean((y[mask_cens] - y_pred_cens_seq_Vecc)^2)), "\n"
+      )
+      sd_cens_seq_Vecc <- apply(y_samp_seq_Vecc, 1, sd)[mask_cens] /
+        sqrt(n_samp)
+      cat(
+        "> ", scene_ID, ",", m, ", NLL, SNN, known, ",
+        -mean(dnorm(y[mask_cens],
+          mean = y_pred_cens_seq_Vecc,
+          sd = sd_cens_seq_Vecc
+        )), "\n"
+      )
+      cat(
+        "> ", scene_ID, ",", m, ", CRPS, SNN, known, ",
+        mean(scoringRules::crps_sample(
+          y = y[mask_cens],
+          dat = y_samp_seq_Vecc[mask_cens, , drop = FALSE]
+        )), "\n"
+      )
+    } else {
+      cat(
+        "> ", scene_ID, ",", m, ", RMSE, SNN_order, known, ",
+        sqrt(mean((y[mask_cens] - y_pred_cens_seq_Vecc)^2)), "\n"
+      )
+      sd_cens_seq_Vecc <- apply(y_samp_seq_Vecc, 1, sd)[mask_cens] /
+        sqrt(n_samp)
+      cat(
+        "> ", scene_ID, ",", m, ", NLL, SNN_order, known, ",
+        -mean(dnorm(y[mask_cens],
+          mean = y_pred_cens_seq_Vecc,
+          sd = sd_cens_seq_Vecc
+        )), "\n"
+      )
+      cat(
+        "> ", scene_ID, ",", m, ", CRPS, SNN_order, known, ",
+        mean(scoringRules::crps_sample(
+          y = y[mask_cens],
+          dat = y_samp_seq_Vecc[mask_cens, , drop = FALSE]
+        )), "\n"
+      )
+    }
   }
 }

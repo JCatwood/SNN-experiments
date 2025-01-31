@@ -9,7 +9,8 @@ rm(list = ls())
 set.seed(123)
 scene_ID <- 1
 m <- 30 # number of nearest neighbors
-reorder <- 0 # 0 no reorder, 1 maximin
+use_maxmin_order <- 0 # 0 no reorder, 1 maximin
+use_snn_order <- 0
 n_samp <- 50 # samples generated for posterior inference
 run_SNN <- TRUE
 run_VT <- TRUE
@@ -32,9 +33,9 @@ y_obs[mask_cens] <- NA
 
 # nntmvn ---------------------------------------
 if (run_SNN) {
-  if (reorder == 0) {
+  if (use_maxmin_order == 0) {
     order <- 1:n
-  } else if (reorder == 1) {
+  } else if (use_maxmin_order == 1) {
     order <- GpGp::order_maxmin(locs)
   }
   y_obs_order <- y_obs[order]
@@ -53,7 +54,7 @@ if (run_SNN) {
       nntmvn::rtmvn_snn(y_obs_order, cens_lb_order, cens_ub_order,
         mask_cens_order,
         m = m,
-        covmat = covmat_order, locs = locs_order,
+        covmat = covmat_order, locs = locs_order, ordering = use_snn_order,
         seed = i
       )
     }
@@ -63,7 +64,7 @@ if (run_SNN) {
       nntmvn::rtmvn_snn(y_obs_order, cens_lb_order, cens_ub_order,
         mask_cens_order,
         m = m,
-        covmat = covmat_order, locs = locs_order,
+        covmat = covmat_order, locs = locs_order, ordering = use_snn_order,
         seed = seed_id
       )
     })
@@ -84,7 +85,7 @@ if (run_SNN) {
   }
   save(time_SNN, y_samp_SNN, file = paste0(
     "results/samp_cmp_known_SNN_scene",
-    scene_ID, "_m", m, "_order", reorder, "_rep", k, ".RData"
+    scene_ID, "_m", m, "_order", use_snn_order, "_rep", k, ".RData"
   ))
   cat(
     "> ", scene_ID, ", RMSE, SNN, known, ",
@@ -291,7 +292,7 @@ if (plot_heatmap) {
   library(fields)
   load(paste0(
     "results/samp_cmp_known_SNN_scene",
-    scene_ID, "_m", m, "_order", reorder, "_rep", k, ".RData"
+    scene_ID, "_m", m, "_order", use_snn_order, "_rep", k, ".RData"
   ))
   load(paste0("results/samp_cmp_known_VT_scene", scene_ID, "_rep", k, ".RData"))
   load(paste0("results/samp_cmp_known_TN_scene", scene_ID, "_rep", k, ".RData"))
@@ -308,7 +309,7 @@ if (plot_heatmap) {
   pdf(
     file = paste0(
       "plots/samp_cmp_known_SNN_scene", scene_ID, "_m", m,
-      "_order", reorder, ".pdf"
+      "_order", use_snn_order, ".pdf"
     ),
     width = 5, height = 5
   )
