@@ -60,7 +60,7 @@ for (n_sub in n_vec) {
   }
   time_end <- Sys.time()
   time_df[n_ind, 1] <- difftime(time_end, time_bgn, units = "secs")[[1]]
-  
+
   # update misc
   n_ind <- n_ind + 1
 }
@@ -83,8 +83,8 @@ if (sum(is.na(time_df[, 2])) > 0) {
 }
 colnames(time_df) <- c("n", "SNN")
 time_df <- pivot_longer(time_df, c(2:(n_mtd + 1)),
-                        names_to = "method",
-                        values_to = "time"
+  names_to = "method",
+  values_to = "time"
 )
 ggplot(time_df, aes(x = n, y = time)) +
   geom_line(linewidth = 2, color = "#00BFC4", linetype = "longdash") +
