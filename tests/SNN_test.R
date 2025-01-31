@@ -28,7 +28,7 @@ n <- nrow(locs)
 m <- 30
 range_parm <- 0.1
 nu_parm <- 1.5
-levl_censor <- rep(1.0, n)
+levl_censor <- rnorm(n)
 covmat <- fields::Matern(as.matrix(dist(locs)),
   range = range_parm,
   nu = nu_parm
@@ -73,7 +73,7 @@ registerDoParallel(cl)
 y_samp_SNN <- foreach(i = 1:n_samp, .packages = c("nntmvn")) %dopar% {
   rtmvn_snn(y_obs, rep(-Inf, n), levl_censor, mask_cens,
     m = m,
-    covmat = covmat, seed = i
+    covmat = covmat, ordering = 1, seed = i
   )
 }
 stopCluster(cl)
@@ -100,6 +100,8 @@ cond_mean_cens <- as.vector(covmat[mask_cens, !mask_cens] %*%
   y[!mask_cens])
 cond_covmat_cens <- covmat[mask_cens, mask_cens] - covmat[mask_cens, !mask_cens] %*%
   solve(covmat[!mask_cens, !mask_cens]) %*% covmat[!mask_cens, mask_cens]
+cond_covmat_cens[lower.tri(cond_covmat_cens)] <-
+  t(cond_covmat_cens)[lower.tri(cond_covmat_cens)]
 y_cens_samp_MET <- t(TruncatedNormal::rtmvnorm(n_samp,
   mu = cond_mean_cens, sigma = cond_covmat_cens,
   lb = rep(-Inf, n_cens),
