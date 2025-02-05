@@ -57,3 +57,30 @@ for (scenario in sort(unique(m_cmp_rslt$scenario))) {
   cat("\\\\\n")
   cat("\\hline\n")
 }
+
+score_vec <- numeric(m_length)
+score_sd_vec <- numeric(m_length)
+for (method in c("SNN", "SNN_order_desc", "SNN_order_ascd")) {
+  ind <- 1
+  for (m in m_vec) {
+    mask <- m_cmp_rslt$scenario == 3 & m_cmp_rslt$m == m &
+      m_cmp_rslt$score == score & m_cmp_rslt$cov_kernel == "known" &
+      m_cmp_rslt$method == method
+    mask[is.na(mask)] <- FALSE
+    score_vec[ind] <- mean(m_cmp_rslt$value[mask])
+    score_sd_vec[ind] <- sd(m_cmp_rslt$value[mask]) / sqrt(sum(mask))
+    ind <- ind + 1
+  }
+  cat(
+    sapply(score_vec, FUN = function(x) {
+      sprintf("%.3f", x)
+    }),
+    sep = " & "
+  )
+  cat("\\\\\n")
+  cat(" ", sapply(score_sd_vec, FUN = function(x) {
+    sprintf("(%.4f)", x)
+  }), sep = " & ")
+  cat("\\\\\n")
+  cat("\\hline\n")
+}
