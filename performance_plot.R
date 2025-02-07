@@ -1,0 +1,105 @@
+m_cmp_rslt <- read.table("m_cmp.csv", header = FALSE, sep = ",")
+mtd_cmp_rslt <- read.table("mtd_cmp.csv", header = FALSE, sep = ",")
+colnames(m_cmp_rslt) <- c("scenario", "m", "score", "method", "cov_kernel", "value")
+colnames(mtd_cmp_rslt) <- c("scenario", "score", "method", "cov_kernel", "value")
+mtd_cmp_rslt$m <- NA
+mtd_cmp_rslt$m[mtd_cmp_rslt$method == "SNN"] <- 30
+mtd_cmp_rslt <- mtd_cmp_rslt[c(1, 6, 2, 3, 4, 5)]
+all_rslt <- rbind(m_cmp_rslt, mtd_cmp_rslt)
+all_rslt$submethod <- all_rslt$method
+ind_SNN <- which(all_rslt$method == "SNN")
+all_rslt$submethod[ind_SNN] <- paste0(
+  "SNN",
+  "[", all_rslt$m[ind_SNN], "]"
+)
+ind_SNN_order_desc <- which(all_rslt$method == "SNN_order_desc")
+all_rslt$submethod[ind_SNN_order_desc] <- paste0(
+  "SNN",
+  "[", all_rslt$m[ind_SNN_order_desc], "]^1"
+)
+ind_VT <- which(all_rslt$method == "VT")
+all_rslt$submethod[ind_VT] <- "VMET[30]"
+
+all_rslt <- all_rslt[!all_rslt$method == "SNN_order_ascd", ]
+subset_mask <- all_rslt$score == "RMSE" & all_rslt$scenario == 3
+subset_rslt <- all_rslt[subset_mask, , drop = FALSE]
+ggplot(data = subset_rslt, mapping = aes(x = submethod, y = value)) +
+  geom_boxplot(mapping = aes(fill = method), alpha = 0.5)
+
+score <- "CRPS"
+m_vec <- sort(unique(m_cmp_rslt$m))
+m_length <- length(m_vec)
+for (scenario in sort(unique(m_cmp_rslt$scenario))) {
+  score_vec <- m_length + 4
+  score_sd_vec <- m_length + 4
+  ind <- 1
+  for (cov_kernel in c("known", "unknown")) {
+    if (cov_kernel == "known") {
+      for (method in c("VT", "TN", "SNN")) {
+        if (method == "SNN") {
+          for (m in m_vec) {
+            mask <- all_rslt$scenario == scenario & all_rslt$m == m &
+              all_rslt$score == score & all_rslt$cov_kernel == cov_kernel
+            mask[is.na(mask)] <- FALSE
+            score_vec[ind] <- mean(all_rslt$value[mask])
+            score_sd_vec[ind] <- sd(all_rslt$value[mask]) / sqrt(sum(mask))
+            ind <- ind + 1
+          }
+        } else {
+          mask <- all_rslt$scenario == scenario & all_rslt$method == method &
+            all_rslt$score == score & all_rslt$cov_kernel == cov_kernel
+          score_vec[ind] <- mean(all_rslt$value[mask])
+          score_sd_vec[ind] <- sd(all_rslt$value[mask]) / sqrt(sum(mask))
+          ind <- ind + 1
+        }
+      }
+    } else {
+      for (method in c("CB", "SNN")) {
+        mask <- all_rslt$scenario == scenario & all_rslt$method == method &
+          all_rslt$score == score & all_rslt$cov_kernel == cov_kernel
+        score_vec[ind] <- mean(all_rslt$value[mask])
+        score_sd_vec[ind] <- sd(all_rslt$value[mask]) / sqrt(sum(mask))
+        ind <- ind + 1
+      }
+    }
+  }
+  cat(sprintf("\\multirow{2}{*}{Scene %d}", scenario),
+    sapply(score_vec, FUN = function(x) {
+      sprintf("%.2f", x)
+    }),
+    sep = " & "
+  )
+  cat("\\\\\n")
+  cat(" ", sapply(score_sd_vec, FUN = function(x) {
+    sprintf("(%.3f)", x)
+  }), sep = " & ")
+  cat("\\\\\n")
+  cat("\\hline\n")
+}
+
+score_vec <- numeric(m_length)
+score_sd_vec <- numeric(m_length)
+for (method in c("SNN", "SNN_order_desc", "SNN_order_ascd")) {
+  ind <- 1
+  for (m in m_vec) {
+    mask <- m_cmp_rslt$scenario == 3 & m_cmp_rslt$m == m &
+      m_cmp_rslt$score == score & m_cmp_rslt$cov_kernel == "known" &
+      m_cmp_rslt$method == method
+    mask[is.na(mask)] <- FALSE
+    score_vec[ind] <- mean(m_cmp_rslt$value[mask])
+    score_sd_vec[ind] <- sd(m_cmp_rslt$value[mask]) / sqrt(sum(mask))
+    ind <- ind + 1
+  }
+  cat(
+    sapply(score_vec, FUN = function(x) {
+      sprintf("%.3f", x)
+    }),
+    sep = " & "
+  )
+  cat("\\\\\n")
+  cat(" ", sapply(score_sd_vec, FUN = function(x) {
+    sprintf("(%.4f)", x)
+  }), sep = " & ")
+  cat("\\\\\n")
+  cat("\\hline\n")
+}
