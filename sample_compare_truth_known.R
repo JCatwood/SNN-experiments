@@ -51,7 +51,7 @@ if (run_SNN) {
     cl <- makeCluster(ncores)
     registerDoParallel(cl)
     y_samp_SNN_order <- foreach(i = 1:n_samp, .packages = c("nntmvn")) %dopar% {
-      nntmvn::rtmvn_snn(y_obs_order, cens_lb_order, cens_ub_order,
+      nntmvn::rptmvn(y_obs_order, cens_lb_order, cens_ub_order,
         mask_cens_order,
         m = m,
         covmat = covmat_order, locs = locs_order, ordering = use_snn_order,
@@ -61,7 +61,7 @@ if (run_SNN) {
     stopCluster(cl)
   } else {
     y_samp_SNN_order <- lapply(1:n_samp, function(seed_id) {
-      nntmvn::rtmvn_snn(y_obs_order, cens_lb_order, cens_ub_order,
+      nntmvn::rptmvn(y_obs_order, cens_lb_order, cens_ub_order,
         mask_cens_order,
         m = m,
         covmat = covmat_order, locs = locs_order, ordering = use_snn_order,
