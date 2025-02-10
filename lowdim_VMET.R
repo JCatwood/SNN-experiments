@@ -11,7 +11,7 @@ tmp_vec <- seq(from = 0.025, to = 0.975, by = 0.05)
 locs <- as.matrix(expand.grid(tmp_vec, tmp_vec))
 rm(tmp_vec)
 n <- nrow(locs)
-m <- 50
+m <- 30
 range_parm <- 0.1
 nu_parm <- 1.5
 covmat <- fields::Matern(as.matrix(dist(locs)), range = range_parm, nu = nu_parm)
@@ -41,6 +41,7 @@ y_cens_samp_MET <- t(TruncatedNormal::rtmvnorm(50,
   lb = rep(-Inf, n_cens),
   ub = levl_censor[mask_cens]
 ))
+# plot ---------------------------
 plot(y[mask_cens], rowMeans(y_cens_samp_MET),
   xlab = "true y at censored locs",
   ylab = "predicted y by MET",
