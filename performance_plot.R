@@ -9,7 +9,7 @@ mtd_cmp_rslt$m <- NA
 mtd_cmp_rslt$m[mtd_cmp_rslt$method == "SNN"] <- 30
 mtd_cmp_rslt <- mtd_cmp_rslt[c(1, 6, 2, 3, 4, 5)]
 all_rslt <- rbind(m_cmp_rslt, mtd_cmp_rslt)
-all_rslt <- all_rslt[!all_rslt$method == "SNN_order_ascd", ]  # remove order_ascd
+all_rslt <- all_rslt[!all_rslt$method == "SNN_order_ascd", ] # remove order_ascd
 all_rslt$submethod <- all_rslt$method
 ind_SNN <- which(all_rslt$method %in% c("SNN", "SNN_order_desc", "SNN_order_maximin"))
 all_rslt$submethod[ind_SNN] <- paste0(
