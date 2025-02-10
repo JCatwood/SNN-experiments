@@ -9,16 +9,12 @@ mtd_cmp_rslt$m <- NA
 mtd_cmp_rslt$m[mtd_cmp_rslt$method == "SNN"] <- 30
 mtd_cmp_rslt <- mtd_cmp_rslt[c(1, 6, 2, 3, 4, 5)]
 all_rslt <- rbind(m_cmp_rslt, mtd_cmp_rslt)
+all_rslt <- all_rslt[!all_rslt$method == "SNN_order_ascd", ]  # remove order_ascd
 all_rslt$submethod <- all_rslt$method
-ind_SNN <- which(all_rslt$method == "SNN")
+ind_SNN <- which(all_rslt$method %in% c("SNN", "SNN_order_desc", "SNN_order_maximin"))
 all_rslt$submethod[ind_SNN] <- paste0(
   "SNN",
   "[", all_rslt$m[ind_SNN], "]"
-)
-ind_SNN_order_desc <- which(all_rslt$method == "SNN_order_desc")
-all_rslt$submethod[ind_SNN_order_desc] <- paste0(
-  "SNN",
-  "[", all_rslt$m[ind_SNN_order_desc], "]^1"
 )
 ind_VT <- which(all_rslt$method == "VT")
 all_rslt$submethod[ind_VT] <- "VMET[30]"
@@ -26,12 +22,12 @@ ind_TN <- which(all_rslt$method == "TN")
 all_rslt$submethod[ind_TN] <- "MET"
 ind_CB <- which(all_rslt$method == "CB")
 all_rslt$submethod[ind_CB] <- "CSB"
-all_rslt <- all_rslt[!all_rslt$method == "SNN_order_ascd", ]
+
 m_vec <- sort(unique(m_cmp_rslt$m))
 m_length <- length(m_vec)
 
 score <- "RMSE"
-order <- NULL # c(NULL, "desc", "maximin")
+order <- "maximin" # c(NULL, "desc", "maximin")
 if (is.null(order)) {
   mtd_vec <- c("CB", "SNN", "VT", "TN")
 } else {
