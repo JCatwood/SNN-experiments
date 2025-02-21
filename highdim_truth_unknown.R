@@ -8,8 +8,9 @@ library(scoringRules)
 rm(list = ls())
 set.seed(123)
 scene_ID <- 1
+k <- 1
 m <- 30 # number of nearest neighbors
-reorder <- 0 # 0 no reorder, 1 maximin
+reorder <- 1 # 0 no reorder, 1 maximin
 n_samp <- 50 # samples generated for posterior inference
 subset_size <- 2500
 run_est_SNN <- TRUE
@@ -17,10 +18,10 @@ run_CB <- TRUE
 use_parallel <- FALSE
 plot_heatmap <- FALSE
 args <- commandArgs(trailingOnly = TRUE)
+# use command line args when running in batch on clusters
 if (length(args) > 0) {
   k <- as.integer(args[1]) # k is the index for GP realizations
-} else {
-  k <- 1
+  scene_ID <- as.integer(args[2]) # simulation scenario ID
 }
 # CensSpBayes
 n_burn <- 20000
@@ -196,21 +197,28 @@ if (run_est_SNN) {
       scene_ID, "_m", m, "_order", reorder, "_subset", subset_size, "_rep", k, ".RData"
     )
   )
+  if (order == 0) {
+    SNN_name <- "SNN"
+  } else if (order == 1) {
+    SNN_name <- "SNN_order_maximin"
+  } else {
+    stop("Unknown order\n")
+  }
   cat(
-    "> ", scene_ID, ", RMSE, SNN, unknown, ",
+    "> ", scene_ID, ", RMSE,", SNN_name, ", unknown, ",
     sqrt(mean((y[mask_cens] - y_pred_cens_est_SNN)^2)), "\n"
   )
   sd_cens_est_SNN <- apply(y_samp_est_SNN, 1, sd)[mask_cens] /
     sqrt(n_samp)
   cat(
-    "> ", scene_ID, ", NLL, SNN, unknown, ",
+    "> ", scene_ID, ", RMSE,", SNN_name, ", unknown, ",
     -mean(dnorm(y[mask_cens],
       mean = y_pred_cens_est_SNN,
       sd = sd_cens_est_SNN
     )), "\n"
   )
   cat(
-    "> ", scene_ID, ", CRPS, SNN, unknown, ",
+    "> ", scene_ID, ", RMSE,", SNN_name, ", unknown, ",
     mean(scoringRules::crps_sample(
       y = y[mask_cens],
       dat = y_samp_est_SNN[mask_cens, , drop = FALSE]
