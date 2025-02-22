@@ -197,12 +197,12 @@ if (run_est_SNN) {
       scene_ID, "_m", m, "_order", reorder, "_subset", subset_size, "_rep", k, ".RData"
     )
   )
-  if (order == 0) {
+  if (reorder == 0) {
     SNN_name <- "SNN"
-  } else if (order == 1) {
+  } else if (reorder == 1) {
     SNN_name <- "SNN_order_maximin"
   } else {
-    stop("Unknown order\n")
+    stop("Unknown reorder\n")
   }
   cat(
     "> ", scene_ID, ", RMSE,", SNN_name, ", unknown, ",
@@ -211,14 +211,14 @@ if (run_est_SNN) {
   sd_cens_est_SNN <- apply(y_samp_est_SNN, 1, sd)[mask_cens] /
     sqrt(n_samp)
   cat(
-    "> ", scene_ID, ", RMSE,", SNN_name, ", unknown, ",
+    "> ", scene_ID, ", NLL,", SNN_name, ", unknown, ",
     -mean(dnorm(y[mask_cens],
       mean = y_pred_cens_est_SNN,
       sd = sd_cens_est_SNN
     )), "\n"
   )
   cat(
-    "> ", scene_ID, ", RMSE,", SNN_name, ", unknown, ",
+    "> ", scene_ID, ", CRPS,", SNN_name, ", unknown, ",
     mean(scoringRules::crps_sample(
       y = y[mask_cens],
       dat = y_samp_est_SNN[mask_cens, , drop = FALSE]
