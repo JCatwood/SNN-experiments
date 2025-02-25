@@ -29,8 +29,8 @@ levl_censor <- rep(1.0, n)
 mask_cens <- y < levl_censor
 ind_cens <- which(mask_cens)
 n_cens <- length(ind_cens)
-burn <- 2000
-iter <- 2250
+burn <- 5000
+iter <- 6000
 thin <- 5
 n_samp <- floor((iter - burn) / thin)
 
@@ -64,8 +64,8 @@ for (i in 1:6) {
   )
   ggplot(data = mydf, mapping = aes(x = x, y = y)) +
     geom_point(size = 1) +
-    scale_x_continuous(name = "MCMC sample index after burn-in and thinning") +
-    scale_y_continuous(name = paste0(i, "-th censored response")) +
+    scale_x_continuous(name = "Index after burn-in and thinning") +
+    scale_y_continuous(name = "MCMC samples") +
     theme(
       text = element_text(size = 14),
       plot.title = element_blank()
