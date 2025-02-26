@@ -1,0 +1,61 @@
+---
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 80), tidy = TRUE)
+```
+
+## Overview
+
+This document provides guidance on installing the dependencies for as well as running the experiments that can replicate the results in **Scalable Sampling of Truncated Multivariate Normals Using Sequential Nearest-Neighbor Approximation**.
+
+## Installing Dependencies
+
+Most of our dependencies are on CRAN, with only one exception. Please change `eval` to `TRUE` if you need to install the dependencies.
+```{r, eval=FALSE, message=FALSE, results='hide'}
+CRAN_pkg_names <- c("ggplot2", "fields", "scoringRules", "VeccTMVN", "sf", "spData", "GpGp", "nntmvn", "doParallel", "TruncatedNormal", "RColorBrewer", "autoimage", "mvtnorm", "RANN", "scales", "R.utils", "tidyr", "devtools")
+Git_pkg_name <- "CensSpBayes"
+Git_pkg_link <- "SumanM47/CensSpBayes"
+for (pkg_name in CRAN_pkg_names) {
+  install.packages(pkg_name, repos='http://cran.us.r-project.org')
+}
+```
+
+The package `CensSpBayes` is not on CRAN. To install `CensSpBayes`, you need to first install [`INLA`](https://www.r-inla.org/download-install). The procedure for installing `INLA` depends on your operating system. There might also be several dependencies for `INLA` that cannot be installed through R.
+```{r, eval=FALSE, message=FALSE, results='hide'}
+library(devtools)
+Git_pkg_name <- "CensSpBayes"
+Git_pkg_link <- "SumanM47/CensSpBayes"
+devtools::install_github(Git_pkg_link)
+```
+
+In fact, I could not install INLA on my MacOS, for which the `create_inla_mats` function cannot be called. The experiments involving `CensSpBayes` were run on a Linux system.
+
+## Low Dimensional Experiments in Section 3
+
+To replicate the results shown in Figure 1 and Table 1, run `lowdim_SNN.R`, `lowdim_SNN.R`, and `lowdim_SNN.R`.
+
+To replicate the time growth curve, please run `time_compare.R` and `time_SNN.R`. Note that the reported times may be different from those shown in Figure 2.
+
+## Diagnostic Plot for CSB
+
+The diagnostic plot for CSB, shown in Figure D.1 is produced by running `CSB_diagnosis.R`. Note that the successful installation of `CensSpBayes` and `INLA` is required.
+
+## High Dimensional Experiments in Section 4
+
+Figures 3 as well as E.2, E.3, E.4 are each obtained by running `highdim_truth_known.R` and `highdim_truth_unknown.R` for 60 times each. Specifically, 
+
+- Figure 3 and E.2 need the results from 1) running `highdim_truth_known.R` with `use_snn_order` set to 2, `scene_ID` sequentially set to 1, 2, and 3, and `k` sequentially set to $1, \ldots, 20$, which amount to a total of 60 runs and 2) running `highdim_truth_unknown.R` with `reorder` set to 1, `scene_ID` sequentially set to 1, 2, and 3, and `k` sequentially set to $1, \ldots, 20$, which amount to a total of 60 runs 
+- Figure E.3 and E.4 need the results from 1) running `highdim_truth_known.R` with `use_snn_order` set to 0, `scene_ID` sequentially set to 1, 2, and 3, and `k` sequentially set to $1, \ldots, 20$, which amount to a total of 60 runs and 2) running `highdim_truth_unknown.R` with `reorder` set to 0, `scene_ID` sequentially set to 1, 2, and 3, and `k` sequentially set to $1, \ldots, 20$, which amount to a total of 60 runs 
+
+The outputs from these runs were consolidated into `mtd_cmp.csv`. 
+
+Figure E.5 is based on the results by running `m_compare_truth_known.R` for 180 times, corresponding to `use_snn_order` set to 0, 1, and 2; `scene_ID` set to 1, 2, and 3; and `k` set to $1, \ldots, 20$. The results were consolidated into `m_cmp.csv`.
+
+Notice that the data simulation was done only once and the simulated data is stored in the `data` folder.
+
+Each run of `highdim_truth_known.R` and `highdim_truth_unknown.R` will produce one set of samples and the corresponding heatmaps. From the many runs of `highdim_truth_known.R` and `highdim_truth_unknown.R`, a randomly chosen set of heatmaps was used as Figure~4.
+
+
