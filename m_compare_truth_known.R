@@ -10,7 +10,6 @@ set.seed(123)
 scene_ID <- 1
 k <- 1
 m_seq <- seq(from = 10, to = 50, by = 10) # number of nearest neighbors
-use_maxmin_order <- 0 # 0 no reorder, 1 maximin
 use_snn_order <- 0
 n_samp <- 50 # samples generated for posterior inference
 run_seq_Vecc <- TRUE
@@ -31,11 +30,7 @@ y_obs[mask_cens] <- NA
 
 # nntmvn ---------------------------------------
 if (run_seq_Vecc) {
-  if (use_maxmin_order == 0) {
-    order <- 1:n
-  } else if (use_maxmin_order == 1) {
-    order <- GpGp::order_maxmin(locs)
-  }
+  order <- 1:n
   y_obs_order <- y_obs[order]
   cens_ub_order <- cens_ub[order]
   cens_lb_order <- cens_lb[order]
