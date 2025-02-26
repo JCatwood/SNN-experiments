@@ -171,7 +171,8 @@ if (run_seq_Vecc) {
     nntmvn::rtmvn(
       cens_lb = rep(-Inf, n_cens) - cond_mean_TX_cens,
       cens_ub = b_scaled_Texas_big[-ind_obs_tmp] - cond_mean_TX_cens,
-      m = m, covmat = cond_covmat_TX_cens
+      m = m, covmat = cond_covmat_TX_cens, ordering = 2,
+      locs = locs_scaled_Texas_big[-ind_obs_tmp, ]
     ) + cond_mean_TX_cens
   }
   stopCluster(cl)
@@ -203,7 +204,7 @@ if (run_seq_Vecc_all) {
   samp_seq_Vecc_all <- nntmvn::rptmvn(
     y_scaled, rep(-Inf, n), b_scaled, is.na(y_scaled), m,
     locs = locs_scaled_twice, cov_name = cov_name,
-    cov_parm = covparms_tmp, seed = 1
+    cov_parm = covparms_tmp, seed = 1, ordering = 2
   ) # only draw one sample
   time_end <- Sys.time()
   time_seq_Vecc_all <- difftime(time_end, time_bgn, units = "secs")[[1]]
