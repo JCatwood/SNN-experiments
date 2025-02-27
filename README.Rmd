@@ -4,7 +4,7 @@ output: pdf_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 80), tidy = TRUE)
+knitr::opts_chunk$set(tidy.opts = list(width.cutoff = 80), tidy = TRUE) # needs formatR package installed
 ```
 
 ## Overview
@@ -57,5 +57,26 @@ Figure E.5 is based on the results by running `m_compare_truth_known.R` for 180 
 Notice that the data simulation was done only once and the simulated data is stored in the `data` folder.
 
 Each run of `highdim_truth_known.R` and `highdim_truth_unknown.R` will produce one set of samples and the corresponding heatmaps. From the many runs of `highdim_truth_known.R` and `highdim_truth_unknown.R`, a randomly chosen set of heatmaps was used as Figure~4.
+
+## PCE Data Example in Section 5
+
+Figures 5 and 6 in Section 5 can be reproduced by running `PCE_modeling.R`, where the control variables, `run_parm_est`, `run_VeccTMVN`, `run_TN`, `run_CB`, `run_seq_Vecc`, `run_seq_Vecc_all`, and `run_CB_all` should be set to `TRUE`.
+ 
+Certain components of this script can take relatively long time
+
+- `run_parm_est` is the switch for covariance parameter estimation, which took around 10 hours. Its result was store in `data/PCE_modeling.RData`. You can reuse the previous covariance estimation by setting `run_parm_est` to `FALSE` 
+- `run_CB` and `run_CB_all` are the switches for using the CSB method for the inference over Texas and the entire US, respectively, the latter of which may take 3 hours
+- All other methods are relatively fast
+- The plotting part of `PCE_modeling.R` can only run after the results from `run_VeccTMVN`, `run_TN`, `run_CB`, `run_seq_Vecc`, `run_seq_Vecc_all`, and `run_CB_all` are all available
+
+
+
+
+
+
+
+
+
+
 
 
