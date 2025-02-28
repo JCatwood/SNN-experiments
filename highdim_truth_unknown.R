@@ -194,7 +194,8 @@ if (run_est_SNN) {
   save(time_parm_est_SNN, time_est_SNN, y_samp_est_SNN,
     file = paste0(
       "results/samp_cmp_unknown_SNN_scene",
-      scene_ID, "_m", m, "_order", reorder, "_subset", subset_size, "_rep", k, ".RData"
+      scene_ID, "_m", m, "_order", reorder, "_subset", subset_size, 
+      "_rep", k, ".RData"
     )
   )
   if (reorder == 0) {
@@ -234,7 +235,8 @@ if (plot_heatmap) {
   ))
   load(paste0(
     "results/samp_cmp_unknown_SNN_scene",
-    scene_ID, "_m", m, "_order", reorder, "_rep", k, ".RData"
+    scene_ID, "_m", m, "_order", reorder, "_subset", subset_size, 
+    "_rep", k, ".RData"
   ))
   y_samp_CB_tmp <- y_obs
   y_samp_CB_tmp[mask_cens] <- y_samp_CB$Y.pred.samp[, ncol(y_samp_CB$Y.pred.samp)]
