@@ -1,5 +1,5 @@
 ---
-output: pdf_document
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -13,25 +13,28 @@ This document provides guidance on installing the dependencies for as well as ru
 
 ## Installing Dependencies
 
-Most of our dependencies are on CRAN, with only one exception. Please change `eval` to `TRUE` if you need to install the dependencies.
+Most of our dependencies are on CRAN, with only one exception. The following code can be used to installed the CRAN dependencies for running the experiments in the directory.
 ```{r, eval=FALSE, message=FALSE, results='hide'}
 CRAN_pkg_names <- c("ggplot2", "fields", "scoringRules", "VeccTMVN", "sf", "spData", "GpGp", "nntmvn", "doParallel", "TruncatedNormal", "RColorBrewer", "autoimage", "mvtnorm", "RANN", "scales", "R.utils", "tidyr", "devtools")
-Git_pkg_name <- "CensSpBayes"
-Git_pkg_link <- "SumanM47/CensSpBayes"
 for (pkg_name in CRAN_pkg_names) {
   install.packages(pkg_name, repos='http://cran.us.r-project.org')
 }
 ```
 
-The package `CensSpBayes` is not on CRAN. To install `CensSpBayes`, you need to first install [`INLA`](https://www.r-inla.org/download-install). The procedure for installing `INLA` depends on your operating system. There might also be several dependencies for `INLA` that cannot be installed through R.
+The package `CensSpBayes` is not on CRAN. To install `CensSpBayes`, you need to first install [`INLA`](https://www.r-inla.org/download-install). The procedure for installing `INLA` depends on your operating system. There might also be several dependencies for `INLA` that cannot be installed through R. Notice that we made minor modification to the original implementation of [`CensSpBayes`](https://github.com/SumanM47/CensSpBayes) such that the MCMC samples can be returned.
 ```{r, eval=FALSE, message=FALSE, results='hide'}
 library(devtools)
 Git_pkg_name <- "CensSpBayes"
-Git_pkg_link <- "SumanM47/CensSpBayes"
+Git_pkg_link <- "JCatwood/CensSpBayes"
 devtools::install_github(Git_pkg_link)
 ```
 
-In fact, I could not install INLA on my MacOS, for which the `create_inla_mats` function cannot be called. The experiments involving `CensSpBayes` were run on a Linux system.
+For the above R packages, some require system-wide libraries that probably cannot be installed through R. On a freshly created Ubuntu VM, I installed the following libraries to be able to install the above R packages.
+```{bash, eval=FALSE}
+sudo apt-get install libudunits2-dev libssl-dev libgdal-dev libfontconfig-dev libgit2-dev libharfbuzz-dev libfribidi-dev libgsl-dev jags-dev
+```
+
+In fact, I could not install INLA on my MacOS, for which `CensSpBayes` cannot work. The experiments involving `CensSpBayes` were run on a Linux system.
 
 ## Low Dimensional Experiments in Section 3
 
@@ -64,7 +67,7 @@ Figures 5 and 6 in Section 5 can be reproduced by running `PCE_modeling.R`, wher
  
 Certain components of this script can take relatively long time
 
-- `run_parm_est` is the switch for covariance parameter estimation, which took around 10 hours. Its result was store in `data/PCE_modeling.RData`. You can reuse the previous covariance estimation by setting `run_parm_est` to `FALSE` 
+- `run_parm_est` is the switch for covariance parameter estimation, which took around 10 hours. Its result was store in `results/PCE_modeling.RData`. You can reuse the previous covariance estimation by setting `run_parm_est` to `FALSE` 
 - `run_CB` and `run_CB_all` are the switches for using the CSB method for the inference over Texas and the entire US, respectively, the latter of which may take 3 hours
 - All other methods are relatively fast
 - The plotting part of `PCE_modeling.R` can only run after the results from `run_VeccTMVN`, `run_TN`, `run_CB`, `run_seq_Vecc`, `run_seq_Vecc_all`, and `run_CB_all` are all available
