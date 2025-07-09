@@ -29,7 +29,7 @@ n_iter_MC <- 25000
 thin <- 5
 
 # data simulation ----------------------
-source("data_simulation.R")
+source("../utils/data_simulation.R")
 y <- y_list[[k]]
 mask_cens <- (y < cens_ub) & (y > cens_lb)
 y_obs <- y
