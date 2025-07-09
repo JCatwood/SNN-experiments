@@ -90,6 +90,10 @@ if (run_CB) {
       dat = y_samp_CB$Y.pred.samp
     )), "\n"
   )
+  cat(
+    "> ", scene_ID, ", time, CB, unknown, ",
+    time_CB, "\n"
+  )
 }
 
 # nntmvn with est. parms -------------------------------
@@ -224,6 +228,10 @@ if (run_est_SNN) {
       y = y[mask_cens],
       dat = y_samp_est_SNN[mask_cens, , drop = FALSE]
     )), "\n"
+  )
+  cat(
+    "> ", scene_ID, ", time,", SNN_name, ", unknown, ",
+    time_est_SNN, "\n"
   )
 }
 # heatmap -------------------------

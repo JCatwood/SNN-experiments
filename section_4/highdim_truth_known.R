@@ -102,6 +102,10 @@ if (run_SNN) {
       dat = y_samp_SNN[mask_cens, , drop = FALSE]
     )), "\n"
   )
+  cat(
+    "> ", scene_ID, ", time, SNN, known, ",
+    time_SNN, "\n"
+  )
 }
 
 # VeccTMVN and TruncatedNormal -----------------------
@@ -254,6 +258,10 @@ if (run_VT || run_TN) {
         y = y[mask_cens], dat = y_samp_VT[mask_cens, ]
       )), "\n"
     )
+    cat(
+      "> ", scene_ID, ", time, VT, known, ",
+      time_VT, "\n"
+    )
   }
   if (run_TN) {
     if (!file.exists("results")) {
@@ -278,6 +286,10 @@ if (run_VT || run_TN) {
       mean(scoringRules::crps_sample(
         y = y[mask_cens], dat = y_samp_TN[mask_cens, ]
       )), "\n"
+    )
+    cat(
+      "> ", scene_ID, ", time, TN, known, ",
+      time_TN, "\n"
     )
   }
 }

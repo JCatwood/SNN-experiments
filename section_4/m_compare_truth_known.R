@@ -102,6 +102,10 @@ if (run_seq_Vecc) {
           dat = y_samp_seq_Vecc[mask_cens, , drop = FALSE]
         )), "\n"
       )
+      cat(
+        "> ", scene_ID, ",", m, ", time, SNN, known, ",
+        time_seq_Vecc, "\n"
+      )
     } else {
       cat(
         "> ", scene_ID, ",", m, ", RMSE, SNN_order, known, ",
@@ -122,6 +126,10 @@ if (run_seq_Vecc) {
           y = y[mask_cens],
           dat = y_samp_seq_Vecc[mask_cens, , drop = FALSE]
         )), "\n"
+      )
+      cat(
+        "> ", scene_ID, ",", m, ", time, SNN_order, known, ",
+        time_seq_Vecc, "\n"
       )
     }
   }
