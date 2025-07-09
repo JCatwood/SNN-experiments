@@ -7,7 +7,6 @@ library(scoringRules)
 # simulation settings ------------------------------
 rm(list = ls())
 set.seed(123)
-scene_ID <- 1
 m <- 30 # number of nearest neighbors
 use_snn_order <- 0
 n_samp <- 50 # samples generated for posterior inference
@@ -19,8 +18,10 @@ plot_heatmap <- FALSE
 args <- commandArgs(trailingOnly = TRUE)
 if (length(args) > 0) {
   k <- as.integer(args[1]) # k is the index for GP realizations
+  scene_ID <- as.integer(args[2])
 } else {
   k <- 1
+  scene_ID <- 1
 }
 
 # data simulation ----------------------
