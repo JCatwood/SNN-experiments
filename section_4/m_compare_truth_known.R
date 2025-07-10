@@ -77,10 +77,6 @@ if (run_seq_Vecc) {
     if (!file.exists("results")) {
       dir.create("results")
     }
-    save(time_seq_Vecc, y_samp_seq_Vecc, file = paste0(
-      "results/m_cmp_known_SNN_scene",
-      scene_ID, "_m", m, "_order", use_snn_order, "_rep", k, ".RData"
-    ))
     if (use_snn_order == 0) {
       cat(
         "> ", scene_ID, ",", m, ", RMSE, SNN, known, ",

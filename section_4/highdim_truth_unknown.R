@@ -65,10 +65,6 @@ if (run_CB) {
   if (!file.exists("results")) {
     dir.create("results")
   }
-  save(time_CB, y_samp_CB, file = paste0(
-    "results/samp_cmp_unknown_CB_scene",
-    scene_ID, "_rep", k, ".RData"
-  ))
   cat(
     "> ", scene_ID, ", RMSE, CB, unknown, ",
     sqrt(mean((y[mask_cens] - y_samp_CB$Y.pred.posmean)^2)),
@@ -195,13 +191,6 @@ if (run_est_SNN) {
   if (!file.exists("results")) {
     dir.create("results")
   }
-  save(time_parm_est_SNN, time_est_SNN, y_samp_est_SNN,
-    file = paste0(
-      "results/samp_cmp_unknown_SNN_scene",
-      scene_ID, "_m", m, "_order", reorder, "_subset", subset_size, 
-      "_rep", k, ".RData"
-    )
-  )
   if (reorder == 0) {
     SNN_name <- "SNN"
   } else if (reorder == 1) {
@@ -237,15 +226,6 @@ if (run_est_SNN) {
 # heatmap -------------------------
 if (plot_heatmap) {
   library(fields)
-  load(paste0(
-    "results/samp_cmp_unknown_CB_scene",
-    scene_ID, "_rep", k, ".RData"
-  ))
-  load(paste0(
-    "results/samp_cmp_unknown_SNN_scene",
-    scene_ID, "_m", m, "_order", reorder, "_subset", subset_size, 
-    "_rep", k, ".RData"
-  ))
   y_samp_CB_tmp <- y_obs
   y_samp_CB_tmp[mask_cens] <- y_samp_CB$Y.pred.samp[, ncol(y_samp_CB$Y.pred.samp)]
   y_samp_CB <- y_samp_CB_tmp

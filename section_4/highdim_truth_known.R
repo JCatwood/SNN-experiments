@@ -79,10 +79,6 @@ if (run_SNN) {
   if (!file.exists("results")) {
     dir.create("results")
   }
-  save(time_SNN, y_samp_SNN, file = paste0(
-    "results/samp_cmp_known_SNN_scene",
-    scene_ID, "_m", m, "_order", use_snn_order, "_rep", k, ".RData"
-  ))
   cat(
     "> ", scene_ID, ", RMSE, SNN, known, ",
     sqrt(mean((y[mask_cens] - y_pred_cens_SNN)^2)), "\n"
@@ -239,9 +235,6 @@ if (run_VT || run_TN) {
     if (!file.exists("results")) {
       dir.create("results")
     }
-    save(y_pred_VT, sd_pred_VT, y_samp_VT, time_VT,
-      file = paste0("results/samp_cmp_known_VT_scene", scene_ID, "_rep", k, ".RData")
-    )
     cat(
       "> ", scene_ID, ", RMSE, VT, known, ",
       sqrt(mean((y[mask_cens] - y_pred_VT[mask_cens])^2)), "\n"
@@ -268,9 +261,6 @@ if (run_VT || run_TN) {
     if (!file.exists("results")) {
       dir.create("results")
     }
-    save(y_pred_TN, sd_pred_TN, y_samp_TN, time_TN,
-      file = paste0("results/samp_cmp_known_TN_scene", scene_ID, "_rep", k, ".RData")
-    )
     cat(
       "> ", scene_ID, ", RMSE, TN, known, ",
       sqrt(mean((y[mask_cens] - y_pred_TN[mask_cens])^2)), "\n"
@@ -298,12 +288,6 @@ if (run_VT || run_TN) {
 # heatmap -------------------------
 if (plot_heatmap) {
   library(fields)
-  load(paste0(
-    "results/samp_cmp_known_SNN_scene",
-    scene_ID, "_m", m, "_order", use_snn_order, "_rep", k, ".RData"
-  ))
-  load(paste0("results/samp_cmp_known_VT_scene", scene_ID, "_rep", k, ".RData"))
-  load(paste0("results/samp_cmp_known_TN_scene", scene_ID, "_rep", k, ".RData"))
   zlim <- range(y_samp_SNN, y_samp_TN, y_samp_VT)
   if (!file.exists("plots")) {
     dir.create("plots")
