@@ -22,6 +22,7 @@ args <- commandArgs(trailingOnly = TRUE)
 if (length(args) > 0) {
   k <- as.integer(args[1]) # k is the index for GP realizations
   scene_ID <- as.integer(args[2]) # simulation scenario ID
+  reorder <- as.integer(args[3]) # 0 no reorder, 1 maximin
 }
 # CensSpBayes
 n_burn <- 20000

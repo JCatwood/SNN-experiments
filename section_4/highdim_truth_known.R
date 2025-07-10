@@ -8,7 +8,6 @@ library(scoringRules)
 rm(list = ls())
 set.seed(123)
 m <- 30 # number of nearest neighbors
-use_snn_order <- 0
 n_samp <- 50 # samples generated for posterior inference
 run_SNN <- TRUE
 run_VT <- TRUE
@@ -19,9 +18,11 @@ args <- commandArgs(trailingOnly = TRUE)
 if (length(args) > 0) {
   k <- as.integer(args[1]) # k is the index for GP realizations
   scene_ID <- as.integer(args[2])
+  use_snn_order <- as.integer(args[3]) # 0, 1, 2
 } else {
   k <- 1
   scene_ID <- 1
+  use_snn_order <- 0
 }
 
 # data simulation ----------------------

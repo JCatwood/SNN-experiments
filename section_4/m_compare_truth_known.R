@@ -19,6 +19,7 @@ args <- commandArgs(trailingOnly = TRUE)
 if (length(args) > 0) {
   k <- as.integer(args[1]) # k is the index for GP realizations
   scene_ID <- as.integer(args[2]) # simulation scenario ID
+  use_snn_order <- as.integer(args[3]) # 0, 1, 2
 }
 
 # data simulation ----------------------
