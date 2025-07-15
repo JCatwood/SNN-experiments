@@ -1018,3 +1018,15 @@
 3,RMSE,SNN_order_maximin,unknown,0.1709489
 3,NLL,SNN_order_maximin,unknown,-3.086819
 3,CRPS,SNN_order_maximin,unknown,0.0857599
+1,time,CB,unknown,9804.943
+1,time,SNN,unknown,877.345
+1,time,CB,unknown,10442.45
+1,time,SNN_order_maximin,unknown,1214.631
+2,time,CB,unknown,9611.927
+2,time,SNN,unknown,980.697
+2,time,CB,unknown,9866.73
+2,time,SNN_order_maximin,unknown,889.3322
+3,time,CB,unknown,9985.904
+3,time,SNN,unknown,413.8315
+3,time,CB,unknown,9837.261
+3,time,SNN_order_maximin,unknown,433.5285
