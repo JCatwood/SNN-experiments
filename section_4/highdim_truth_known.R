@@ -126,12 +126,12 @@ if (run_VT || run_TN) {
     )
     time_TN <- 0
   }
-  for (i in 1:10) {
-    for (j in 1:10) {
-      mask_ij_env <- locs[, 1] >= ((i - 1) * 0.1 - 0.015) &
-        locs[, 1] <= (i * 0.1 + 0.015) &
-        locs[, 2] >= ((j - 1) * 0.1 - 0.015) &
-        locs[, 2] <= (j * 0.1 + 0.015)
+  for (i in 1:5) {
+    for (j in 1:5) {
+      mask_ij_env <- locs[, 1] >= ((i - 1) * 0.2 - 0.015) &
+        locs[, 1] <= (i * 0.2 + 0.015) &
+        locs[, 2] >= ((j - 1) * 0.2 - 0.015) &
+        locs[, 2] <= (j * 0.2 + 0.015)
       locs_ij_env <- locs[mask_ij_env, , drop = FALSE]
       y_obs_ij_env <- y_obs[mask_ij_env]
       mask_cens_ij_env <- mask_cens[mask_ij_env]
@@ -139,9 +139,9 @@ if (run_VT || run_TN) {
       cens_lb_ij_env <- cens_lb[mask_ij_env]
       covmat_ij_env <- covmat[mask_ij_env, mask_ij_env, drop = FALSE]
       locs_cens_ij_env <- locs_ij_env[mask_cens_ij_env, , drop = FALSE]
-      mask_inner_ij_env <- locs_ij_env[, 1] >= (i - 1) * 0.1 &
-        locs_ij_env[, 1] <= i * 0.1 &
-        locs_ij_env[, 2] >= (j - 1) * 0.1 & locs_ij_env[, 2] <= j * 0.1
+      mask_inner_ij_env <- locs_ij_env[, 1] >= (i - 1) * 0.2 &
+        locs_ij_env[, 1] <= i * 0.2 &
+        locs_ij_env[, 2] >= (j - 1) * 0.2 & locs_ij_env[, 2] <= j * 0.2
       if (run_VT) {
         bgn_time <- Sys.time()
         set.seed(123)
@@ -174,9 +174,9 @@ if (run_VT || run_TN) {
           )
         }
         locs_cens_ij_env <- locs_ij_env[mask_cens_ij_env, , drop = FALSE]
-        mask_cens_inner_ij_env <- locs_cens_ij_env[, 1] >= (i - 1) * 0.1 &
-          locs_cens_ij_env[, 1] <= i * 0.1 &
-          locs_cens_ij_env[, 2] >= (j - 1) * 0.1 & locs_cens_ij_env[, 2] <= j * 0.1
+        mask_cens_inner_ij_env <- locs_cens_ij_env[, 1] >= (i - 1) * 0.2 &
+          locs_cens_ij_env[, 1] <= i * 0.2 &
+          locs_cens_ij_env[, 2] >= (j - 1) * 0.2 & locs_cens_ij_env[, 2] <= j * 0.2
         y_pred_VT[mask_ij_env][mask_inner_ij_env & mask_cens_ij_env] <-
           rowMeans(samp_ij_env_VT)[mask_cens_inner_ij_env]
         sd_pred_VT[mask_ij_env][mask_inner_ij_env & mask_cens_ij_env] <-
@@ -217,10 +217,10 @@ if (run_VT || run_TN) {
           cens_ub_ij_env[mask_cens_ij_env]
         ))
         locs_cens_ij_env <- locs_ij_env[mask_cens_ij_env, , drop = FALSE]
-        mask_cens_inner_ij_env <- locs_cens_ij_env[, 1] >= (i - 1) * 0.1 &
-          locs_cens_ij_env[, 1] <= i * 0.1 &
-          locs_cens_ij_env[, 2] >= (j - 1) * 0.1 &
-          locs_cens_ij_env[, 2] <= j * 0.1
+        mask_cens_inner_ij_env <- locs_cens_ij_env[, 1] >= (i - 1) * 0.2 &
+          locs_cens_ij_env[, 1] <= i * 0.2 &
+          locs_cens_ij_env[, 2] >= (j - 1) * 0.2 &
+          locs_cens_ij_env[, 2] <= j * 0.2
         y_pred_TN[mask_ij_env][mask_inner_ij_env & mask_cens_ij_env] <-
           rowMeans(samp_ij_env_TN)[mask_cens_inner_ij_env]
         sd_pred_TN[mask_ij_env][mask_inner_ij_env & mask_cens_ij_env] <-
