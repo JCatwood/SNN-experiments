@@ -79,55 +79,35 @@ if (run_seq_Vecc) {
       dir.create("results")
     }
     if (use_snn_order == 0) {
-      cat(
-        "> ", scene_ID, ",", m, ", RMSE, SNN, known, ",
-        sqrt(mean((y[mask_cens] - y_pred_cens_seq_Vecc)^2)), "\n"
-      )
-      sd_cens_seq_Vecc <- apply(y_samp_seq_Vecc, 1, sd)[mask_cens] /
-        sqrt(n_samp)
-      cat(
-        "> ", scene_ID, ",", m, ", NLL, SNN, known, ",
-        -mean(dnorm(y[mask_cens],
-          mean = y_pred_cens_seq_Vecc,
-          sd = sd_cens_seq_Vecc
-        )), "\n"
-      )
-      cat(
-        "> ", scene_ID, ",", m, ", CRPS, SNN, known, ",
-        mean(scoringRules::crps_sample(
-          y = y[mask_cens],
-          dat = y_samp_seq_Vecc[mask_cens, , drop = FALSE]
-        )), "\n"
-      )
-      cat(
-        "> ", scene_ID, ",", m, ", time, SNN, known, ",
-        time_seq_Vecc, "\n"
-      )
+      method = "SNN"
+    } else if (use_snn_order == 1) {
+      method = "SNN_order_desc"
     } else {
-      cat(
-        "> ", scene_ID, ",", m, ", RMSE, SNN_order, known, ",
-        sqrt(mean((y[mask_cens] - y_pred_cens_seq_Vecc)^2)), "\n"
-      )
-      sd_cens_seq_Vecc <- apply(y_samp_seq_Vecc, 1, sd)[mask_cens] /
-        sqrt(n_samp)
-      cat(
-        "> ", scene_ID, ",", m, ", NLL, SNN_order, known, ",
-        -mean(dnorm(y[mask_cens],
-          mean = y_pred_cens_seq_Vecc,
-          sd = sd_cens_seq_Vecc
-        )), "\n"
-      )
-      cat(
-        "> ", scene_ID, ",", m, ", CRPS, SNN_order, known, ",
-        mean(scoringRules::crps_sample(
-          y = y[mask_cens],
-          dat = y_samp_seq_Vecc[mask_cens, , drop = FALSE]
-        )), "\n"
-      )
-      cat(
-        "> ", scene_ID, ",", m, ", time, SNN_order, known, ",
-        time_seq_Vecc, "\n"
-      )
+      method = "SNN_order_maximin"
     }
+    cat(
+      "> ", scene_ID, ",", m, ", RMSE,", method, ", known, ",
+      sqrt(mean((y[mask_cens] - y_pred_cens_seq_Vecc)^2)), "\n"
+    )
+    sd_cens_seq_Vecc <- apply(y_samp_seq_Vecc, 1, sd)[mask_cens] /
+      sqrt(n_samp)
+    cat(
+      "> ", scene_ID, ",", m, ", NLL,", method, ", known, ",
+      -mean(dnorm(y[mask_cens],
+                  mean = y_pred_cens_seq_Vecc,
+                  sd = sd_cens_seq_Vecc
+      )), "\n"
+    )
+    cat(
+      "> ", scene_ID, ",", m, ", CRPS,", method, ", known, ",
+      mean(scoringRules::crps_sample(
+        y = y[mask_cens],
+        dat = y_samp_seq_Vecc[mask_cens, , drop = FALSE]
+      )), "\n"
+    )
+    cat(
+      "> ", scene_ID, ",", m, ", time,", method, ", known, ",
+      time_seq_Vecc, "\n"
+    )
   }
 }

@@ -1030,3 +1030,12 @@
 3,time,SNN,unknown,413.8315
 3,time,CB,unknown,9837.261
 3,time,SNN_order_maximin,unknown,433.5285
+1,time,SNN,known,1057.524
+1,time,VT,known,112.868
+1,time,TN,known,39.41061
+2,time,SNN,known,1237.576
+2,time,VT,known,115.2277
+2,time,TN,known,53.35587
+3,time,SNN,known,514.7519
+3,time,VT,known,14.80154
+3,time,TN,known,6.490788
