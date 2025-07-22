@@ -221,7 +221,7 @@ if (run_est_SNN) {
   )
   cat(
     "> ", scene_ID, ", time,", SNN_name, ", unknown, ",
-    time_est_SNN, "\n"
+    time_est_SNN + time_parm_est_SNN, "\n"
   )
 }
 # heatmap -------------------------
