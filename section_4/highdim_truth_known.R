@@ -111,10 +111,12 @@ sample_func_VT_TN <- function(x1, x2, y1, y2, method = c("VT", "TN")) {
   mask_inner <- locs_envelop[, 1] >= x1 &
     locs_envelop[, 1] <= x2 &
     locs_envelop[, 2] >= y1 & locs_envelop[, 2] <= y2
-  
-  cat("Dimension of the TMVN distribution to be sampled from is",
-      sum(mask_cens_envelop), "\n")
-  
+
+  cat(
+    "Dimension of the TMVN distribution to be sampled from is",
+    sum(mask_cens_envelop), "\n"
+  )
+
   if (sum(mask_cens_envelop) == length(y_obs_envelop)) {
     cond_mean_cens_envelop <- rep(0, sum(mask_envelop))
     cond_covmat_cens_envelop <- covmat_envelop
@@ -177,48 +179,64 @@ sample_wrapper <- function(x1, x2, y1, y2, method = c("VT", "TN")) {
           cat("Done", method, "sampling [", x1, x2, "] X [", y1, y2, "]\n")
           ret_obj
         },
-        timeout = 180
+        timeout = 300
       )
     },
     TimeoutException = function(foo) {
       cat(
         method, "sampling in [", x1, x2, "] X [", y1, y2, "] did not finish",
-        "within 3 minutes\n"
+        "within 5 minutes\n"
       )
-      x_span <- (x2 - x1) / 2
-      y_span <- (y2 - y1) / 2
+      x_span <- (x2 - x1) / 3
+      y_span <- (y2 - y1) / 3
       ret_obj1 <- sample_wrapper(x1, x1 + x_span, y1, y1 + y_span, method)
-      ret_obj2 <- sample_wrapper(x1 + x_span, x2, y1, y1 + y_span, method)
-      ret_obj3 <- sample_wrapper(x1, x1 + x_span, y1 + y_span, y2, method)
-      ret_obj4 <- sample_wrapper(x1 + x_span, x2, y1 + y_span, y2, method)
+      ret_obj2 <- sample_wrapper(x1, x1 + x_span, y1 + y_span, y1 + 2 * y_span, method)
+      ret_obj3 <- sample_wrapper(x1, x1 + x_span, y1 + 2 * y_span, y2, method)
+      ret_obj4 <- sample_wrapper(x1 + x_span, x1 + 2 * x_span, y1, y1 + y_span, method)
+      ret_obj5 <- sample_wrapper(x1 + x_span, x1 + 2 * x_span, y1 + y_span, y1 + 2 * y_span, method)
+      ret_obj6 <- sample_wrapper(x1 + x_span, x1 + 2 * x_span, y1 + 2 * y_span, y2, method)
+      ret_obj7 <- sample_wrapper(x1 + 2 * x_span, x2, y1, y1 + y_span, method)
+      ret_obj8 <- sample_wrapper(x1 + 2 * x_span, x2, y1 + y_span, y1 + 2 * y_span, method)
+      ret_obj9 <- sample_wrapper(x1 + 2 * x_span, x2, y1 + 2 * y_span, y2, method)
+
       ret_obj <- list(
         ind = c(
-          ret_obj1$ind, ret_obj2$ind,
-          ret_obj3$ind, ret_obj4$ind
+          ret_obj1$ind, ret_obj2$ind, ret_obj3$ind,
+          ret_obj4$ind, ret_obj5$ind, ret_obj6$ind,
+          ret_obj7$ind, ret_obj8$ind, ret_obj9$ind
         ),
         samp = rbind(
-          ret_obj1$samp, ret_obj2$samp,
-          ret_obj3$samp, ret_obj4$samp
+          ret_obj1$samp, ret_obj2$samp, ret_obj3$samp,
+          ret_obj4$samp, ret_obj5$samp, ret_obj6$samp,
+          ret_obj7$samp, ret_obj8$samp, ret_obj9$samp
         )
       )
       ret_obj
     },
     error = function(e) {
       message("Caught error: ", e$message)
-      x_span <- (x2 - x1) / 2
-      y_span <- (y2 - y1) / 2
+      x_span <- (x2 - x1) / 3
+      y_span <- (y2 - y1) / 3
       ret_obj1 <- sample_wrapper(x1, x1 + x_span, y1, y1 + y_span, method)
-      ret_obj2 <- sample_wrapper(x1 + x_span, x2, y1, y1 + y_span, method)
-      ret_obj3 <- sample_wrapper(x1, x1 + x_span, y1 + y_span, y2, method)
-      ret_obj4 <- sample_wrapper(x1 + x_span, x2, y1 + y_span, y2, method)
+      ret_obj2 <- sample_wrapper(x1, x1 + x_span, y1 + y_span, y1 + 2 * y_span, method)
+      ret_obj3 <- sample_wrapper(x1, x1 + x_span, y1 + 2 * y_span, y2, method)
+      ret_obj4 <- sample_wrapper(x1 + x_span, x1 + 2 * x_span, y1, y1 + y_span, method)
+      ret_obj5 <- sample_wrapper(x1 + x_span, x1 + 2 * x_span, y1 + y_span, y1 + 2 * y_span, method)
+      ret_obj6 <- sample_wrapper(x1 + x_span, x1 + 2 * x_span, y1 + 2 * y_span, y2, method)
+      ret_obj7 <- sample_wrapper(x1 + 2 * x_span, x2, y1, y1 + y_span, method)
+      ret_obj8 <- sample_wrapper(x1 + 2 * x_span, x2, y1 + y_span, y1 + 2 * y_span, method)
+      ret_obj9 <- sample_wrapper(x1 + 2 * x_span, x2, y1 + 2 * y_span, y2, method)
+
       ret_obj <- list(
         ind = c(
-          ret_obj1$ind, ret_obj2$ind,
-          ret_obj3$ind, ret_obj4$ind
+          ret_obj1$ind, ret_obj2$ind, ret_obj3$ind,
+          ret_obj4$ind, ret_obj5$ind, ret_obj6$ind,
+          ret_obj7$ind, ret_obj8$ind, ret_obj9$ind
         ),
         samp = rbind(
-          ret_obj1$samp, ret_obj2$samp,
-          ret_obj3$samp, ret_obj4$samp
+          ret_obj1$samp, ret_obj2$samp, ret_obj3$samp,
+          ret_obj4$samp, ret_obj5$samp, ret_obj6$samp,
+          ret_obj7$samp, ret_obj8$samp, ret_obj9$samp
         )
       )
       ret_obj
