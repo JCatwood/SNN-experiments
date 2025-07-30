@@ -77,21 +77,9 @@ if (run_SNN) {
   )[rev_order, , drop = FALSE]
   y_pred_SNN <- rowMeans(y_samp_SNN)
   y_pred_cens_SNN <- y_pred_SNN[mask_cens]
-  if (!file.exists("results")) {
-    dir.create("results")
-  }
   cat(
     "> ", scene_ID, ", RMSE, SNN, known, ",
     sqrt(mean((y[mask_cens] - y_pred_cens_SNN)^2)), "\n"
-  )
-  sd_cens_SNN <- apply(y_samp_SNN, 1, sd)[mask_cens] /
-    sqrt(n_samp)
-  cat(
-    "> ", scene_ID, ", NLL, SNN, known, ",
-    -mean(dnorm(y[mask_cens],
-      mean = y_pred_cens_SNN,
-      sd = sd_cens_SNN
-    )), "\n"
   )
   cat(
     "> ", scene_ID, ", CRPS, SNN, known, ",
@@ -107,183 +95,192 @@ if (run_SNN) {
 }
 
 # VeccTMVN and TruncatedNormal -----------------------
-if (run_VT || run_TN) {
-  if (run_VT) {
-    y_pred_VT <- y_obs
-    sd_pred_VT <- rep(0, length(y_obs))
-    y_samp_VT <- matrix(y_obs,
-      nrow = length(y_obs),
-      ncol = n_samp, byrow = FALSE
+offset <- 0.015
+sample_func_VT_TN <- function(x1, x2, y1, y2, method = c("VT", "TN")) {
+  mask_envelop <- locs[, 1] >= (x1 - offset) &
+    locs[, 1] <= (x2 + offset) &
+    locs[, 2] >= (y1 - offset) &
+    locs[, 2] <= (y2 + offset)
+  locs_envelop <- locs[mask_envelop, , drop = FALSE]
+  y_obs_envelop <- y_obs[mask_envelop]
+  mask_cens_envelop <- mask_cens[mask_envelop]
+  cens_ub_envelop <- cens_ub[mask_envelop]
+  cens_lb_envelop <- cens_lb[mask_envelop]
+  covmat_envelop <- covmat[mask_envelop, mask_envelop, drop = FALSE]
+  locs_cens_envelop <- locs_envelop[mask_cens_envelop, , drop = FALSE]
+  mask_inner <- locs_envelop[, 1] >= x1 &
+    locs_envelop[, 1] <= x2 &
+    locs_envelop[, 2] >= y1 & locs_envelop[, 2] <= y2
+  
+  cat("Dimension of the TMVN distribution to be sampled from is",
+      sum(mask_cens_envelop), "\n")
+  
+  if (sum(mask_cens_envelop) == length(y_obs_envelop)) {
+    cond_mean_cens_envelop <- rep(0, sum(mask_envelop))
+    cond_covmat_cens_envelop <- covmat_envelop
+  } else {
+    tmp_mat <- solve(
+      covmat_envelop[!mask_cens_envelop, !mask_cens_envelop, drop = FALSE],
+      covmat_envelop[!mask_cens_envelop, mask_cens_envelop, drop = FALSE]
     )
-    time_VT <- 0
-  }
-  if (run_TN) {
-    y_pred_TN <- y_obs
-    sd_pred_TN <- rep(0, length(y_obs))
-    y_samp_TN <- matrix(y_obs,
-      nrow = length(y_obs),
-      ncol = n_samp, byrow = FALSE
+    cond_covmat_cens_envelop <-
+      covmat_envelop[mask_cens_envelop, mask_cens_envelop, drop = FALSE] -
+      covmat_envelop[mask_cens_envelop, !mask_cens_envelop, drop = FALSE] %*%
+      tmp_mat
+    cond_mean_cens_envelop <- as.vector(
+      t(y_obs_envelop[!mask_cens_envelop]) %*% tmp_mat
     )
-    time_TN <- 0
   }
-  for (i in 1:5) {
-    for (j in 1:5) {
-      mask_ij_env <- locs[, 1] >= ((i - 1) * 0.2 - 0.015) &
-        locs[, 1] <= (i * 0.2 + 0.015) &
-        locs[, 2] >= ((j - 1) * 0.2 - 0.015) &
-        locs[, 2] <= (j * 0.2 + 0.015)
-      locs_ij_env <- locs[mask_ij_env, , drop = FALSE]
-      y_obs_ij_env <- y_obs[mask_ij_env]
-      mask_cens_ij_env <- mask_cens[mask_ij_env]
-      cens_ub_ij_env <- cens_ub[mask_ij_env]
-      cens_lb_ij_env <- cens_lb[mask_ij_env]
-      covmat_ij_env <- covmat[mask_ij_env, mask_ij_env, drop = FALSE]
-      locs_cens_ij_env <- locs_ij_env[mask_cens_ij_env, , drop = FALSE]
-      mask_inner_ij_env <- locs_ij_env[, 1] >= (i - 1) * 0.2 &
-        locs_ij_env[, 1] <= i * 0.2 &
-        locs_ij_env[, 2] >= (j - 1) * 0.2 & locs_ij_env[, 2] <= j * 0.2
-      if (run_VT) {
-        bgn_time <- Sys.time()
-        set.seed(123)
-        cat("VT sampling at i =", i, "j =", j, "\n")
-        # if all responses are censored
-        if (sum(mask_cens_ij_env) == length(y_obs_ij_env)) {
-          samp_ij_env_VT <- VeccTMVN::mvrandn(
-            lower = cens_lb_ij_env, upper = cens_ub_ij_env, mean = 0,
-            sigma = covmat_ij_env,
-            m = min(m, length(mask_cens_ij_env) - 1), N = n_samp
-          )
-        } else {
-          tmp_mat <- solve(
-            covmat_ij_env[!mask_cens_ij_env, !mask_cens_ij_env, drop = FALSE],
-            covmat_ij_env[!mask_cens_ij_env, mask_cens_ij_env, drop = FALSE]
-          )
-          cond_covmat_ij_env_cens <-
-            covmat_ij_env[mask_cens_ij_env, mask_cens_ij_env, drop = FALSE] -
-            covmat_ij_env[mask_cens_ij_env, !mask_cens_ij_env, drop = FALSE] %*%
-            tmp_mat
-          cond_mean_ij_env_cens <- as.vector(
-            t(y_obs_ij_env[!mask_cens_ij_env]) %*% tmp_mat
-          )
-          samp_ij_env_VT <- VeccTMVN::mvrandn(
-            lower = cens_lb_ij_env[mask_cens_ij_env],
-            upper = cens_ub_ij_env[mask_cens_ij_env],
-            mean = cond_mean_ij_env_cens,
-            sigma = cond_covmat_ij_env_cens,
-            m = min(m, length(cond_mean_ij_env_cens) - 1), N = n_samp
-          )
-        }
-        locs_cens_ij_env <- locs_ij_env[mask_cens_ij_env, , drop = FALSE]
-        mask_cens_inner_ij_env <- locs_cens_ij_env[, 1] >= (i - 1) * 0.2 &
-          locs_cens_ij_env[, 1] <= i * 0.2 &
-          locs_cens_ij_env[, 2] >= (j - 1) * 0.2 & locs_cens_ij_env[, 2] <= j * 0.2
-        y_pred_VT[mask_ij_env][mask_inner_ij_env & mask_cens_ij_env] <-
-          rowMeans(samp_ij_env_VT)[mask_cens_inner_ij_env]
-        sd_pred_VT[mask_ij_env][mask_inner_ij_env & mask_cens_ij_env] <-
-          apply(samp_ij_env_VT, 1, sd)[mask_cens_inner_ij_env] / sqrt(n_samp)
-        y_samp_VT[mask_ij_env, ][mask_inner_ij_env & mask_cens_ij_env, ] <-
-          samp_ij_env_VT[mask_cens_inner_ij_env, ]
-        end_time <- Sys.time()
-        time_VT <- time_VT + difftime(end_time, bgn_time, units = "secs")[[1]]
-      }
+  # guarantee symmetry
+  cond_covmat_cens_envelop[lower.tri(cond_covmat_cens_envelop)] <-
+    t(cond_covmat_cens_envelop)[lower.tri(cond_covmat_cens_envelop)]
 
-      if (run_TN) {
-        bgn_time <- Sys.time()
-        set.seed(123)
-        cat("TN sampling at i =", i, "j =", j, "\n")
-        covmat_ij_env <- covmat[mask_ij_env, mask_ij_env, drop = FALSE]
-        if (sum(mask_cens_ij_env) == sum(mask_ij_env)) {
-          cond_mean_ij_env_cens <- rep(0, sum(mask_ij_env))
-          cond_covmat_ij_env_cens <- covmat_ij_env
-        } else {
-          tmp_mat <- solve(
-            covmat_ij_env[!mask_cens_ij_env, !mask_cens_ij_env, drop = FALSE],
-            covmat_ij_env[!mask_cens_ij_env, mask_cens_ij_env, drop = FALSE]
-          )
-          cond_covmat_ij_env_cens <-
-            covmat_ij_env[mask_cens_ij_env, mask_cens_ij_env, drop = FALSE] -
-            covmat_ij_env[mask_cens_ij_env, !mask_cens_ij_env, drop = FALSE] %*%
-            tmp_mat
-          cond_mean_ij_env_cens <- as.vector(
-            t(y_obs_ij_env[!mask_cens_ij_env]) %*% tmp_mat
-          )
-        }
-        # guarantee symmetry
-        cond_covmat_ij_env_cens[lower.tri(cond_covmat_ij_env_cens)] <-
-          t(cond_covmat_ij_env_cens)[lower.tri(cond_covmat_ij_env_cens)]
-        samp_ij_env_TN <- t(TruncatedNormal::rtmvnorm(
-          n_samp, cond_mean_ij_env_cens,
-          cond_covmat_ij_env_cens, cens_lb_ij_env[mask_cens_ij_env],
-          cens_ub_ij_env[mask_cens_ij_env]
-        ))
-        locs_cens_ij_env <- locs_ij_env[mask_cens_ij_env, , drop = FALSE]
-        mask_cens_inner_ij_env <- locs_cens_ij_env[, 1] >= (i - 1) * 0.2 &
-          locs_cens_ij_env[, 1] <= i * 0.2 &
-          locs_cens_ij_env[, 2] >= (j - 1) * 0.2 &
-          locs_cens_ij_env[, 2] <= j * 0.2
-        y_pred_TN[mask_ij_env][mask_inner_ij_env & mask_cens_ij_env] <-
-          rowMeans(samp_ij_env_TN)[mask_cens_inner_ij_env]
-        sd_pred_TN[mask_ij_env][mask_inner_ij_env & mask_cens_ij_env] <-
-          apply(samp_ij_env_TN, 1, sd)[mask_cens_inner_ij_env] / sqrt(n_samp)
-        y_samp_TN[mask_ij_env, ][mask_inner_ij_env & mask_cens_ij_env, ] <-
-          samp_ij_env_TN[mask_cens_inner_ij_env, ]
-        end_time <- Sys.time()
-        time_TN <- time_TN + difftime(end_time, bgn_time, units = "secs")[[1]]
-      }
+  if (method[1] == "VT") {
+    samp_envelop <- VeccTMVN::mvrandn(
+      lower = cens_lb_envelop[mask_cens_envelop],
+      upper = cens_ub_envelop[mask_cens_envelop],
+      mean = cond_mean_cens_envelop,
+      sigma = cond_covmat_cens_envelop,
+      m = min(m, length(cond_mean_cens_envelop) - 1), N = n_samp
+    )
+  } else if (method[1] == "TN") {
+    if (sum(mask_cens_envelop) > 1500) {
+      stop("Input dimension for TN is too high\n")
     }
+    samp_envelop <- t(TruncatedNormal::rtmvnorm(
+      n_samp, cond_mean_cens_envelop,
+      cond_covmat_cens_envelop, cens_lb_envelop[mask_cens_envelop],
+      cens_ub_envelop[mask_cens_envelop]
+    ))
+  } else {
+    stop("invalid method option\n")
   }
-  if (run_VT) {
-    if (!file.exists("results")) {
-      dir.create("results")
+
+
+  locs_cens_envelop <- locs_envelop[mask_cens_envelop, , drop = FALSE]
+  mask_cens_inner <- locs_cens_envelop[, 1] >= x1 &
+    locs_cens_envelop[, 1] <= x2 &
+    locs_cens_envelop[, 2] >= y1 &
+    locs_cens_envelop[, 2] <= y2
+  ind <- c(1:n)[mask_envelop][mask_inner & mask_cens_envelop]
+  return(list(ind = ind, samp = samp_envelop[mask_cens_inner, ]))
+}
+
+library(R.utils)
+sample_wrapper <- function(x1, x2, y1, y2, method = c("VT", "TN")) {
+  cat(method, "sampling [", x1, x2, "] X [", y1, y2, "]...\n")
+  ret_obj <- tryCatch(
+    {
+      R.utils::withTimeout(
+        {
+          ret_obj <- sample_func_VT_TN(x1, x2, y1, y2, method)
+          cat("Done", method, "sampling [", x1, x2, "] X [", y1, y2, "]\n")
+          ret_obj
+        },
+        timeout = 180
+      )
+    },
+    TimeoutException = function(foo) {
+      cat(
+        method, "sampling in [", x1, x2, "] X [", y1, y2, "] did not finish",
+        "within 3 minutes\n"
+      )
+      x_span <- (x2 - x1) / 2
+      y_span <- (y2 - y1) / 2
+      ret_obj1 <- sample_wrapper(x1, x1 + x_span, y1, y1 + y_span, method)
+      ret_obj2 <- sample_wrapper(x1 + x_span, x2, y1, y1 + y_span, method)
+      ret_obj3 <- sample_wrapper(x1, x1 + x_span, y1 + y_span, y2, method)
+      ret_obj4 <- sample_wrapper(x1 + x_span, x2, y1 + y_span, y2, method)
+      ret_obj <- list(
+        ind = c(
+          ret_obj1$ind, ret_obj2$ind,
+          ret_obj3$ind, ret_obj4$ind
+        ),
+        samp = rbind(
+          ret_obj1$samp, ret_obj2$samp,
+          ret_obj3$samp, ret_obj4$samp
+        )
+      )
+      ret_obj
+    },
+    error = function(e) {
+      message("Caught error: ", e$message)
+      x_span <- (x2 - x1) / 2
+      y_span <- (y2 - y1) / 2
+      ret_obj1 <- sample_wrapper(x1, x1 + x_span, y1, y1 + y_span, method)
+      ret_obj2 <- sample_wrapper(x1 + x_span, x2, y1, y1 + y_span, method)
+      ret_obj3 <- sample_wrapper(x1, x1 + x_span, y1 + y_span, y2, method)
+      ret_obj4 <- sample_wrapper(x1 + x_span, x2, y1 + y_span, y2, method)
+      ret_obj <- list(
+        ind = c(
+          ret_obj1$ind, ret_obj2$ind,
+          ret_obj3$ind, ret_obj4$ind
+        ),
+        samp = rbind(
+          ret_obj1$samp, ret_obj2$samp,
+          ret_obj3$samp, ret_obj4$samp
+        )
+      )
+      ret_obj
     }
-    cat(
-      "> ", scene_ID, ", RMSE, VT, known, ",
-      sqrt(mean((y[mask_cens] - y_pred_VT[mask_cens])^2)), "\n"
-    )
-    cat(
-      "> ", scene_ID, ", NLL, VT, known, ",
-      -mean(dnorm(y[mask_cens],
-        mean = y_pred_VT[mask_cens],
-        sd = sd_pred_VT[mask_cens]
-      )), "\n"
-    )
-    cat(
-      "> ", scene_ID, ", CRPS, VT, known, ",
-      mean(scoringRules::crps_sample(
-        y = y[mask_cens], dat = y_samp_VT[mask_cens, ]
-      )), "\n"
-    )
-    cat(
-      "> ", scene_ID, ", time, VT, known, ",
-      time_VT, "\n"
-    )
-  }
-  if (run_TN) {
-    if (!file.exists("results")) {
-      dir.create("results")
-    }
-    cat(
-      "> ", scene_ID, ", RMSE, TN, known, ",
-      sqrt(mean((y[mask_cens] - y_pred_TN[mask_cens])^2)), "\n"
-    )
-    cat(
-      "> ", scene_ID, ", NLL, TN, known, ",
-      -mean(dnorm(y[mask_cens],
-        mean = y_pred_TN[mask_cens],
-        sd = sd_pred_TN[mask_cens]
-      )), "\n"
-    )
-    cat(
-      "> ", scene_ID, ", CRPS, TN, known, ",
-      mean(scoringRules::crps_sample(
-        y = y[mask_cens], dat = y_samp_TN[mask_cens, ]
-      )), "\n"
-    )
-    cat(
-      "> ", scene_ID, ", time, TN, known, ",
-      time_TN, "\n"
-    )
-  }
+  )
+  return(ret_obj)
+}
+
+if (run_VT) {
+  y_samp_VT <- matrix(y_obs,
+    nrow = length(y_obs),
+    ncol = n_samp, byrow = FALSE
+  )
+  bgn_time <- Sys.time()
+  set.seed(123)
+  ret_obj <- sample_wrapper(0, 1, 0, 1, "VT")
+  y_samp_VT[ret_obj$ind, ] <- ret_obj$samp
+  end_time <- Sys.time()
+  time_VT <- difftime(end_time, bgn_time, units = "secs")[[1]]
+  y_pred_VT <- rowMeans(y_samp_VT)
+  cat(
+    "> ", scene_ID, ", RMSE, VT, known, ",
+    sqrt(mean((y[mask_cens] - y_pred_VT[mask_cens])^2)), "\n"
+  )
+  cat(
+    "> ", scene_ID, ", CRPS, VT, known, ",
+    mean(scoringRules::crps_sample(
+      y = y[mask_cens], dat = y_samp_VT[mask_cens, , drop = FALSE]
+    )), "\n"
+  )
+  cat(
+    "> ", scene_ID, ", time, VT, known, ",
+    time_VT, "\n"
+  )
+}
+
+if (run_TN) {
+  y_samp_TN <- matrix(y_obs,
+    nrow = length(y_obs),
+    ncol = n_samp, byrow = FALSE
+  )
+  bgn_time <- Sys.time()
+  set.seed(123)
+  ret_obj <- sample_wrapper(0, 1, 0, 1, "TN")
+  y_samp_TN[ret_obj$ind, ] <- ret_obj$samp
+  end_time <- Sys.time()
+  time_TN <- difftime(end_time, bgn_time, units = "secs")[[1]]
+  y_pred_TN <- rowMeans(y_samp_TN)
+  cat(
+    "> ", scene_ID, ", RMSE, TN, known, ",
+    sqrt(mean((y[mask_cens] - y_pred_TN[mask_cens])^2)), "\n"
+  )
+  cat(
+    "> ", scene_ID, ", CRPS, TN, known, ",
+    mean(scoringRules::crps_sample(
+      y = y[mask_cens], dat = y_samp_TN[mask_cens, , drop = FALSE]
+    )), "\n"
+  )
+  cat(
+    "> ", scene_ID, ", time, TN, known, ",
+    time_TN, "\n"
+  )
 }
 
 # heatmap -------------------------
@@ -306,18 +303,18 @@ if (plot_heatmap) {
     ),
     width = 5, height = 5
   )
-  fields::image.plot(matrix(y_samp_SNN, sqrt(n), sqrt(n)), zlim = zlim)
+  fields::image.plot(matrix(y_samp_SNN[, 1], sqrt(n), sqrt(n)), zlim = zlim)
   dev.off()
   pdf(
     file = paste0("plots/samp_cmp_known_VT_scene", scene_ID, ".pdf"),
     width = 5, height = 5
   )
-  fields::image.plot(matrix(y_samp_VT, sqrt(n), sqrt(n)), zlim = zlim)
+  fields::image.plot(matrix(y_samp_VT[, 1], sqrt(n), sqrt(n)), zlim = zlim)
   dev.off()
   pdf(
     file = paste0("plots/samp_cmp_known_TN_scene", scene_ID, ".pdf"),
     width = 5, height = 5
   )
-  fields::image.plot(matrix(y_samp_TN, sqrt(n), sqrt(n)), zlim = zlim)
+  fields::image.plot(matrix(y_samp_TN[, 1], sqrt(n), sqrt(n)), zlim = zlim)
   dev.off()
 }
