@@ -25,6 +25,8 @@ mask_cens <- (y < cens_ub) & (y > cens_lb)
 y_obs <- y
 y_obs[mask_cens] <- NA
 
+source("../utils/score_output.R")
+
 # VMET ---------------------------------------
 source("sample_func_VT_TN.R")
 for (m in m_seq) {
@@ -38,19 +40,8 @@ for (m in m_seq) {
   y_samp_VT[ret_obj$ind, ] <- ret_obj$samp
   end_time <- Sys.time()
   time_VT <- difftime(end_time, bgn_time, units = "secs")[[1]]
-  y_pred_VT <- rowMeans(y_samp_VT)
-  cat(
-    "> ", scene_ID, ",", m, ", RMSE, VT, known, ",
-    sqrt(mean((y[mask_cens] - y_pred_VT[mask_cens])^2)), "\n"
-  )
-  cat(
-    "> ", scene_ID, ",", m, ", CRPS, VT, known, ",
-    mean(scoringRules::crps_sample(
-      y = y[mask_cens], dat = y_samp_VT[mask_cens, , drop = FALSE]
-    )), "\n"
-  )
-  cat(
-    "> ", scene_ID, ",", m, ", time, VT, known, ",
-    time_VT, "\n"
+
+  score_output(y_samp_VT[mask_cens, ], y[mask_cens], time_VT,
+    scene_ID = scene_ID, method = "VT", parms = "known"
   )
 }

@@ -31,6 +31,8 @@ if (!exists("cov_name")) {
   cov_name <- "matern15_isotropic"
 }
 
+source("../utils/score_output.R")
+
 # nntmvn ---------------------------------------
 for (m in m_seq) {
   ## covariance parameter estimation --------------------------------
@@ -91,10 +93,10 @@ for (m in m_seq) {
   bgn_time <- Sys.time()
   y_samp_est_SNN_order <- lapply(1:n_samp, function(seed_id) {
     nntmvn::rptmvn(y_obs_order, cens_lb_order, cens_ub_order,
-                   mask_cens_order,
-                   m = m,
-                   covmat = covmat_order, locs = locs_order,
-                   seed = seed_id
+      mask_cens_order,
+      m = m,
+      covmat = covmat_order, locs = locs_order,
+      seed = seed_id
     )
   })
   end_time <- Sys.time()
@@ -106,38 +108,17 @@ for (m in m_seq) {
     n_samp,
     byrow = FALSE
   )[rev_order, , drop = FALSE]
-  y_pred_est_SNN <- rowMeans(y_samp_est_SNN)
-  y_pred_cens_est_SNN <- y_pred_est_SNN[mask_cens]
+
   if (reorder == 0) {
-    SNN_name <- "SNN"
+    method <- "SNN"
   } else if (reorder == 1) {
-    SNN_name <- "SNN_order_maximin"
+    method <- "SNN_order_maximin"
   } else {
     stop("Unknown reorder\n")
   }
 
-  cat(
-    "> ", scene_ID, ",", m, ", RMSE,", SNN_name, ", unknown, ",
-    sqrt(mean((y[mask_cens] - y_pred_cens_est_SNN)^2)), "\n"
-  )
-  sd_cens_est_SNN <- apply(y_samp_est_SNN, 1, sd)[mask_cens] /
-    sqrt(n_samp)
-  cat(
-    "> ", scene_ID, ",", m, ", NLL,", SNN_name, ", unknown, ",
-    -mean(dnorm(y[mask_cens],
-      mean = y_pred_cens_est_SNN,
-      sd = sd_cens_est_SNN
-    )), "\n"
-  )
-  cat(
-    "> ", scene_ID, ",", m, ", CRPS,", SNN_name, ", unknown, ",
-    mean(scoringRules::crps_sample(
-      y = y[mask_cens],
-      dat = y_samp_est_SNN[mask_cens, , drop = FALSE]
-    )), "\n"
-  )
-  cat(
-    "> ", scene_ID, ",", m, ", time,", SNN_name, ", unknown, ",
-    time_est_SNN + time_parm_est_SNN, "\n"
+  score_output(y_samp_est_SNN[mask_cens, ], y[mask_cens],
+    time_est_SNN + time_parm_est_SNN,
+    scene_ID = scene_ID, method = method, parms = "unknown"
   )
 }

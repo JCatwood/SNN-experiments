@@ -2,7 +2,6 @@ library(doParallel)
 library(GpGp)
 library(VeccTMVN)
 library(TruncatedNormal)
-library(scoringRules)
 
 # simulation settings ------------------------------
 rm(list = ls())
@@ -21,7 +20,7 @@ if (length(args) > 0) {
   use_snn_order <- as.integer(args[3]) # 0, 1, 2
 } else {
   k <- 1
-  scene_ID <- 1
+  scene_ID <- 3
   use_snn_order <- 0
 }
 
@@ -31,6 +30,8 @@ y <- y_list[[k]]
 mask_cens <- (y < cens_ub) & (y > cens_lb)
 y_obs <- y
 y_obs[mask_cens] <- NA
+
+source("../utils/score_output.R")
 
 # nntmvn ---------------------------------------
 if (run_SNN) {
@@ -75,22 +76,9 @@ if (run_SNN) {
     n_samp,
     byrow = FALSE
   )[rev_order, , drop = FALSE]
-  y_pred_SNN <- rowMeans(y_samp_SNN)
-  y_pred_cens_SNN <- y_pred_SNN[mask_cens]
-  cat(
-    "> ", scene_ID, ", RMSE, SNN, known, ",
-    sqrt(mean((y[mask_cens] - y_pred_cens_SNN)^2)), "\n"
-  )
-  cat(
-    "> ", scene_ID, ", CRPS, SNN, known, ",
-    mean(scoringRules::crps_sample(
-      y = y[mask_cens],
-      dat = y_samp_SNN[mask_cens, , drop = FALSE]
-    )), "\n"
-  )
-  cat(
-    "> ", scene_ID, ", time, SNN, known, ",
-    time_SNN, "\n"
+
+  score_output(y_samp_SNN[mask_cens, ], y[mask_cens], time_SNN,
+    scene_ID = scene_ID, method = "SNN", parms = "known"
   )
 }
 
@@ -111,19 +99,9 @@ if (run_VT) {
   end_time <- Sys.time()
   time_VT <- difftime(end_time, bgn_time, units = "secs")[[1]]
   y_pred_VT <- rowMeans(y_samp_VT)
-  cat(
-    "> ", scene_ID, ", RMSE, VT, known, ",
-    sqrt(mean((y[mask_cens] - y_pred_VT[mask_cens])^2)), "\n"
-  )
-  cat(
-    "> ", scene_ID, ", CRPS, VT, known, ",
-    mean(scoringRules::crps_sample(
-      y = y[mask_cens], dat = y_samp_VT[mask_cens, , drop = FALSE]
-    )), "\n"
-  )
-  cat(
-    "> ", scene_ID, ", time, VT, known, ",
-    time_VT, "\n"
+
+  score_output(y_samp_VT[mask_cens, ], y[mask_cens], time_VT,
+    scene_ID = scene_ID, method = "VT", parms = "known"
   )
 }
 
@@ -139,19 +117,9 @@ if (run_TN) {
   end_time <- Sys.time()
   time_TN <- difftime(end_time, bgn_time, units = "secs")[[1]]
   y_pred_TN <- rowMeans(y_samp_TN)
-  cat(
-    "> ", scene_ID, ", RMSE, TN, known, ",
-    sqrt(mean((y[mask_cens] - y_pred_TN[mask_cens])^2)), "\n"
-  )
-  cat(
-    "> ", scene_ID, ", CRPS, TN, known, ",
-    mean(scoringRules::crps_sample(
-      y = y[mask_cens], dat = y_samp_TN[mask_cens, , drop = FALSE]
-    )), "\n"
-  )
-  cat(
-    "> ", scene_ID, ", time, TN, known, ",
-    time_TN, "\n"
+
+  score_output(y_samp_TN[mask_cens, ], y[mask_cens], time_TN,
+    scene_ID = scene_ID, method = "TN", parms = "known"
   )
 }
 
