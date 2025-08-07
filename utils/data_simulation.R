@@ -129,3 +129,18 @@ if (scene_ID == 3) {
   cens_ub <- rnorm(n)
   rm(tmp_vec)
 }
+
+# split data into training and testing -----------------------
+n_test <- round(n * 0.2)
+ind_test <- sample(1 : n, n_test, replace = FALSE)
+ind_train <- c(1 : n)[-ind_test]
+covmat_train_test <- covmat[ind_train, ind_test, drop = FALSE]
+covmat_test <- covmat[ind_test, ind_test,  drop = FALSE]
+covmat <- covmat[ind_train, ind_train, drop = FALSE]
+locs_test <- locs[ind_test, , drop = FALSE]
+locs <- locs[ind_train, , drop = FALSE]
+y_test_list <- lapply(y_list, function(x) { x[ind_test] })
+y_list <- lapply(y_list, function(x) { x[ind_train] })
+cens_lb <- cens_lb[ind_train]
+cens_ub <- cens_ub[ind_train]
+n <- n - n_test

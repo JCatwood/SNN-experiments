@@ -8,8 +8,8 @@ rm(list = ls())
 set.seed(123)
 m <- 30 # number of nearest neighbors
 n_samp <- 50 # samples generated for posterior inference
-run_SNN <- TRUE
-run_VT <- TRUE
+run_SNN <- FALSE
+run_VT <- FALSE
 run_TN <- TRUE
 use_parallel <- FALSE
 plot_heatmap <- FALSE
@@ -27,9 +27,11 @@ if (length(args) > 0) {
 # data simulation ----------------------
 source("../utils/data_simulation.R")
 y <- y_list[[k]]
+y_test <- y_test_list[[k]]
 mask_cens <- (y < cens_ub) & (y > cens_lb)
 y_obs <- y
 y_obs[mask_cens] <- NA
+L <- t(chol(covmat))
 
 source("../utils/score_output.R")
 
@@ -77,7 +79,7 @@ if (run_SNN) {
     byrow = FALSE
   )[rev_order, , drop = FALSE]
 
-  score_output(y_samp_SNN[mask_cens, ], y[mask_cens], time_SNN,
+  kriging_score_output(y_samp_SNN, y_test, time_SNN,
     scene_ID = scene_ID, method = "SNN", parms = "known"
   )
 }
@@ -98,9 +100,8 @@ if (run_VT) {
   y_samp_VT[ret_obj$ind, ] <- ret_obj$samp
   end_time <- Sys.time()
   time_VT <- difftime(end_time, bgn_time, units = "secs")[[1]]
-  y_pred_VT <- rowMeans(y_samp_VT)
 
-  score_output(y_samp_VT[mask_cens, ], y[mask_cens], time_VT,
+  kriging_score_output(y_samp_VT, y_test, time_VT,
     scene_ID = scene_ID, method = "VT", parms = "known"
   )
 }
@@ -116,45 +117,61 @@ if (run_TN) {
   y_samp_TN[ret_obj$ind, ] <- ret_obj$samp
   end_time <- Sys.time()
   time_TN <- difftime(end_time, bgn_time, units = "secs")[[1]]
-  y_pred_TN <- rowMeans(y_samp_TN)
 
-  score_output(y_samp_TN[mask_cens, ], y[mask_cens], time_TN,
+  kriging_score_output(y_samp_TN, y_test, time_TN,
     scene_ID = scene_ID, method = "TN", parms = "known"
   )
 }
 
-# heatmap -------------------------
-if (plot_heatmap) {
-  library(fields)
-  zlim <- range(y_samp_SNN, y_samp_TN, y_samp_VT)
+# save data for heatmap -------------------------
+if (k == 1) { # only for seed 1
   if (!file.exists("plots")) {
     dir.create("plots")
   }
-  pdf(
-    file = paste0("plots/sim_data_scene", scene_ID, "_true.pdf"),
-    width = 5, height = 5
+  y_all <- rep(NA, length(ind_train) + length(ind_test))
+  y_all[ind_train] <- y
+  y_all[ind_test] <- y_test
+  write.table(y_all,
+    file = paste0("plots/sim_data_scene", scene_ID, "_true.csv"),
+    row.names = F, col.names = F
   )
-  fields::image.plot(matrix(y, sqrt(n), sqrt(n)), zlim = zlim)
-  dev.off()
-  pdf(
-    file = paste0(
-      "plots/samp_cmp_known_SNN_scene", scene_ID, "_m", m,
-      "_order", use_snn_order, ".pdf"
-    ),
-    width = 5, height = 5
-  )
-  fields::image.plot(matrix(y_samp_SNN[, 1], sqrt(n), sqrt(n)), zlim = zlim)
-  dev.off()
-  pdf(
-    file = paste0("plots/samp_cmp_known_VT_scene", scene_ID, ".pdf"),
-    width = 5, height = 5
-  )
-  fields::image.plot(matrix(y_samp_VT[, 1], sqrt(n), sqrt(n)), zlim = zlim)
-  dev.off()
-  pdf(
-    file = paste0("plots/samp_cmp_known_TN_scene", scene_ID, ".pdf"),
-    width = 5, height = 5
-  )
-  fields::image.plot(matrix(y_samp_TN[, 1], sqrt(n), sqrt(n)), zlim = zlim)
-  dev.off()
+
+  if (run_SNN) {
+    y_all <- rep(NA, length(ind_train) + length(ind_test))
+    y_all[ind_train] <- y_samp_SNN[, 1]
+    y_all[ind_test] <- y_test
+    write.table(y_all,
+      file = paste0(
+        "plots/samp_cmp_known_SNN_scene", scene_ID, "_m", m,
+        "_order", use_snn_order, ".csv"
+      ),
+      row.names = F, col.names = F
+    )
+  }
+
+  if (run_VT) {
+    y_all <- rep(NA, length(ind_train) + length(ind_test))
+    y_all[ind_train] <- y_samp_VT[, 1]
+    y_all[ind_test] <- y_test
+    write.table(y_all,
+      file = paste0(
+        "plots/samp_cmp_known_VT_scene",
+        scene_ID, ".csv"
+      ),
+      row.names = F, col.names = F
+    )
+  }
+
+  if (run_TN) {
+    y_all <- rep(NA, length(ind_train) + length(ind_test))
+    y_all[ind_train] <- y_samp_TN[, 1]
+    y_all[ind_test] <- y_test
+    write.table(y_all,
+      file = paste0(
+        "plots/samp_cmp_known_TN_scene",
+        scene_ID, ".csv"
+      ),
+      row.names = F, col.names = F
+    )
+  }
 }

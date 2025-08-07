@@ -25,9 +25,11 @@ if (length(args) > 0) {
 # data simulation ----------------------
 source("../utils/data_simulation.R")
 y <- y_list[[k]]
+y_test <- y_test_list[[k]]
 mask_cens <- (y < cens_ub) & (y > cens_lb)
 y_obs <- y
 y_obs[mask_cens] <- NA
+L <- t(chol(covmat))
 
 source("../utils/score_output.R")
 
@@ -84,7 +86,7 @@ if (run_SNN) {
       method <- "SNN_order_maximin"
     }
 
-    score_output(y_samp_SNN[mask_cens, ], y[mask_cens], time_SNN,
+    kriging_score_output(y_samp_SNN, y_test, time_SNN,
       scene_ID = scene_ID, method = method, parms = "known"
     )
   }

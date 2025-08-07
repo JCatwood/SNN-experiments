@@ -21,9 +21,11 @@ if (length(args) > 0) {
 # data simulation ----------------------
 source("../utils/data_simulation.R")
 y <- y_list[[k]]
+y_test <- y_test_list[[k]]
 mask_cens <- (y < cens_ub) & (y > cens_lb)
 y_obs <- y
 y_obs[mask_cens] <- NA
+L <- t(chol(covmat))
 
 source("../utils/score_output.R")
 
@@ -41,7 +43,7 @@ for (m in m_seq) {
   end_time <- Sys.time()
   time_VT <- difftime(end_time, bgn_time, units = "secs")[[1]]
 
-  score_output(y_samp_VT[mask_cens, ], y[mask_cens], time_VT,
+  kriging_score_output(y_samp_VT, y_test, time_VT,
     scene_ID = scene_ID, method = "VT", parms = "known"
   )
 }

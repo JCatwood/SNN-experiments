@@ -24,12 +24,14 @@ if (length(args) > 0) {
 # data simulation ----------------------
 source("../utils/data_simulation.R")
 y <- y_list[[k]]
+y_test <- y_test_list[[k]]
 mask_cens <- (y < cens_ub) & (y > cens_lb)
 y_obs <- y
 y_obs[mask_cens] <- NA
 if (!exists("cov_name")) {
   cov_name <- "matern15_isotropic"
 }
+L <- t(chol(covmat))
 
 source("../utils/score_output.R")
 
@@ -117,8 +119,7 @@ for (m in m_seq) {
     stop("Unknown reorder\n")
   }
 
-  score_output(y_samp_est_SNN[mask_cens, ], y[mask_cens],
-    time_est_SNN + time_parm_est_SNN,
+  kriging_score_output(y_samp_est_SNN, y_test, time_est_SNN + time_parm_est_SNN,
     scene_ID = scene_ID, method = method, parms = "unknown"
   )
 }
