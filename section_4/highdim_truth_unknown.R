@@ -40,10 +40,6 @@ source("../utils/score_output.R")
 # CenSpBayes ------------------------------
 if (run_CB) {
   library(CensSpBayes)
-  y_samp_CB <- matrix(y_obs,
-    nrow = length(y_obs),
-    ncol = n_samp, byrow = FALSE
-  )
   bgn_time <- Sys.time()
   inla.mats <- create_inla_mats(
     S = locs, S.pred = locs[mask_cens, ],
@@ -61,6 +57,10 @@ if (run_CB) {
     inla.mats = inla.mats,
     rho.init = 0.1, rho.upper = 5,
     iters = n_iter_MC, burn = n_burn, thin = thin, ret_samp = TRUE
+  )
+  y_samp_CB <- matrix(y_obs,
+    nrow = length(y_obs),
+    ncol = ncol(ret_obj$Y.pred.samp), byrow = FALSE
   )
   y_samp_CB[mask_cens, ] <- ret_obj$Y.pred.samp
   cat("CB sampling done\n")
