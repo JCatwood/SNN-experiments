@@ -87,7 +87,7 @@ if (run_SNN) {
     }
 
     kriging_score_output(y_samp_SNN, y_test, time_SNN,
-      scene_ID = scene_ID, method = method, parms = "known"
+      scene_ID = scene_ID, m = m, method = method, parms = "known"
     )
   }
 }

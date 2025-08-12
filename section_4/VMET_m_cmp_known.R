@@ -44,6 +44,6 @@ for (m in m_seq) {
   time_VT <- difftime(end_time, bgn_time, units = "secs")[[1]]
 
   kriging_score_output(y_samp_VT, y_test, time_VT,
-    scene_ID = scene_ID, method = "VT", parms = "known"
+    scene_ID = scene_ID, m = m, method = "VT", parms = "known"
   )
 }

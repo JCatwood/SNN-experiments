@@ -120,6 +120,6 @@ for (m in m_seq) {
   }
 
   kriging_score_output(y_samp_est_SNN, y_test, time_est_SNN + time_parm_est_SNN,
-    scene_ID = scene_ID, method = method, parms = "unknown"
+    scene_ID = scene_ID, m = m, method = method, parms = "unknown"
   )
 }
