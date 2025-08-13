@@ -37,7 +37,7 @@ m_length <- length(m_vec)
 
 # comparison between SNN and others ---------------------------------------
 score_chosen <- "RMSE"
-order <- "maximin" # "maximin" # scenario 1 and 2 do not have desc ordering results
+order <- NULL # c(NULL, "maximin") # scenario 1 and 2 do not have desc ordering results
 if (is.null(order)) {
   mtd_vec <- c("CB", "SNN", "VT", "TN")
 } else {

@@ -51,9 +51,9 @@ sample_func_VT_TN <- function(x1, x2, y1, y2, method = c("VT", "TN")) {
       m = min(m, length(cond_mean_cens_envelop) - 1), N = n_samp
     )
   } else if (method[1] == "TN") {
-    if (sum(mask_cens_envelop) > 1500) {
-      stop("Input dimension for TN is too high\n")
-    }
+    # if (sum(mask_cens_envelop) > 1500) {
+    #   stop("Input dimension for TN is too high\n")
+    # }
     samp_envelop <- t(TruncatedNormal::rtmvnorm(
       n_samp, cond_mean_cens_envelop,
       cond_covmat_cens_envelop, cens_lb_envelop[mask_cens_envelop],
