@@ -2,10 +2,10 @@
 # The GP field is censored below 1.
 if (scene_ID == 1) {
   set.seed(123)
-  tmp_vec <- seq(from = 0, to = 1, length.out = 100)
+  tmp_vec <- seq(from = 0, to = 1, length.out = 80)
   locs <- as.matrix(expand.grid(tmp_vec, tmp_vec))
   cov_func <- GpGp::matern15_isotropic
-  cov_parms <- c(1.0, 0.03, 0.0001)
+  cov_parms <- c(1.0, 0.3, 0.01)
   cov_name <- "matern15_isotropic"
   covmat <- cov_func(cov_parms, locs)
   N <- 20
@@ -42,7 +42,7 @@ if (scene_ID == 1) {
 # The GP field is censored below 1.
 if (scene_ID == 2) {
   set.seed(123)
-  tmp_vec <- seq(from = 0, to = 1, length.out = 100)
+  tmp_vec <- seq(from = 0, to = 1, length.out = 80)
   locs <- as.matrix(expand.grid(tmp_vec, tmp_vec))
   # define a 2d periodic covariance function
   cov_func <- function(cov_parms, locs) {
@@ -56,7 +56,7 @@ if (scene_ID == 2) {
       exp(-2 * sin(pi * dist_mat_y / period)^2 / range^2) +
       diag(rep(nugget * variance, nrow(locs)))
   }
-  cov_parms <- c(1.0, 0.5, 0.3, 0.0001)
+  cov_parms <- c(1.0, 0.5, 0.3, 0.01)
   # cov_name used for model fitting, not the true covariance model
   cov_name <- "matern15_isotropic"
   covmat <- cov_func(cov_parms, locs)
@@ -94,10 +94,10 @@ if (scene_ID == 2) {
 # The GP field is censored below 1.
 if (scene_ID == 3) {
   set.seed(123)
-  tmp_vec <- seq(from = 0, to = 1, length.out = 100)
+  tmp_vec <- seq(from = 0, to = 1, length.out = 80)
   locs <- as.matrix(expand.grid(tmp_vec, tmp_vec))
   cov_func <- GpGp::matern15_isotropic
-  cov_parms <- c(1.0, 0.03, 0.0001)
+  cov_parms <- c(1.0, 0.3, 0.01)
   cov_name <- "matern15_isotropic"
   covmat <- cov_func(cov_parms, locs)
   N <- 20
@@ -126,12 +126,12 @@ if (scene_ID == 3) {
   }
   n <- nrow(locs)
   cens_lb <- rep(-Inf, n)
-  cens_ub <- rnorm(n)
+  cens_ub <- runif(n) + 1
   rm(tmp_vec)
 }
 
 # split data into training and testing -----------------------
-n_test <- round(n * 0.2)
+n_test <- round(n * 0.5)
 ind_test <- sample(1 : n, n_test, replace = FALSE)
 ind_train <- c(1 : n)[-ind_test]
 covmat_train_test <- covmat[ind_train, ind_test, drop = FALSE]
