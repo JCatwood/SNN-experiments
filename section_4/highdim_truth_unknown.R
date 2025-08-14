@@ -74,8 +74,8 @@ if (run_CB) {
 
 # save data for heatmap -------------------------
 if (k == 1) {
-  if (!file.exists("plots")) {
-    dir.create("plots")
+  if (!file.exists("samples")) {
+    dir.create("samples")
   }
   if (run_CB) {
     y_all <- rep(NA, length(ind_train) + length(ind_test))
@@ -83,7 +83,7 @@ if (k == 1) {
     y_all[ind_test] <- y_test
     write.table(y_all,
       file = paste0(
-        "plots/samp_cmp_known_CB_scene",
+        "samples/samp_cmp_known_CB_scene",
         scene_ID, ".csv"
       ),
       row.names = F, col.names = F

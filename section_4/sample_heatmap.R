@@ -8,33 +8,33 @@ scene_ID <- 1
 use_snn_order <- 0
 source("../utils/data_simulation.R")
 
-y_true <- read.table(paste0("plots/sim_data_scene", scene_ID, "_true.csv"),
+y_true <- read.table(paste0("samples/sim_data_scene", scene_ID, "_true.csv"),
   header = F, row.names = NULL
 )[, 1]
 y_SNN <- read.table(
   paste0(
-    "plots/samp_cmp_known_SNN_scene", scene_ID, "_m", m,
+    "samples/samp_cmp_known_SNN_scene", scene_ID, "_m", m,
     "_order", use_snn_order, ".csv"
   ),
   header = F, row.names = NULL
 )[, 1]
 y_VT <- read.table(
   paste0(
-    "plots/samp_cmp_known_VT_scene",
+    "samples/samp_cmp_known_VT_scene",
     scene_ID, ".csv"
   ),
   header = F, row.names = NULL
 )[, 1]
 y_TN <- read.table(
   paste0(
-    "plots/samp_cmp_known_TN_scene",
+    "samples/samp_cmp_known_TN_scene",
     scene_ID, ".csv"
   ),
   header = F, row.names = NULL
 )[, 1]
 y_CB <- read.table(
   paste0(
-    "plots/samp_cmp_known_CB_scene",
+    "samples/samp_cmp_known_CB_scene",
     scene_ID, ".csv"
   ),
   header = F, row.names = NULL

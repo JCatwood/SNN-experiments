@@ -125,14 +125,14 @@ if (run_TN) {
 
 # save data for heatmap -------------------------
 if (k == 1) { # only for seed 1
-  if (!file.exists("plots")) {
-    dir.create("plots")
+  if (!file.exists("samples")) {
+    dir.create("samples")
   }
   y_all <- rep(NA, length(ind_train) + length(ind_test))
   y_all[ind_train] <- y
   y_all[ind_test] <- y_test
   write.table(y_all,
-    file = paste0("plots/sim_data_scene", scene_ID, "_true.csv"),
+    file = paste0("samples/sim_data_scene", scene_ID, "_true.csv"),
     row.names = F, col.names = F
   )
 
@@ -142,7 +142,7 @@ if (k == 1) { # only for seed 1
     y_all[ind_test] <- y_test
     write.table(y_all,
       file = paste0(
-        "plots/samp_cmp_known_SNN_scene", scene_ID, "_m", m,
+        "samples/samp_cmp_known_SNN_scene", scene_ID, "_m", m,
         "_order", use_snn_order, ".csv"
       ),
       row.names = F, col.names = F
@@ -155,7 +155,7 @@ if (k == 1) { # only for seed 1
     y_all[ind_test] <- y_test
     write.table(y_all,
       file = paste0(
-        "plots/samp_cmp_known_VT_scene",
+        "samples/samp_cmp_known_VT_scene",
         scene_ID, ".csv"
       ),
       row.names = F, col.names = F
@@ -168,7 +168,7 @@ if (k == 1) { # only for seed 1
     y_all[ind_test] <- y_test
     write.table(y_all,
       file = paste0(
-        "plots/samp_cmp_known_TN_scene",
+        "samples/samp_cmp_known_TN_scene",
         scene_ID, ".csv"
       ),
       row.names = F, col.names = F
