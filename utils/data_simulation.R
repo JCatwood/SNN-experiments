@@ -5,7 +5,7 @@ if (scene_ID == 1) {
   tmp_vec <- seq(from = 0, to = 1, length.out = 100)
   locs <- as.matrix(expand.grid(tmp_vec, tmp_vec))
   cov_func <- GpGp::matern15_isotropic
-  cov_parms <- c(1.0, 0.03, 0.0001)
+  cov_parms <- c(1.0, 0.1, 0.0001)
   cov_name <- "matern15_isotropic"
   covmat <- cov_func(cov_parms, locs)
   N <- 20
@@ -97,7 +97,7 @@ if (scene_ID == 3) {
   tmp_vec <- seq(from = 0, to = 1, length.out = 100)
   locs <- as.matrix(expand.grid(tmp_vec, tmp_vec))
   cov_func <- GpGp::matern15_isotropic
-  cov_parms <- c(1.0, 0.03, 0.0001)
+  cov_parms <- c(1.0, 0.1, 0.0001)
   cov_name <- "matern15_isotropic"
   covmat <- cov_func(cov_parms, locs)
   N <- 20
@@ -132,8 +132,9 @@ if (scene_ID == 3) {
 
 # split data into training and testing -----------------------
 set.seed(123)
-n_test <- round(n * 0.2)
-ind_test <- sample(1 : n, n_test, replace = FALSE)
+ind_test <- which(locs[, 1] > 0.25 & locs[, 1] < 0.75 &
+                  locs[, 2] > 0.25 & locs[, 2] < 0.75)
+n_test <- length(ind_test)
 ind_train <- c(1 : n)[-ind_test]
 covmat_train_test <- covmat[ind_train, ind_test, drop = FALSE]
 covmat_test <- covmat[ind_test, ind_test,  drop = FALSE]

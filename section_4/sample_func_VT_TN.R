@@ -6,6 +6,9 @@ sample_func_VT_TN <- function(x1, x2, y1, y2, method = c("VT", "TN")) {
     locs[, 1] <= (x2 + offset) &
     locs[, 2] >= (y1 - offset) &
     locs[, 2] <= (y2 + offset)
+  if (sum(mask_envelop) == 0) {
+    return(list(ind = NULL, samp = NULL))
+  }
   locs_envelop <- locs[mask_envelop, , drop = FALSE]
   y_obs_envelop <- y_obs[mask_envelop]
   mask_cens_envelop <- mask_cens[mask_envelop]
@@ -16,7 +19,10 @@ sample_func_VT_TN <- function(x1, x2, y1, y2, method = c("VT", "TN")) {
   mask_inner <- locs_envelop[, 1] >= x1 &
     locs_envelop[, 1] <= x2 &
     locs_envelop[, 2] >= y1 & locs_envelop[, 2] <= y2
-
+  if (sum(mask_inner) == 0 || sum(mask_cens_envelop) == 0) {
+    return(list(ind = NULL, samp = NULL))
+  }
+  
   cat(
     "Dimension of the TMVN distribution to be sampled from is",
     sum(mask_cens_envelop), "\n"
@@ -51,9 +57,9 @@ sample_func_VT_TN <- function(x1, x2, y1, y2, method = c("VT", "TN")) {
       m = min(m, length(cond_mean_cens_envelop) - 1), N = n_samp
     )
   } else if (method[1] == "TN") {
-    # if (sum(mask_cens_envelop) > 1500) {
-    #   stop("Input dimension for TN is too high\n")
-    # }
+    if (sum(mask_cens_envelop) > 2000) {
+      stop("Input dimension for TN is too high\n")
+    }
     samp_envelop <- t(TruncatedNormal::rtmvnorm(
       n_samp, cond_mean_cens_envelop,
       cond_covmat_cens_envelop, cens_lb_envelop[mask_cens_envelop],
