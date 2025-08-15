@@ -21,7 +21,7 @@ if (length(args) > 0) {
 } else {
   k <- 1
   scene_ID <- 3
-  use_snn_order <- 2
+  use_snn_order <- 0
 }
 
 # data simulation ----------------------
