@@ -20,8 +20,8 @@ if (length(args) > 0) {
   use_snn_order <- as.integer(args[3]) # 0, 1, 2
 } else {
   k <- 1
-  scene_ID <- 3
-  use_snn_order <- 2
+  scene_ID <- 1
+  use_snn_order <- 0
 }
 
 # data simulation ----------------------
