@@ -34,34 +34,34 @@ In fact, I could not install `CensSpBayes` on my Mac OS. The experiments involvi
 Codes for producing figures/tables in Section 3 as well as the related figures/tables in the Appendix. All scripts can be run independently. 
 
 - Figure 1 and Table 1, run `lowdim_SNN.R`, `lowdim_VMET.R`, and `lowdim_CSB.R`.
-
-- Figure 2, run `time_compare.R` and `time_SNN.R`.
-
+- Figure 2, run `sample_heatmap.R`
+- Figure 3, run `time_compare.R` and `time_SNN.R`.
 - Figure D.1, run `CSB_diagnosis.R`. Note that the successful installation of `CensSpBayes` R package is required.
 
 ## Section 4
 
 Codes for producing figures/tables in Section 4 as well as the related figures/tables in the Appendix.
 
-- Figure 3, run the first section of `performance_plot.R` with `score` set to `"RMSE"` and `order` set to `"maximin"`.
+- Figure 4, run the first section of `performance_plot.R` with `score` set to `"RMSE"` and `order` set to `"maximin"`.
 - Figure E.2, run the first section of `performance_plot.R` with `score` set to `"CRPS"` and `order` set to `"maximin"`.
 - Figure E.3, run the first section of `performance_plot.R` with `score` set to `"RMSE"` and `order` set to `NULL`.
 - Figure E.4, run the first section of `performance_plot.R` with `score` set to `"CRPS"` and `order` set to `NULL`.
 - Figure E.5, run the second section of `performance_plot.R` with `score` set to `"RMSE"` and `"CRPS"`, sequentially.
-- Figure 4, run `highdim_truth_known.R` with `use_snn_order` set to 2 for maximin ordering, `scene_ID` set to 1, and seed ID `k` set to 1. Run `highdim_truth_unknown.R` with `reorder` set to 1 for maximin ordering, `scene_ID` set to 1, and seed ID `k` set to 1.
+- Figure 5, run `sample_heatmap.R`.
 
 The previous plots are based on the `mtd_cmp.csv` and the `m_cmp.csv` files. 
 
 `mtd_cmp.csv` stores the (processed) outputs from running
-- `highdim_truth_known.R` for 60 times, with `use_snn_order` set to 2, `scene_ID` sequentially set to 1, 2, and 3, and seed ID `k` sequentially set to $1, \ldots, 20$
-- `highdim_truth_unknown.R` for 60 times, with `reorder` set to 1, `scene_ID` sequentially set to 1, 2, and 3, and seed ID `k` sequentially set to $1, \ldots, 20$
 - `highdim_truth_known.R` for 60 times, with `use_snn_order` set to 0, `scene_ID` sequentially set to 1, 2, and 3, and seed ID `k` sequentially set to $1, \ldots, 20$
-- `highdim_truth_unknown.R` for 60 times, with `reorder` set to 0, `scene_ID` sequentially set to 1, 2, and 3, and seed ID `k` sequentially set to $1, \ldots, 20$
+- `highdim_truth_unknown.R` for 60 times, with `scene_ID` sequentially set to 1, 2, and 3, and seed ID `k` sequentially set to $1, \ldots, 20$
 
 `m_cmp.csv` stores the (processed) outputs from running
-- `m_compare_truth_known.R` for 180 times, with `use_snn_order` sequentially set to 0, 1, and 2; `scene_ID` sequentially set to 1, 2, and 3; and seed ID `k` sequentially set to $1, \ldots, 20$
+- `SNN_m_cmp_known.R` for 120 times, with `use_snn_order` set to 0, 2 `scene_ID` sequentially set to 1, 2, and 3, and seed ID `k` sequentially set to $1, \ldots, 20$
+- `SNN_m_cmp_unknown.R` for 120 times, with `use_snn_order` set to 0, 2 `scene_ID` sequentially set to 1, 2, and 3, and seed ID `k` sequentially set to $1, \ldots, 20$
+- `SNN_m_cmp_known.R` for 20 times, with `use_snn_order` set to 1 `scene_ID` sequentially set to 3, and seed ID `k` sequentially set to $1, \ldots, 20$
+- `SNN_m_cmp_unknown.R` for 20 times, with `use_snn_order` set to 1 `scene_ID` sequentially set to 3, and seed ID `k` sequentially set to $1, \ldots, 20$
+- `VMET_m_cmp_known.R` for 60 times, with `scene_ID` sequentially set to 1, 2, and 3, and seed ID `k` sequentially set to $1, \ldots, 20$
 
-`performance_table.R` is legacy, which is not used for any presentation in the current version.
 
 ## Section 5
 
