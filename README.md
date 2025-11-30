@@ -65,7 +65,7 @@ The previous plots are based on the `mtd_cmp.csv` and the `m_cmp.csv` files.
 
 ## Section 5
 
-Figures 5 and 6 in Section 5 can be reproduced by running `PCE_modeling.R`, where the control variables, `run_parm_est`, `run_VeccTMVN`, `run_TN`, `run_CB`, `run_seq_Vecc`, `run_seq_Vecc_all`, and `run_CB_all` should be set to `TRUE`.
+Figures 6 and 7 in Section 5 can be reproduced by running `PCE_modeling.R`, where the control variables, `run_parm_est`, `run_VeccTMVN`, `run_TN`, `run_CB`, `run_seq_Vecc`, `run_seq_Vecc_all`, and `run_CB_all` should be set to `TRUE`.
  
 Certain components of this script can take relatively long time
 
