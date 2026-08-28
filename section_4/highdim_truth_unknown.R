@@ -43,6 +43,12 @@ if (length(args) > 0) {
 if (anyNA(c(k, scene_ID)) || any(c(k, scene_ID) < 1)) {
   stop("k and scene_ID must be positive integers.\n", usage, call. = FALSE)
 }
+if (run_CB && !scene_ID %in% c(1, 2)) {
+  stop(
+    "The CSB comparison is restricted to Scenarios 1 and 2.",
+    call. = FALSE
+  )
+}
 
 library(doParallel)
 library(GpGp)

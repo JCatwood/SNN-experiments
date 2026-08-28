@@ -6,7 +6,7 @@ This document provides guidance on installing the dependencies for as well as ru
 
 Most of our dependencies are on CRAN, with only one exception. The following R code can be used to installed the CRAN dependencies for running the experiments.
 ```
-CRAN_pkg_names <- c("ggplot2", "fields", "scoringRules", "VeccTMVN", "sf", "spData", "GpGp", "nntmvn", "doParallel", "TruncatedNormal", "RColorBrewer", "autoimage", "mvtnorm", "RANN", "scales", "R.utils", "tidyr", "devtools")
+CRAN_pkg_names <- c("ggplot2", "fields", "scoringRules", "VeccTMVN", "sf", "spData", "GpGp", "nntmvn", "doParallel", "TruncatedNormal", "RColorBrewer", "autoimage", "mvtnorm", "RANN", "scales", "R.utils", "tidyr", "lhs", "devtools")
 for (pkg_name in CRAN_pkg_names) {
   install.packages(pkg_name, repos='http://cran.us.r-project.org')
 }
@@ -64,20 +64,28 @@ Codes for producing figures/tables in Section 4 as well as the related figures/t
 The previous plots are based on the `mtd_cmp.csv` and the `m_cmp.csv` files. 
 
 `mtd_cmp.csv` stores the (processed) outputs from running
-- `highdim_truth_known.R` for 60 times, with `use_snn_order` set to 0, `scene_ID` sequentially set to 1, 2, and 3, and seed ID `k` sequentially set to $1, \ldots, 20$
-- `highdim_truth_unknown.R` for 60 times, with `run_CB` set to `true`,
-  `scene_ID` sequentially set to 1, 2, and 3, and seed ID `k` sequentially set
+- `highdim_truth_known.R` for 80 times, with `use_snn_order` set to 0, `scene_ID` sequentially set to 1, 2, 3, and 4, and seed ID `k` sequentially set to $1, \ldots, 20$
+- `highdim_truth_unknown.R` for 40 times, with `run_CB` set to `true`,
+  `scene_ID` sequentially set to 1 and 2, and seed ID `k` sequentially set
   to $1, \ldots, 20$. The command-line syntax is
   `Rscript highdim_truth_unknown.R k scene_ID run_CB`; for example,
   `Rscript highdim_truth_unknown.R 1 1 true`. The third argument defaults to
-  `true` when it is omitted.
+  `true` when it is omitted. The CSB comparison is restricted to Scenarios 1
+  and 2.
 
 `m_cmp.csv` stores the (processed) outputs from running
-- `SNN_m_cmp_known.R` for 120 times, with `use_snn_order` set to 0, 2 `scene_ID` sequentially set to 1, 2, and 3, and seed ID `k` sequentially set to $1, \ldots, 20$
-- `SNN_m_cmp_unknown.R` for 120 times, with `use_snn_order` set to 0, 2 `scene_ID` sequentially set to 1, 2, and 3, and seed ID `k` sequentially set to $1, \ldots, 20$
+- `SNN_m_cmp_known.R` for 160 times, with `use_snn_order` set to 0 and 2, `scene_ID` sequentially set to 1, 2, 3, and 4, and seed ID `k` sequentially set to $1, \ldots, 20$
+- `SNN_m_cmp_unknown.R` for 160 times, with `use_snn_order` set to 0 and 2, `scene_ID` sequentially set to 1, 2, 3, and 4, and seed ID `k` sequentially set to $1, \ldots, 20$
 - `SNN_m_cmp_known.R` for 20 times, with `use_snn_order` set to 1 `scene_ID` sequentially set to 3, and seed ID `k` sequentially set to $1, \ldots, 20$
 - `SNN_m_cmp_unknown.R` for 20 times, with `use_snn_order` set to 1 `scene_ID` sequentially set to 3, and seed ID `k` sequentially set to $1, \ldots, 20$
-- `VMET_m_cmp_known.R` for 60 times, with `scene_ID` sequentially set to 1, 2, and 3, and seed ID `k` sequentially set to $1, \ldots, 20$
+- `VMET_m_cmp_known.R` for 80 times, with `scene_ID` sequentially set to 1, 2, 3, and 4, and seed ID `k` sequentially set to $1, \ldots, 20$
+
+`performance_plot.R` and the first part of `performance_table.R` obtain the
+scenario IDs from the result files, so Scenario 4 is included automatically
+after its rows are added to `m_cmp.csv` and `mtd_cmp.csv`. Their ordering-only
+comparisons intentionally remain restricted to Scenario 3. `sample_heatmap.R`
+should also remain restricted to a two-dimensional scenario; its square-grid
+heatmap is not defined for the four-dimensional Scenario 4.
 
 
 ## Section 5
@@ -91,8 +99,6 @@ Certain components of this script can take relatively long time
 - `CensSpBayes` is checked and loaded only when `run_CB` or `run_CB_all` is
   `TRUE`; the other PCE experiments do not require it
 - All other methods are relatively fast
-
-
 
 
 
