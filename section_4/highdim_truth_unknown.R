@@ -1,23 +1,67 @@
+rm(list = ls())
+
+# command-line arguments ---------------------------------------------------
+args <- commandArgs(trailingOnly = TRUE)
+usage <- paste(
+  "Usage: Rscript highdim_truth_unknown.R [k scene_ID run_CB]",
+  "  k: positive integer indexing the GP realization",
+  "  scene_ID: positive integer identifying the simulation scenario",
+  "  run_CB: true or false (default: true)",
+  sep = "\n"
+)
+
+if (any(args %in% c("-h", "--help"))) {
+  cat(usage, "\n")
+  quit(save = "no", status = 0)
+}
+
+parse_bool <- function(x) {
+  value <- tolower(x)
+  if (value %in% c("true", "t", "1", "yes", "y")) {
+    return(TRUE)
+  }
+  if (value %in% c("false", "f", "0", "no", "n")) {
+    return(FALSE)
+  }
+  stop("run_CB must be true or false.\n", usage, call. = FALSE)
+}
+
+k <- 1
+scene_ID <- 1
+run_CB <- TRUE
+if (length(args) > 0) {
+  if (!length(args) %in% c(2, 3)) {
+    stop(usage, call. = FALSE)
+  }
+  k <- as.integer(args[1]) # k is the index for GP realizations
+  scene_ID <- as.integer(args[2]) # simulation scenario ID
+  if (length(args) == 3) {
+    run_CB <- parse_bool(args[3])
+  }
+}
+
+if (anyNA(c(k, scene_ID)) || any(c(k, scene_ID) < 1)) {
+  stop("k and scene_ID must be positive integers.\n", usage, call. = FALSE)
+}
+
 library(doParallel)
 library(GpGp)
 library(VeccTMVN)
 library(TruncatedNormal)
 library(scoringRules)
 
-# simulation settings ---------------
-rm(list = ls())
+if (run_CB && !requireNamespace("CensSpBayes", quietly = TRUE)) {
+  stop(
+    "run_CB=true requires the optional CensSpBayes package. ",
+    "Run with run_CB=false to skip this experiment.",
+    call. = FALSE
+  )
+}
+
+# simulation settings ------------------------------------------------------
 set.seed(123)
-scene_ID <- 1
-k <- 1
 m <- 30 # number of nearest neighbors
 n_samp <- 50 # samples generated for posterior inference
-run_CB <- TRUE
-args <- commandArgs(trailingOnly = TRUE)
-# use command line args when running in batch on clusters
-if (length(args) > 0) {
-  k <- as.integer(args[1]) # k is the index for GP realizations
-  scene_ID <- as.integer(args[2]) # simulation scenario ID
-}
 # CensSpBayes
 n_burn <- 20000
 n_iter_MC <- 25000
@@ -37,11 +81,10 @@ L <- t(chol(covmat))
 
 source("../utils/score_output.R")
 
-# CenSpBayes ------------------------------
+# CensSpBayes ------------------------------
 if (run_CB) {
-  library(CensSpBayes)
   bgn_time <- Sys.time()
-  inla.mats <- create_inla_mats(
+  inla.mats <- CensSpBayes::create_inla_mats(
     S = locs, S.pred = locs[mask_cens, ],
     offset = c(0.01, 0.2),
     cutoff = 0.05,

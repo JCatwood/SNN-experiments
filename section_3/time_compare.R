@@ -1,3 +1,52 @@
+# input args ---------------
+args <- commandArgs(trailingOnly = TRUE)
+usage <- paste(
+  "Usage: Rscript time_compare.R [scene_ID n_samp m thin include_CSB]",
+  "  include_CSB: true or false (default: false)",
+  sep = "\n"
+)
+
+if (any(args %in% c("-h", "--help"))) {
+  cat(usage, "\n")
+  quit(save = "no", status = 0)
+}
+
+parse_bool <- function(x) {
+  value <- tolower(x)
+  if (value %in% c("true", "t", "1", "yes", "y")) {
+    return(TRUE)
+  }
+  if (value %in% c("false", "f", "0", "no", "n")) {
+    return(FALSE)
+  }
+  stop("include_CSB must be true or false.\n", usage, call. = FALSE)
+}
+
+if (length(args) > 0) {
+  if (!length(args) %in% c(4, 5)) {
+    stop(usage, call. = FALSE)
+  }
+  scene_ID <- as.integer(args[1])
+  n_samp <- as.integer(args[2])
+  m <- as.integer(args[3])
+  thin <- as.integer(args[4])
+  include_CSB <- if (length(args) == 5) parse_bool(args[5]) else FALSE
+} else {
+  scene_ID <- 1
+  n_samp <- 10
+  m <- 30
+  thin <- 5
+  include_CSB <- FALSE
+}
+n_burn <- 2000
+
+if (anyNA(c(scene_ID, n_samp, m, thin)) ||
+    any(c(scene_ID, n_samp, m, thin) < 1)) {
+  stop("scene_ID, n_samp, m, and thin must be positive integers.\n", usage,
+    call. = FALSE
+  )
+}
+
 library(TruncatedNormal)
 library(nntmvn)
 library(VeccTMVN)
@@ -6,26 +55,16 @@ library(R.utils)
 library(RANN)
 library(ggplot2)
 library(tidyr)
-library(CensSpBayes)
 
-# input args ---------------
-rm(list = ls())
-set.seed(123)
-args <- commandArgs(trailingOnly = TRUE)
-
-if (length(args) > 0) {
-  scene_ID <- as.integer(args[1])
-  n_samp <- as.integer(args[2])
-  m <- as.integer(args[3])
-  n_burn <- as.integer(args[3])
-  thin <- as.integer(args[4])
-} else {
-  scene_ID <- 1
-  n_samp <- 10
-  m <- 30
-  n_burn <- 2000
-  thin <- 5
+if (include_CSB && !requireNamespace("CensSpBayes", quietly = TRUE)) {
+  stop(
+    "include_CSB=true requires the optional CensSpBayes package. ",
+    "Run with include_CSB=false to compare the other methods.",
+    call. = FALSE
+  )
 }
+
+set.seed(123)
 
 # sim setup ----------------
 if (scene_ID == 1) {
@@ -36,7 +75,11 @@ if (scene_ID == 1) {
   ub <- 0
   n_vec <- seq(from = 10, by = 4, length.out = 11)^2
 }
-n_mtd <- 4
+method_names <- c("MET", "VMET", "SNN")
+if (include_CSB) {
+  method_names <- c(method_names, "CSB")
+}
+n_mtd <- length(method_names)
 time_df <- matrix(NA, length(n_vec), n_mtd)
 max_time <- 1800
 
@@ -111,27 +154,29 @@ for (n_sub in n_vec) {
   time_end <- Sys.time()
   time_df[n_ind, 3] <- difftime(time_end, time_bgn, units = "secs")[[1]]
 
-  # mtd 4 CensSpBayes
-  time_bgn <- Sys.time()
-  inla.mats <- CensSpBayes::create_inla_mats(
-    S = locs_sub, S.pred = locs_sub,
-    offset = c(0.01, 0.2),
-    cutoff = 0.05,
-    max.edge = c(0.01, 0.1)
-  )
-  X.obs <- matrix(1, n_sub, 1)
-  X.pred <- matrix(1, n_sub, 1)
-  set.seed(123)
-  out <- CensSpBayes(
-    Y = ub_sub, S = locs_sub, X = X.obs,
-    cutoff.Y = ub_sub,
-    S.pred = locs_sub, X.pred = X.pred,
-    inla.mats = inla.mats,
-    rho.init = 0.1, rho.upper = 5,
-    iters = n_burn + thin * n_samp, burn = n_burn, thin = thin
-  )
-  time_end <- Sys.time()
-  time_df[n_ind, 4] <- difftime(time_end, time_bgn, units = "secs")[[1]]
+  # mtd 4 CensSpBayes (optional)
+  if (include_CSB) {
+    time_bgn <- Sys.time()
+    inla.mats <- CensSpBayes::create_inla_mats(
+      S = locs_sub, S.pred = locs_sub,
+      offset = c(0.01, 0.2),
+      cutoff = 0.05,
+      max.edge = c(0.01, 0.1)
+    )
+    X.obs <- matrix(1, n_sub, 1)
+    X.pred <- matrix(1, n_sub, 1)
+    set.seed(123)
+    out <- CensSpBayes::CensSpBayes(
+      Y = ub_sub, S = locs_sub, X = X.obs,
+      cutoff.Y = ub_sub,
+      S.pred = locs_sub, X.pred = X.pred,
+      inla.mats = inla.mats,
+      rho.init = 0.1, rho.upper = 5,
+      iters = n_burn + thin * n_samp, burn = n_burn, thin = thin
+    )
+    time_end <- Sys.time()
+    time_df[n_ind, 4] <- difftime(time_end, time_bgn, units = "secs")[[1]]
+  }
 
   # update misc
   n_ind <- n_ind + 1
@@ -139,27 +184,23 @@ for (n_sub in n_vec) {
 if (!file.exists("results")) {
   dir.create("results")
 }
-save(time_df, file = paste0(
+output_suffix <- if (include_CSB) "" else "_without_CSB"
+result_file <- paste0(
   "results/time_for_", n_samp, "_scene", scene_ID, "_m", m,
-  ".RData"
-))
+  output_suffix, ".RData"
+)
+save(time_df, method_names, include_CSB, file = result_file)
 
 # plot ------------------------------------------
-load(paste0(
-  "results/time_for_", n_samp, "_scene", scene_ID, "_m", m,
-  ".RData"
-))
+load(result_file)
 time_df <- as.data.frame(cbind(n_vec, time_df))
-if (sum(is.na(time_df[, 2])) > 0) {
-  time_df[which(is.na(time_df[, 2]))[1], 2] <- max_time
+for (j in seq_len(n_mtd)) {
+  missing_rows <- which(is.na(time_df[, j + 1]))
+  if (length(missing_rows) > 0) {
+    time_df[missing_rows[1], j + 1] <- max_time
+  }
 }
-if (sum(is.na(time_df[, 3])) > 0) {
-  time_df[which(is.na(time_df[, 3]))[1], 3] <- max_time
-}
-if (sum(is.na(time_df[, 4])) > 0) {
-  time_df[which(is.na(time_df[, 4]))[1], 4] <- max_time
-}
-colnames(time_df) <- c("n", "MET", "VMET", "SNN", "CSB")
+colnames(time_df) <- c("n", method_names)
 time_df <- pivot_longer(time_df, c(2:(n_mtd + 1)),
   names_to = "method",
   values_to = "time"
@@ -176,5 +217,5 @@ if (!file.exists("plots")) {
 }
 ggsave(paste0(
   "plots/time_for_", n_samp, "_scene", scene_ID, "_m", m,
-  ".pdf"
+  output_suffix, ".pdf"
 ), width = 8, height = 5)

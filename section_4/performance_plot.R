@@ -1,7 +1,63 @@
+# command-line arguments ---------------------------------------------------
+args <- commandArgs(trailingOnly = TRUE)
+usage <- paste(
+  "Usage:",
+  "  Rscript performance_plot.R [score] [order]",
+  "  Rscript performance_plot.R --score=RMSE --order=maximin",
+  "",
+  "score: RMSE or CRPS (default: RMSE)",
+  "order: none, maximin, or desc (default: none)",
+  sep = "\n"
+)
+
+if (any(args %in% c("-h", "--help"))) {
+  cat(usage, "\n")
+  quit(save = "no", status = 0)
+}
+
+score_chosen <- "RMSE"
+order_arg <- "none"
+if (length(args) > 0) {
+  if (any(startsWith(args, "--"))) {
+    if (!all(grepl("^--(score|order)=.+$", args))) {
+      stop(usage, call. = FALSE)
+    }
+    for (arg in args) {
+      if (startsWith(arg, "--score=")) {
+        score_chosen <- sub("^--score=", "", arg)
+      } else if (startsWith(arg, "--order=")) {
+        order_arg <- sub("^--order=", "", arg)
+      }
+    }
+  } else {
+    if (length(args) > 2) {
+      stop(usage, call. = FALSE)
+    }
+    score_chosen <- args[1]
+    if (length(args) == 2) {
+      order_arg <- args[2]
+    }
+  }
+}
+
+score_chosen <- toupper(score_chosen)
+order_arg <- tolower(order_arg)
+if (!score_chosen %in% c("RMSE", "CRPS")) {
+  stop("score must be RMSE or CRPS.\n", usage, call. = FALSE)
+}
+if (!order_arg %in% c("none", "null", "na", "maximin", "desc")) {
+  stop("order must be none, maximin, or desc.\n", usage, call. = FALSE)
+}
+order_chosen <- if (order_arg %in% c("none", "null", "na")) NULL else order_arg
+
 library(ggplot2)
 library(scales)
 library(dplyr)
 library(tidyr)
+
+if (!dir.exists("plots")) {
+  dir.create("plots")
+}
 
 m_cmp_rslt <- read.table("m_cmp.csv", header = FALSE, sep = ",")
 mtd_cmp_rslt <- read.table("mtd_cmp.csv", header = FALSE, sep = ",")
@@ -36,12 +92,11 @@ m_vec <- sort(unique(m_cmp_rslt$m))
 m_length <- length(m_vec)
 
 # comparison between SNN and others ---------------------------------------
-score_chosen <- "RMSE"
-order <- NULL # c(NULL, "maximin") # scenario 1 and 2 do not have desc ordering results
-if (is.null(order)) {
+# Scenarios 1 and 2 do not have variance-descending ordering results.
+if (is.null(order_chosen)) {
   mtd_vec <- c("CB", "SNN", "VT", "TN")
 } else {
-  mtd_vec <- c("CB", paste0("SNN", "_order_", order), "VT", "TN")
+  mtd_vec <- c("CB", paste0("SNN", "_order_", order_chosen), "VT", "TN")
 }
 for (scenario_chosen in sort(unique(m_cmp_rslt$scenario))) {
   subset_score <- all_rslt %>%
@@ -110,11 +165,11 @@ for (scenario_chosen in sort(unique(m_cmp_rslt$scenario))) {
       plot.title = element_text(hjust = 0.5),
       legend.position = c(0.13, 0.8)
     )
-  if (is.null(order)) {
+  if (is.null(order_chosen)) {
     order_ID <- 0
-  } else if (order == "desc") {
+  } else if (order_chosen == "desc") {
     order_ID <- 1
-  } else if (order == "maximin") {
+  } else if (order_chosen == "maximin") {
     order_ID <- 2
   } else {
     stop("Wrong order name\n")
@@ -130,7 +185,6 @@ for (scenario_chosen in sort(unique(m_cmp_rslt$scenario))) {
 }
 
 # comparison of different orderings using SNN --------------------------------
-score_chosen <- "CRPS"
 mtd_vec <- c("SNN", "SNN_order_desc", "SNN_order_maximin")
 scenario_chosen <- 3
 

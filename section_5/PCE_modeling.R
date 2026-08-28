@@ -13,6 +13,15 @@ run_seq_Vecc <- FALSE
 run_seq_Vecc_all <- FALSE
 run_CB_all <- FALSE
 
+# CensSpBayes is optional and is checked only when a CSB experiment is enabled.
+if ((run_CB || run_CB_all) &&
+    !requireNamespace("CensSpBayes", quietly = TRUE)) {
+  stop(
+    "run_CB or run_CB_all requires the optional CensSpBayes package.",
+    call. = FALSE
+  )
+}
+
 load("PCE.RData")
 summary(data.PCE.censored)
 unique(data.PCE.censored$dl_units)
@@ -217,7 +226,6 @@ if (run_seq_Vecc_all) {
 }
 # CensSpBayes method --------------------
 if (run_CB) {
-  library(CensSpBayes)
   ind_Texas_big <- ind_Texas
   ind_obs <- which(!is.na(y))
   ind_Texas_big <- union(ind_Texas_big, ind_obs)
@@ -233,7 +241,7 @@ if (run_CB) {
   thin <- 5
   ## Sample at locations given by `ind_Texas_big` using CB -----------------
   time_bgn <- Sys.time()
-  inla.mats <- create_inla_mats(
+  inla.mats <- CensSpBayes::create_inla_mats(
     S = locs_scaled_Texas_big[, 1:2], # 3D mesh produced error
     S.pred = locs_scaled_Texas_big[mask_cens_Texas_big, 1:2],
     offset = c(0.01, 0.2),
@@ -269,7 +277,7 @@ if (run_CB_all) {
   thin <- 5
   ## Sample at all locations using CB -----------------
   time_bgn <- Sys.time()
-  inla.mats <- create_inla_mats(
+  inla.mats <- CensSpBayes::create_inla_mats(
     S = locs_scaled[, 1:2],
     S.pred = locs_scaled[mask_censor, 1:2],
     offset = c(0.01, 0.2),
