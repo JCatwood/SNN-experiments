@@ -1,96 +1,28 @@
-library(GpGp)
-library(VeccTMVN)
-library(TruncatedNormal)
-library(ggplot2)
-library(nntmvn)
-
-# lowdim example ------------------------------
-rm(list = ls())
+source("../utils/local_moments.R")
+args <- commandArgs(TRUE)
+N <- if (length(args)) as.integer(args[1]) else 1000
+reference <- length(args) > 1 && tolower(args[2]) == "true"
 set.seed(123)
-tmp_vec <- seq(from = 0.025, to = 0.975, by = 0.05)
-locs <- as.matrix(expand.grid(tmp_vec, tmp_vec))
-rm(tmp_vec)
+locs <- as.matrix(expand.grid(seq(0.025, 0.975, 0.05), seq(0.025, 0.975, 0.05)))
 n <- nrow(locs)
-m <- 30
-range_parm <- 0.1
-nu_parm <- 1.5
-lb <- rep(-Inf, n)
-ub <- rep(1, n)
-covmat <- fields::Matern(as.matrix(dist(locs)),
-  range = range_parm,
-  nu = nu_parm
-)
-L <- t(chol(covmat))
-y <- as.vector(L %*% rnorm(n))
-mask_cens <- y < ub
-n_cens <- sum(mask_cens)
-n_obs <- n - n_cens
-rm(L)
-
-# rearrange -------------------------
-ind_cens <- which(mask_cens)
-ind_obs <- setdiff(1:n, ind_cens)
-new_order <- c(ind_obs, ind_cens)
-y <- y[new_order]
-locs <- locs[new_order, ]
-covmat <- covmat[new_order, new_order]
-lb <- lb[new_order]
-ub <- ub[new_order]
-mask_cens <- mask_cens[new_order]
-ind_cens <- which(mask_cens)
-ind_obs <- setdiff(1:n, ind_cens)
-
-# three check plots
-ind_test <- sample(which(mask_cens), 10, replace = FALSE)
-check_obj <- ptmvn_check_converge(y, lb, ub, covmat,
-  m_vec = seq(from = 10, to = 100, by = 10),
-  ind_test = ind_test
-)
-first_mmt_ptmvn <- check_obj$pred
-plot(first_mmt_ptmvn) + theme(
-  axis.title = element_text(size = 16),
-  axis.text = element_text(size = 16),
-  axis.title.y = element_blank()
-)
-ggsave(
-  paste0(
-    "plots/mmt_cvg_ptmvn_lowdim.pdf"
-  ),
-  width = 6,
-  height = 5
-)
-
-first_mmt_tmvn <- tmvn_check_converge(lb[mask_cens], ub[mask_cens],
-  covmat[mask_cens, mask_cens],
-  m_vec = seq(from = 10, to = 100, by = 10),
-  ind_test = ind_test - n_obs
-)
-rownames(first_mmt_tmvn) <- paste("Loc", ind_test)
-plot(first_mmt_tmvn) + theme(
-  axis.title = element_text(size = 16),
-  axis.text = element_text(size = 16),
-  axis.title.y = element_blank()
-)
-ggsave(
-  paste0(
-    "plots/mmt_cvg_tmvn_lowdim.pdf"
-  ),
-  width = 6,
-  height = 5
-)
-
-pred_err_tmvn <- first_mmt_tmvn - matrix(y[ind_test], nrow = length(ind_test),
-                                         ncol = ncol(first_mmt_tmvn), byrow = F)
-plot(pred_err_tmvn) + theme(
-  axis.title = element_text(size = 16),
-  axis.text = element_text(size = 16),
-  axis.title.y = element_blank()
-)  + 
-  geom_hline(yintercept = 0, linetype = "dashed", color = "red") 
-ggsave(
-  paste0(
-    "plots/err_cvg_tmvn_lowdim.pdf"
-  ),
-  width = 6,
-  height = 5
-)
+Sigma <- fields::Matern(as.matrix(dist(locs)), range = 0.1, nu = 1.5)
+y <- as.vector(t(chol(Sigma)) %*% rnorm(n))
+cens <- y < 1
+targets <- sample(which(cens), 10)
+m_vec <- seq(10, 100, 10)
+all <- local_moments(y, rep(-Inf, n), rep(1, n), Sigma, cens, targets,
+  c(m_vec, if (reference) n), N, locs)
+all$context <- "Observed and censored"
+# u <- which(cens)
+# only <- local_moments(y[u], rep(-Inf, length(u)), rep(1, length(u)),
+#   Sigma[u, u], rep(TRUE, length(u)), match(targets, u),
+#   c(m_vec, if (reference) length(u)), N, locs[u, ])
+# only$index <- u[only$index]
+# only$context <- "Censored only"
+result <- rbind(all)
+dir.create("results", showWarnings = FALSE)
+dir.create("plots", showWarnings = FALSE)
+write.csv(result, "results/local_moments_lowdim.csv", row.names = FALSE)
+plot_moments(subset(result, m <= 100), "plots/local_moments_lowdim.pdf")
+saveRDS(list(data = result, targets = targets, seed = 123, reference = reference,
+  session = sessionInfo()), "results/local_moments_lowdim.rds")

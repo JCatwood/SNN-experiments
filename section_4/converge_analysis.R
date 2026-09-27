@@ -1,41 +1,22 @@
-library(GpGp)
-library(VeccTMVN)
-library(TruncatedNormal)
-library(ggplot2)
-library(nntmvn)
-# highdim ------------------------------
-## simulation settings ------------------------------
-rm(list = ls())
-set.seed(123)
-m <- 30 # number of nearest neighbors
-n_samp <- 50 # samples generated for posterior inference
-args <- commandArgs(trailingOnly = TRUE)
-if (length(args) > 0) {
-  k <- as.integer(args[1]) # k is the index for GP realizations
-  scene_ID <- as.integer(args[2])
-} else {
-  k <- 1
-  scene_ID <- 3
-}
-
-## data simulation ----------------------
+source("../utils/local_moments.R")
+args <- commandArgs(TRUE)
+k <- if (length(args)) as.integer(args[1]) else 1
+scene_ID <- if (length(args) > 1) as.integer(args[2]) else 1
+N <- if (length(args) > 2) as.integer(args[3]) else 1000
 source("../utils/data_simulation.R")
 y <- y_list[[k]]
-mask_cens <- (y < cens_ub) & (y > cens_lb)
-
-## convergence check ------------------------
-check_obj <- ptmvn_check_converge(y, cens_lb , cens_ub, covmat,
-                                  m_vec = seq(from = 10, to = 100, by = 10))
-pred_err <- check_obj$error
-plot(pred_err) + theme(
-  axis.title = element_text(size = 16),
-  axis.text = element_text(size = 16),
-  axis.title.y = element_blank()
-)
-ggsave(
-  paste0(
-    "plots/converg_analysis_scene_", scene_ID, ".pdf"
-  ),
-  width = 6,
-  height = 5
-)
+cens <- y > cens_lb & y < cens_ub
+set.seed(123)
+targets <- sample(which(cens), 10)
+# Correlation neighborhoods for periodic and random covariances.
+metric_locs <- if (scene_ID %in% c(2)) NULL else locs
+result <- local_moments(y, cens_lb, cens_ub, covmat, cens, targets,
+  seq(10, 100, 10), N, metric_locs)
+result$context <- paste("Scenario", scene_ID)
+dir.create("results", showWarnings = FALSE)
+dir.create("plots", showWarnings = FALSE)
+stem <- paste0("local_moments_scene_", scene_ID, "_seed_", k)
+write.csv(result, paste0("results/", stem, ".csv"), row.names = FALSE)
+plot_moments(result, paste0("plots/", stem, ".pdf"))
+saveRDS(list(data = result, targets = targets, session = sessionInfo()),
+  paste0("results/", stem, ".rds"))

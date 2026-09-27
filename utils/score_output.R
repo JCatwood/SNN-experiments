@@ -1,91 +1,28 @@
 library(scoringRules)
 
-score_output <- function(y_test_samp, y_test, comp_time, scene_ID = c(1, 2, 3),
-                         m = NULL, method = c("SNN", "VMET", "MET", "CSB"),
-                         parms = c("known", "unknown")) {
-  scene_ID <- scene_ID[1]
-  method <- method[1]
-  parms <- parms[1]
-
-  y_pred <- rowMeans(y_test_samp)
-
-  if (is.null(m)) {
-    cat(
-      "> ", scene_ID, ", RMSE,", paste(method, parms, sep = ", "), ",",
-      sqrt(mean((y_test - y_pred)^2)), "\n"
-    )
-    cat(
-      "> ", scene_ID, ", CRPS,", paste(method, parms, sep = ", "), ",",
-      mean(scoringRules::crps_sample(
-        y = y_test,
-        dat = y_test_samp
-      )), "\n"
-    )
-    cat(
-      "> ", scene_ID, ", time,", paste(method, parms, sep = ", "), ",",
-      comp_time, "\n"
-    )
-  } else {
-    cat(
-      "> ", scene_ID, ",", m, ", RMSE,", paste(method, parms, sep = ", "), ",",
-      sqrt(mean((y_test - y_pred)^2)), "\n"
-    )
-    cat(
-      "> ", scene_ID, ",", m, ", CRPS,", paste(method, parms, sep = ", "), ",",
-      mean(scoringRules::crps_sample(
-        y = y_test,
-        dat = y_test_samp
-      )), "\n"
-    )
-    cat(
-      "> ", scene_ID, ",", m, ", time,", paste(method, parms, sep = ", "), ",",
-      comp_time, "\n"
-    )
-  }
+score_output <- function(y_test_samp, y_test, comp_time, scene_ID = 1,
+                         m = NULL, method = "SNN", parms = "known",
+                         pred_mean = rowMeans(y_test_samp)) {
+  values <- c(RMSE = sqrt(mean((y_test - pred_mean)^2)),
+    CRPS = mean(scoringRules::crps_sample(y_test, y_test_samp)), time = comp_time)
+  result <- data.frame(scenario = scene_ID, replicate = k,
+    m = if (is.null(m)) NA_integer_ else m, score = names(values), method = method,
+    cov_kernel = parms, value = as.numeric(values))
+  dir.create("results", recursive = TRUE, showWarnings = FALSE)
+  file <- paste0("results/scene_", scene_ID, "_rep_", k, "_", method,
+    "_", parms, "_m", if (is.null(m)) "NA" else m, ".csv")
+  write.csv(result, file, row.names = FALSE)
+  print(result)
 }
 
-kriging_score_output <- function(
-    y_samp, y_test, comp_time, scene_ID = c(1, 2, 3), m = NULL, 
-    method = c("SNN", "VMET", "MET", "CSB"), parms = c("known", "unknown")) {
-  scene_ID <- scene_ID[1]
-  method <- method[1]
-  parms <- parms[1]
-  
-  y_test_samp <- t(forwardsolve(L, covmat_train_test)) %*% 
-    forwardsolve(L, y_samp) # L should be computed in the global environment
-  y_pred <- rowMeans(y_test_samp)
-  
-  if (is.null(m)) {
-    cat(
-      "> ", scene_ID, ", RMSE,", paste(method, parms, sep = ", "), ",",
-      sqrt(mean((y_test - y_pred)^2)), "\n"
-    )
-    cat(
-      "> ", scene_ID, ", CRPS,", paste(method, parms, sep = ", "), ",",
-      mean(scoringRules::crps_sample(
-        y = y_test,
-        dat = y_test_samp
-      )), "\n"
-    )
-    cat(
-      "> ", scene_ID, ", time,", paste(method, parms, sep = ", "), ",",
-      comp_time, "\n"
-    )
-  } else {
-    cat(
-      "> ", scene_ID, ",", m, ", RMSE,", paste(method, parms, sep = ", "), ",",
-      sqrt(mean((y_test - y_pred)^2)), "\n"
-    )
-    cat(
-      "> ", scene_ID, ",", m, ", CRPS,", paste(method, parms, sep = ", "), ",",
-      mean(scoringRules::crps_sample(
-        y = y_test,
-        dat = y_test_samp
-      )), "\n"
-    )
-    cat(
-      "> ", scene_ID, ",", m, ", time,", paste(method, parms, sep = ", "), ",",
-      comp_time, "\n"
-    )
-  }
+kriging_score_output <- function(y_samp, y_test, comp_time, scene_ID = 1,
+    m = NULL, method = "SNN", parms = "known", train_cov = covmat,
+    cross_cov = covmat_train_test, test_variance = diag(covmat_test)) {
+  W <- solve(train_cov, cross_cov)
+  mu <- crossprod(W, y_samp)
+  v <- pmax(0, test_variance - colSums(cross_cov * W))
+  # Independent row residuals suffice for marginal CRPS; not joint test draws.
+  set.seed(100000 + k)
+  samples <- mu + sqrt(v) * matrix(rnorm(length(mu)), nrow(mu))
+  score_output(samples, y_test, comp_time, scene_ID, m, method, parms, rowMeans(mu))
 }

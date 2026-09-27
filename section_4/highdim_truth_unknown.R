@@ -91,18 +91,18 @@ source("../utils/score_output.R")
 if (run_CB) {
   bgn_time <- Sys.time()
   inla.mats <- CensSpBayes::create_inla_mats(
-    S = locs, S.pred = locs[mask_cens, ],
+    S = locs, S.pred = rbind(locs[mask_cens, ], locs_test),
     offset = c(0.01, 0.2),
     cutoff = 0.05,
     max.edge = c(0.01, 0.1)
   )
   X.obs <- matrix(1, nrow(locs), 1)
-  X.pred <- matrix(1, sum(mask_cens), 1)
+  X.pred <- matrix(1, sum(mask_cens) + nrow(locs_test), 1)
   cat("CB sampling begins...\n")
   ret_obj <- CensSpBayes::CensSpBayes(
     Y = y_obs, S = locs, X = X.obs,
     cutoff.Y = cens_ub,
-    S.pred = locs[mask_cens, ], X.pred = X.pred,
+    S.pred = rbind(locs[mask_cens, ], locs_test), X.pred = X.pred,
     inla.mats = inla.mats,
     rho.init = 0.1, rho.upper = 5,
     iters = n_iter_MC, burn = n_burn, thin = thin, ret_samp = TRUE
@@ -111,12 +111,12 @@ if (run_CB) {
     nrow = length(y_obs),
     ncol = ncol(ret_obj$Y.pred.samp), byrow = FALSE
   )
-  y_samp_CB[mask_cens, ] <- ret_obj$Y.pred.samp
+  y_samp_CB[mask_cens, ] <- ret_obj$Y.pred.samp[seq_len(sum(mask_cens)), , drop = FALSE]
   cat("CB sampling done\n")
   end_time <- Sys.time()
   time_CB <- difftime(end_time, bgn_time, units = "secs")[[1]]
 
-  kriging_score_output(y_samp_CB, y_test, time_CB,
+  score_output(tail(ret_obj$Y.pred.samp, nrow(locs_test)), y_test, time_CB,
     scene_ID = scene_ID, method = "CB", parms = "unknown"
   )
 }

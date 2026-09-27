@@ -6,6 +6,7 @@ sample_func_VT_TN <- function(x1, x2, y1, y2, method = c("VT", "TN")) {
     locs[, 1] <= (x2 + offset) &
     locs[, 2] >= (y1 - offset) &
     locs[, 2] <= (y2 + offset)
+  if (!any(mask_cens[mask_envelop])) return(list(ind = integer(), samp = matrix(numeric(), 0, n_samp)))
   locs_envelop <- locs[mask_envelop, , drop = FALSE]
   y_obs_envelop <- y_obs[mask_envelop]
   mask_cens_envelop <- mask_cens[mask_envelop]
@@ -14,8 +15,8 @@ sample_func_VT_TN <- function(x1, x2, y1, y2, method = c("VT", "TN")) {
   covmat_envelop <- covmat[mask_envelop, mask_envelop, drop = FALSE]
   locs_cens_envelop <- locs_envelop[mask_cens_envelop, , drop = FALSE]
   mask_inner <- locs_envelop[, 1] >= x1 &
-    locs_envelop[, 1] <= x2 &
-    locs_envelop[, 2] >= y1 & locs_envelop[, 2] <= y2
+    (locs_envelop[, 1] < x2 | x2 == 1) &
+    locs_envelop[, 2] >= y1 & (locs_envelop[, 2] < y2 | y2 == 1)
 
   cat(
     "Dimension of the TMVN distribution to be sampled from is",
@@ -42,7 +43,7 @@ sample_func_VT_TN <- function(x1, x2, y1, y2, method = c("VT", "TN")) {
   cond_covmat_cens_envelop[lower.tri(cond_covmat_cens_envelop)] <-
     t(cond_covmat_cens_envelop)[lower.tri(cond_covmat_cens_envelop)]
 
-  if (method[1] == "VT") {
+  if (method[1] == "VT" && sum(mask_cens_envelop) > 1) {
     samp_envelop <- VeccTMVN::mvrandn(
       lower = cens_lb_envelop[mask_cens_envelop],
       upper = cens_ub_envelop[mask_cens_envelop],
@@ -50,7 +51,7 @@ sample_func_VT_TN <- function(x1, x2, y1, y2, method = c("VT", "TN")) {
       sigma = cond_covmat_cens_envelop,
       m = min(m, length(cond_mean_cens_envelop) - 1), N = n_samp
     )
-  } else if (method[1] == "TN") {
+  } else if (method[1] %in% c("TN", "VT")) {
     if (sum(mask_cens_envelop) > 2000) {
       stop("Input dimension for TN is too high\n")
     }
@@ -66,85 +67,30 @@ sample_func_VT_TN <- function(x1, x2, y1, y2, method = c("VT", "TN")) {
 
   locs_cens_envelop <- locs_envelop[mask_cens_envelop, , drop = FALSE]
   mask_cens_inner <- locs_cens_envelop[, 1] >= x1 &
-    locs_cens_envelop[, 1] <= x2 &
+    (locs_cens_envelop[, 1] < x2 | x2 == 1) &
     locs_cens_envelop[, 2] >= y1 &
-    locs_cens_envelop[, 2] <= y2
+    (locs_cens_envelop[, 2] < y2 | y2 == 1)
   ind <- c(1:n)[mask_envelop][mask_inner & mask_cens_envelop]
-  return(list(ind = ind, samp = samp_envelop[mask_cens_inner, ]))
+  return(list(ind = ind, samp = samp_envelop[mask_cens_inner, , drop = FALSE]))
 }
 
-sample_wrapper <- function(x1, x2, y1, y2, method = c("VT", "TN")) {
-  cat(method, "sampling [", x1, x2, "] X [", y1, y2, "]...\n")
-  ret_obj <- tryCatch(
-    {
-      R.utils::withTimeout(
-        {
-          ret_obj <- sample_func_VT_TN(x1, x2, y1, y2, method)
-          cat("Done", method, "sampling [", x1, x2, "] X [", y1, y2, "]\n")
-          ret_obj
-        },
-        timeout = 600
-      )
-    },
-    TimeoutException = function(foo) {
-      cat(
-        method, "sampling in [", x1, x2, "] X [", y1, y2, "] did not finish",
-        "within 10 minutes\n"
-      )
-      x_span <- (x2 - x1) / 3
-      y_span <- (y2 - y1) / 3
-      ret_obj1 <- sample_wrapper(x1, x1 + x_span, y1, y1 + y_span, method)
-      ret_obj2 <- sample_wrapper(x1, x1 + x_span, y1 + y_span, y1 + 2 * y_span, method)
-      ret_obj3 <- sample_wrapper(x1, x1 + x_span, y1 + 2 * y_span, y2, method)
-      ret_obj4 <- sample_wrapper(x1 + x_span, x1 + 2 * x_span, y1, y1 + y_span, method)
-      ret_obj5 <- sample_wrapper(x1 + x_span, x1 + 2 * x_span, y1 + y_span, y1 + 2 * y_span, method)
-      ret_obj6 <- sample_wrapper(x1 + x_span, x1 + 2 * x_span, y1 + 2 * y_span, y2, method)
-      ret_obj7 <- sample_wrapper(x1 + 2 * x_span, x2, y1, y1 + y_span, method)
-      ret_obj8 <- sample_wrapper(x1 + 2 * x_span, x2, y1 + y_span, y1 + 2 * y_span, method)
-      ret_obj9 <- sample_wrapper(x1 + 2 * x_span, x2, y1 + 2 * y_span, y2, method)
-
-      ret_obj <- list(
-        ind = c(
-          ret_obj1$ind, ret_obj2$ind, ret_obj3$ind,
-          ret_obj4$ind, ret_obj5$ind, ret_obj6$ind,
-          ret_obj7$ind, ret_obj8$ind, ret_obj9$ind
-        ),
-        samp = rbind(
-          ret_obj1$samp, ret_obj2$samp, ret_obj3$samp,
-          ret_obj4$samp, ret_obj5$samp, ret_obj6$samp,
-          ret_obj7$samp, ret_obj8$samp, ret_obj9$samp
-        )
-      )
-      ret_obj
-    },
-    error = function(e) {
-      message("Caught error: ", e$message)
-      x_span <- (x2 - x1) / 3
-      y_span <- (y2 - y1) / 3
-      ret_obj1 <- sample_wrapper(x1, x1 + x_span, y1, y1 + y_span, method)
-      ret_obj2 <- sample_wrapper(x1, x1 + x_span, y1 + y_span, y1 + 2 * y_span, method)
-      ret_obj3 <- sample_wrapper(x1, x1 + x_span, y1 + 2 * y_span, y2, method)
-      ret_obj4 <- sample_wrapper(x1 + x_span, x1 + 2 * x_span, y1, y1 + y_span, method)
-      ret_obj5 <- sample_wrapper(x1 + x_span, x1 + 2 * x_span, y1 + y_span, y1 + 2 * y_span, method)
-      ret_obj6 <- sample_wrapper(x1 + x_span, x1 + 2 * x_span, y1 + 2 * y_span, y2, method)
-      ret_obj7 <- sample_wrapper(x1 + 2 * x_span, x2, y1, y1 + y_span, method)
-      ret_obj8 <- sample_wrapper(x1 + 2 * x_span, x2, y1 + y_span, y1 + 2 * y_span, method)
-      ret_obj9 <- sample_wrapper(x1 + 2 * x_span, x2, y1 + 2 * y_span, y2, method)
-
-      ret_obj <- list(
-        ind = c(
-          ret_obj1$ind, ret_obj2$ind, ret_obj3$ind,
-          ret_obj4$ind, ret_obj5$ind, ret_obj6$ind,
-          ret_obj7$ind, ret_obj8$ind, ret_obj9$ind
-        ),
-        samp = rbind(
-          ret_obj1$samp, ret_obj2$samp, ret_obj3$samp,
-          ret_obj4$samp, ret_obj5$samp, ret_obj6$samp,
-          ret_obj7$samp, ret_obj8$samp, ret_obj9$samp
-        )
-      )
-      ret_obj
-    }
-  )
-  return(ret_obj)
+# Only dimension limits and timeouts cause subdivision; other errors surface.
+sample_wrapper <- function(x1, x2, y1, y2, method = "VT", depth = 0) {
+  inside <- locs[, 1] >= x1 - offset & locs[, 1] <= x2 + offset &
+    locs[, 2] >= y1 - offset & locs[, 2] <= y2 + offset
+  too_large <- sum(mask_cens[inside]) > 2000
+  result <- if (too_large) NULL else tryCatch(
+    R.utils::withTimeout(sample_func_VT_TN(x1, x2, y1, y2, method), timeout = 600),
+    TimeoutException = function(e) NULL)
+  if (!is.null(result)) return(result)
+  if (depth == 4) stop("Partition limit reached; inspect this scenario before increasing it.")
+  xs <- seq(x1, x2, length.out = 4)
+  ys <- seq(y1, y2, length.out = 4)
+  tiles <- expand.grid(x = 1:3, y = 1:3)
+  result <- lapply(seq_len(nrow(tiles)), function(i) {
+    a <- tiles$x[i]; b <- tiles$y[i]
+    sample_wrapper(xs[a], xs[a + 1], ys[b], ys[b + 1], method, depth + 1)
+  })
+  list(ind = unlist(lapply(result, `[[`, "ind")),
+    samp = do.call(rbind, lapply(result, `[[`, "samp")))
 }

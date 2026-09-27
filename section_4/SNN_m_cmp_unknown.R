@@ -44,7 +44,7 @@ for (m in m_seq) {
     } else {
       order <- 1:n
     }
-  } else if (reorder == 1) {
+  } else if (reorder %in% c(1, 2)) {
     order <- GpGp::order_maxmin(locs)
     if (subset_size < n) {
       order <- order[1:subset_size]
@@ -81,7 +81,7 @@ for (m in m_seq) {
   ## sampling ----------------------
   if (reorder == 0) {
     order <- 1:n
-  } else if (reorder == 1) {
+  } else if (reorder %in% c(1, 2)) {
     order <- GpGp::order_maxmin(locs)
   }
   cat("SNN sampling...\n")
@@ -98,7 +98,7 @@ for (m in m_seq) {
       mask_cens_order,
       m = m,
       covmat = covmat_order, locs = locs_order,
-      seed = seed_id
+      ordering = if (reorder == 2) 1 else 0, seed = seed_id
     )
   })
   end_time <- Sys.time()
@@ -115,11 +115,18 @@ for (m in m_seq) {
     method <- "SNN"
   } else if (reorder == 1) {
     method <- "SNN_order_maximin"
+  } else if (reorder == 2) {
+    method <- "SNN_order_desc"
   } else {
     stop("Unknown reorder\n")
   }
 
+  # Prediction must use the fitted kernel, not the simulation truth.
+  K_est <- getFromNamespace(cov_name, "GpGp")(cov_parms_est, rbind(locs, locs_test))
+  j_test <- n + seq_len(nrow(locs_test))
   kriging_score_output(y_samp_est_SNN, y_test, time_est_SNN + time_parm_est_SNN,
-    scene_ID = scene_ID, m = m, method = method, parms = "unknown"
+    scene_ID = scene_ID, m = m, method = method, parms = "unknown",
+    train_cov = K_est[seq_len(n), seq_len(n)],
+    cross_cov = K_est[seq_len(n), j_test], test_variance = diag(K_est)[j_test]
   )
 }

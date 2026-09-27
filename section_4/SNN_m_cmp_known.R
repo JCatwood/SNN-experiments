@@ -45,6 +45,7 @@ if (run_SNN) {
   for (m in m_seq) {
     cat("SNN sampling...\n")
     bgn_time <- Sys.time()
+    NN <- if (scene_ID %in% c(2)) nntmvn::corr_nn(covmat_order, m - 1) else NULL
     if (use_parallel) {
       ncores <- 4
       cl <- makeCluster(ncores)
@@ -53,7 +54,7 @@ if (run_SNN) {
         nntmvn::rptmvn(y_obs_order, cens_lb_order, cens_ub_order,
           mask_cens_order,
           m = m,
-          covmat = covmat_order, locs = locs_order, ordering = use_snn_order,
+          covmat = covmat_order, locs = locs_order, NN = NN, ordering = use_snn_order,
           seed = i
         )
       }
@@ -63,7 +64,7 @@ if (run_SNN) {
         nntmvn::rptmvn(y_obs_order, cens_lb_order, cens_ub_order,
           mask_cens_order,
           m = m,
-          covmat = covmat_order, locs = locs_order, ordering = use_snn_order,
+          covmat = covmat_order, locs = locs_order, NN = NN, ordering = use_snn_order,
           seed = seed_id
         )
       })
