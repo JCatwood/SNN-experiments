@@ -15,7 +15,6 @@ if (length(args) > 0) {
 # data simulation ----------------------------------
 source("../utils/data_simulation.R")
 y <- y_list[[k]]
-y_test <- y_test_list[[k]]
 mask_cens <- (y < cens_ub) & (y > cens_lb)
 y_obs <- y
 y_obs[mask_cens] <- NA
@@ -29,8 +28,13 @@ bgn_time <- Sys.time()
 set.seed(123)
 ret_obj <- sample_wrapper(0, 1, 0, 1, "TN")
 y_samp_MET[ret_obj$ind, ] <- ret_obj$samp
-time_MET <- difftime(Sys.time(), bgn_time, units = "secs")[[1]]
+comp_time <- difftime(Sys.time(), bgn_time, units = "secs")[[1]]
 
-kriging_score_output(y_samp_MET, y_test, time_MET,
-  scene_ID = scene_ID, method = "MET", parms = "known"
+score_output(
+  y_samp_MET[mask_cens, , drop = FALSE],
+  y[mask_cens],
+  comp_time,
+  scene_ID = scene_ID,
+  method = "MET",
+  parms = "known"
 )

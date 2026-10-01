@@ -25,7 +25,6 @@ if (length(args) > 0) {
 # data simulation ----------------------
 source("../utils/data_simulation.R")
 y <- y_list[[k]]
-y_test <- y_test_list[[k]]
 mask_cens <- (y < cens_ub) & (y > cens_lb)
 y_obs <- y
 y_obs[mask_cens] <- NA
@@ -71,10 +70,10 @@ if (run_SNN) {
     }
     end_time <- Sys.time()
     cat("SNN sampling is done\n")
-    time_SNN <- difftime(end_time, bgn_time, units = "secs")[[1]]
+    comp_time <- difftime(end_time, bgn_time, units = "secs")[[1]]
     rev_order <- 1:n
     rev_order[order] <- 1:n
-    y_samp_SNN <- matrix(unlist(y_samp_SNN_order), n,
+    y_samp <- matrix(unlist(y_samp_SNN_order), n,
       n_samp,
       byrow = FALSE
     )[rev_order, , drop = FALSE]
@@ -86,9 +85,15 @@ if (run_SNN) {
     } else {
       method <- "SNN_order_maximin"
     }
-
-    kriging_score_output(y_samp_SNN, y_test, time_SNN,
-      scene_ID = scene_ID, m = m, method = method, parms = "known"
+    
+    score_output(
+      y_samp[mask_cens, , drop = FALSE],
+      y[mask_cens],
+      comp_time,
+      scene_ID = scene_ID,
+      m = m,
+      method = method,
+      parms = "known"
     )
   }
 }
