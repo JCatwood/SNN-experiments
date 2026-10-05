@@ -42,9 +42,12 @@ yt[cens[train]] <- NA
 bt <- b[train]
 ct <- cens[train]
 xt <- x[train, , drop = FALSE]
-fit <- seq_len(length(train))
-# fit <- GpGp::order_maxmin(xt)[seq_len(max(51, round(0.2 * length(train))))]
-# fit <- fit[!is.na(fit)]
+if (region == "TX") {
+  fit <- seq_len(length(train))  
+} else {
+  fit <- GpGp::order_maxmin(xt)[seq_len(max(51, round(0.2 * length(train))))]
+  fit <- fit[!is.na(fit)]
+}
 nll <- function(lp) {
   set.seed(123)
   -VeccTMVN::loglk_censor_MVN(xt[fit, ], which(ct[fit]), yt[fit], bt[fit],
@@ -98,7 +101,7 @@ for (method in methods) {
     cb <- CensSpBayes::CensSpBayes(Y = obs, S = S, X = matrix(1, nrow(S), 1),
       cutoff.Y = bt, S.pred = Sp, X.pred = matrix(1, nrow(Sp), 1),
       inla.mats = mats, rho.init = .1, rho.upper = 5,
-      iters = 20000 + 5 * N, burn = 20000, thin = 5, ret_samp = TRUE)
+      iters = 20000 + 5 * 1000, burn = 20000, thin = 5, ret_samp = TRUE)
     pred <- cb$Y.pred.samp
     mean_pred <- rowMeans(pred)
     probability <- rowMeans(pred <= b[test])
