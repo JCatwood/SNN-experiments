@@ -4,14 +4,16 @@ library(spData)
 library(GpGp)
 
 rm(list = ls())
+set.seed(123)
 
 run_parm_est <- FALSE
-run_VeccTMVN <- FALSE
-run_TN <- FALSE
+run_VeccTMVN <- TRUE
+run_TN <- TRUE
 run_CB <- FALSE
-run_seq_Vecc <- FALSE
-run_seq_Vecc_all <- FALSE
+run_seq_Vecc <- TRUE
+run_seq_Vecc_all <- TRUE
 run_CB_all <- FALSE
+n_national <- 3 # independent SNN draws; retain the same number for CSB
 
 # CensSpBayes is optional and is checked only when a CSB experiment is enabled.
 if ((run_CB || run_CB_all) &&
@@ -23,10 +25,6 @@ if ((run_CB || run_CB_all) &&
 }
 
 load("PCE.RData")
-summary(data.PCE.censored)
-unique(data.PCE.censored$dl_units)
-unique(data.PCE.censored$Units)
-hist(log(data.PCE.censored$result_va)) # it looks like censored normal indeed!
 # extract raw data -------------------------------
 y <- log(data.PCE.censored$result_va + 1e-8)
 b_censor <- log(data.PCE.censored$detection_level + 1e-8)
@@ -68,7 +66,7 @@ if (run_parm_est) {
   }
   opt_obj <- optim(
     par = logcovparms_init, fn = neglk_func,
-    control = list(trace = 1, maxit = 500), m = 50, NLevel2 = 1e3
+    control = list(trace = 1, maxit = 200), m = 50, NLevel2 = 1e3
   )
   if (!file.exists("results")) {
     dir.create("results")
@@ -89,7 +87,7 @@ lonlat_to_state <- function(locs) {
   pts <- st_transform(pts, crs = 3857)
   ## Find names of state (if any) intersected by each point
   state_names <- states[["NAME"]]
-  ii <- as.integer(st_intersects(pts, states))
+  ii <- vapply(st_intersects(pts, states), function(i) if (length(i)) i[1] else NA_integer_, integer(1))
   state_names[ii]
 }
 state_names <- lonlat_to_state(data.frame(locs))
@@ -109,7 +107,7 @@ if (run_VeccTMVN) {
   y_scaled_Texas_big <- y_scaled[ind_Texas_big]
   b_scaled_Texas_big <- b_scaled[ind_Texas_big]
   ind_obs_tmp <- which(!is.na(y_scaled_Texas_big))
-  n_samp <- 1000
+  n_samp <- 3
   n_cens <- sum(is.na(y_scaled_Texas_big))
   covparms <- exp(opt_obj$par)
   m <- 50
@@ -154,7 +152,7 @@ if (run_seq_Vecc) {
   y_scaled_Texas_big <- y_scaled[ind_Texas_big]
   b_scaled_Texas_big <- b_scaled[ind_Texas_big]
   ind_obs_tmp <- which(!is.na(y_scaled_Texas_big))
-  n_samp <- 1000
+  n_samp <- 3
   n_cens <- sum(is.na(y_scaled_Texas_big))
   covparms <- exp(opt_obj$par)
   m <- 50
@@ -181,7 +179,7 @@ if (run_seq_Vecc) {
       cens_lb = rep(-Inf, n_cens) - cond_mean_TX_cens,
       cens_ub = b_scaled_Texas_big[-ind_obs_tmp] - cond_mean_TX_cens,
       m = m, covmat = cond_covmat_TX_cens, ordering = 2,
-      locs = locs_scaled_Texas_big[-ind_obs_tmp, ]
+      locs = locs_scaled_Texas_big[-ind_obs_tmp, ], seed = i
     ) + cond_mean_TX_cens
   }
   stopCluster(cl)
@@ -210,11 +208,11 @@ if (run_seq_Vecc_all) {
   covparms_tmp <- covparms
   covparms_tmp[2:4] <- 1
   time_bgn <- Sys.time()
-  samp_seq_Vecc_all <- nntmvn::rptmvn(
+  samp_seq_Vecc_all <- vapply(seq_len(n_national), function(s) nntmvn::rptmvn(
     y_scaled, rep(-Inf, n), b_scaled, is.na(y_scaled), m,
     locs = locs_scaled_twice, cov_name = cov_name,
-    cov_parm = covparms_tmp, seed = 1, ordering = 2
-  ) # only draw one sample
+    cov_parm = covparms_tmp, seed = s, ordering = 2
+  ), numeric(n))
   time_end <- Sys.time()
   time_seq_Vecc_all <- difftime(time_end, time_bgn, units = "secs")[[1]]
   if (!file.exists("results")) {
@@ -237,7 +235,7 @@ if (run_CB) {
   y_obs_scaled_Texas_big[mask_cens_Texas_big] <-
     b_scaled_Texas_big[mask_cens_Texas_big]
   n_burn <- 20000
-  n_iter_MC <- 25000
+  n_iter_MC <- 20015
   thin <- 5
   ## Sample at locations given by `ind_Texas_big` using CB -----------------
   time_bgn <- Sys.time()
@@ -263,8 +261,6 @@ if (run_CB) {
   if (!file.exists("results")) {
     dir.create("results")
   }
-  y_samp_CB$Y.pred.samp <-
-    y_samp_CB$Y.pred.samp[, ncol(y_samp_CB$Y.pred.samp), drop = F]
   save(y_samp_CB, time_TX_CB, ind_Texas_big,
     file = "results/PCE_samp_CB.RData"
   )
@@ -273,7 +269,7 @@ if (run_CB_all) {
   y_obs_scaled <- y_scaled
   y_obs_scaled[mask_censor] <- b_scaled[mask_censor]
   n_burn <- 20000
-  n_iter_MC <- 25000
+  n_iter_MC <- n_burn + 5 * n_national
   thin <- 5
   ## Sample at all locations using CB -----------------
   time_bgn <- Sys.time()
@@ -299,8 +295,6 @@ if (run_CB_all) {
   if (!file.exists("results")) {
     dir.create("results")
   }
-  y_samp_CB_all$Y.pred.samp <-
-    y_samp_CB_all$Y.pred.samp[, ncol(y_samp_CB_all$Y.pred.samp), drop = F]
   save(y_samp_CB_all, time_TX_CB_all, file = "results/PCE_samp_CB_all.RData")
 }
 # TruncatedNormal method --------------------
@@ -314,7 +308,7 @@ if (run_TN) {
   y_scaled_Texas_big <- y_scaled[ind_Texas_big]
   b_scaled_Texas_big <- b_scaled[ind_Texas_big]
   ind_obs_tmp <- which(!is.na(y_scaled_Texas_big))
-  n_samp <- 1000
+  n_samp <- 3
   n_cens <- sum(is.na(y_scaled_Texas_big))
   covparms <- exp(opt_obj$par)
   ## Sample at locations given by `ind_Texas_big` using TN -----------------
@@ -345,168 +339,5 @@ if (run_TN) {
     file = "results/PCE_samp_TN.RData"
   )
 }
-# Texas plots -------------------------------------------
-library(fields)
-library(RColorBrewer)
-if (!file.exists("plots")) {
-  dir.create("plots")
-}
-lon_grid <- seq(from = -106.6, to = -93.5, length.out = 100)
-lat_grid <- seq(from = 25.8, to = 36.6, length.out = 100)
-TX_grid <- expand.grid(lon_grid, lat_grid)
-colnames(TX_grid) <- c("lon", "lat")
-TX_grid_scaled <- TX_grid
-for (j in 1:(d - 1)) {
-  TX_grid_scaled[, j] <- (TX_grid_scaled[, j] - min(locs[, j])) /
-    (max(locs[, j]) - min(locs[, j]))
-}
-TX_grid_scaled <- cbind(TX_grid_scaled, rep(1, nrow(TX_grid)))
-colnames(TX_grid_scaled) <- c("lon", "lat", "time")
-## pred VeccTMVN --------------------------------------
-load("results/PCE_samp_VT.RData")
-locs_scaled_Texas_big <- locs_scaled[ind_Texas_big, , drop = F]
-cov_mat <- get(cov_name)(covparms, rbind(
-  locs_scaled_Texas_big,
-  as.matrix(TX_grid_scaled)
-))
-n_obs <- nrow(locs_scaled_Texas_big)
-n_grid <- nrow(TX_grid)
-pred_VMET <- rowMeans(cov_mat[(n_obs + 1):(n_obs + n_grid), 1:n_obs] %*%
-  solve(cov_mat[1:n_obs, 1:n_obs], samp_TX_VT))
-pred_VMET <- pred_VMET * sd(y, na.rm = T) + mean(y, na.rm = T)
-pred_VMET[!(lonlat_to_state(TX_grid) == "Texas") |
-  (is.na(lonlat_to_state(TX_grid)))] <- NA
-## pred SNN --------------------------------------
-load("results/PCE_samp_seq_Vecc.RData")
-locs_scaled_Texas_big <- locs_scaled[ind_Texas_big, , drop = F]
-cov_mat <- get(cov_name)(covparms, rbind(
-  locs_scaled_Texas_big,
-  as.matrix(TX_grid_scaled)
-))
-n_obs <- nrow(locs_scaled_Texas_big)
-n_grid <- nrow(TX_grid)
-pred_seq_Vecc <- rowMeans(cov_mat[(n_obs + 1):(n_obs + n_grid), 1:n_obs] %*%
-  solve(cov_mat[1:n_obs, 1:n_obs], samp_seq_Vecc))
-pred_seq_Vecc <- pred_seq_Vecc * sd(y, na.rm = T) + mean(y, na.rm = T)
-pred_seq_Vecc[!(lonlat_to_state(TX_grid) == "Texas") |
-  (is.na(lonlat_to_state(TX_grid)))] <- NA
-## pred_LOD_GP --------------------------------------
-ind_censor_Texas_big <- which(is.na(y[ind_Texas_big]))
-locs_scaled_Texas_big <- locs_scaled[ind_Texas_big, , drop = F]
-b_scaled_Texas_big <- b_scaled[ind_Texas_big]
-y_aug <- samp_TX_VT[, 1]
-y_aug[ind_censor_Texas_big] <- b_scaled_Texas_big[ind_censor_Texas_big]
-cov_mat <- get(cov_name)(covparms, rbind(
-  locs_scaled_Texas_big,
-  as.matrix(TX_grid_scaled)
-))
-n_obs <- nrow(locs_scaled_Texas_big)
-n_grid <- nrow(TX_grid)
-pred_GP_aug <- as.vector(cov_mat[(n_obs + 1):(n_obs + n_grid), 1:n_obs] %*%
-  solve(cov_mat[1:n_obs, 1:n_obs], y_aug))
-pred_GP_aug <- pred_GP_aug * sd(y, na.rm = T) + mean(y, na.rm = T)
-pred_GP_aug[!(lonlat_to_state(TX_grid) == "Texas") |
-  (is.na(lonlat_to_state(TX_grid)))] <- NA
-## pred_CB --------------------------------------
-load("results/PCE_samp_CB.RData")
-ind_censor_Texas_big <- which(is.na(y[ind_Texas_big]))
-locs_scaled_Texas_big <- locs_scaled[ind_Texas_big, , drop = F]
-y_scaled_Texas_big_tmp <- y_scaled[ind_Texas_big]
-y_scaled_Texas_big_tmp[is.na(y_scaled_Texas_big_tmp)] <-
-  y_samp_CB$Y.pred.posmean
-cov_mat <- get(cov_name)(covparms, rbind(
-  locs_scaled_Texas_big,
-  as.matrix(TX_grid_scaled)
-))
-n_obs <- nrow(locs_scaled_Texas_big)
-n_grid <- nrow(TX_grid)
-pred_GP_CB <- as.vector(cov_mat[(n_obs + 1):(n_obs + n_grid), 1:n_obs] %*%
-  solve(cov_mat[1:n_obs, 1:n_obs], y_scaled_Texas_big_tmp))
-pred_GP_CB <- pred_GP_CB * sd(y, na.rm = T) + mean(y, na.rm = T)
-pred_GP_CB[!(lonlat_to_state(TX_grid) == "Texas") |
-  (is.na(lonlat_to_state(TX_grid)))] <- NA
-## pred_TN --------------------------------------
-load("results/PCE_samp_TN.RData")
-ind_censor_Texas_big <- which(is.na(y[ind_Texas_big]))
-locs_scaled_Texas_big <- locs_scaled[ind_Texas_big, , drop = F]
-y_scaled_Texas_big_tmp <- y_scaled[ind_Texas_big]
-y_scaled_Texas_big_tmp[is.na(y_scaled_Texas_big_tmp)] <-
-  colMeans(samp_TX_TN)
-cov_mat <- get(cov_name)(covparms, rbind(
-  locs_scaled_Texas_big,
-  as.matrix(TX_grid_scaled)
-))
-n_obs <- nrow(locs_scaled_Texas_big)
-n_grid <- nrow(TX_grid)
-pred_TN <- as.vector(cov_mat[(n_obs + 1):(n_obs + n_grid), 1:n_obs] %*%
-  solve(cov_mat[1:n_obs, 1:n_obs], y_scaled_Texas_big_tmp))
-pred_TN <- pred_TN * sd(y, na.rm = T) + mean(y, na.rm = T)
-pred_TN[!(lonlat_to_state(TX_grid) == "Texas") |
-  (is.na(lonlat_to_state(TX_grid)))] <- NA
-## actual plot ----------------------------------------
-zlim <- range(pred_GP_aug, pred_seq_Vecc, pred_GP_CB, pred_TN, pred_VMET,
-  na.rm = TRUE
-)
-plot_TX <- function(pred_vec, mtd) {
-  pdf(file = paste0("plots/PCE_TX_", mtd, ".pdf"), width = 5, height = 5)
-  image.plot(lon_grid, lat_grid, matrix(pred_vec, 100, 100),
-    col = colorRampPalette(brewer.pal(11, "RdBu")[11:1])(30),
-    xlab = "longitude", ylab = "latitude", cex.lab = 1.3,
-    cex.axis = 1.3, legend.shrink = 0.8, legend.cex = 2.5, legend.width = 2,
-    zlim = zlim,
-    mgp = c(2, 1, 0)
-  )
-  points(
-    locs[ind_Texas_big[ind_censor_Texas_big], 1],
-    locs[ind_Texas_big[ind_censor_Texas_big], 2],
-    col = "grey",
-    cex = 0.6, pch = 1,
-  )
-  ind_obs <- which(!is.na(y))
-  points(
-    x = locs[ind_obs, 1], y = locs[ind_obs, 2], col = "black",
-    cex = 0.6, pch = 4,
-  )
-  dev.off()
-}
-# fields::US(xlim = c(-106.6, -93.5), ylim = c(25.8, 36.6), add = T)
-mtd_vec <- c("GP_aug", "seq_Vecc", "CB", "TN", "VT")
-var_names <- c(
-  "pred_GP_aug", "pred_seq_Vecc", "pred_GP_CB",
-  "pred_TN", "pred_VMET"
-)
-for (i in 1:5) {
-  plot_TX(get0(var_names[i]), mtd_vec[i])
-}
-# US plot --------------------------------------------
-library(autoimage)
-library(RColorBrewer)
-load("results/PCE_samp_CB_all.RData")
-load("results/PCE_samp_seq_Vecc_all.RData")
-zlim <- range(y_samp_CB_all$Y.pred.posmean, samp_seq_Vecc_all) *
-  sd(y, na.rm = TRUE) + mean(y, na.rm = TRUE)
-y_tmp <- y
-y_tmp[is.na(y)] <- y_samp_CB_all$Y.pred.posmean * sd(y, na.rm = TRUE) +
-  mean(y, na.rm = TRUE)
-pdf(file = paste0("plots/PCE_all_CB.pdf"), width = 7, height = 5)
-autopoints(locs[, 1], locs[, 2], y_tmp,
-  zlim = zlim, col = colorRampPalette(brewer.pal(11, "RdBu")[11:1])(30),
-  map = "state", legend = "vertical",
-  xlab = "longitude", ylab = "latitude", cex.lab = 1.3,
-  cex.axis = 1.3, legend.axis.args = list(at = round(seq(
-    from = zlim[1], to = zlim[2], length.out = 7
-  ), digits = 2))
-)
-dev.off()
-pdf(file = paste0("plots/PCE_all_seq_Vecc.pdf"), width = 7, height = 5)
-y_tmp <- samp_seq_Vecc_all * sd(y, na.rm = TRUE) +
-  mean(y, na.rm = TRUE)
-autopoints(locs[, 1], locs[, 2], y_tmp,
-  zlim = zlim, col = colorRampPalette(brewer.pal(11, "RdBu")[11:1])(30),
-  map = "state", legend = "vertical",
-  xlab = "longitude", ylab = "latitude", cex.lab = 1.3,
-  cex.axis = 1.3, legend.axis.args = list(at = round(seq(
-    from = zlim[1], to = zlim[2], length.out = 7
-  ), digits = 2))
-)
-dev.off()
+
+# Run PCE_validate.R for Figure 6 and PCE_figures.R for Figures 6--7.
