@@ -21,8 +21,6 @@ if (!requireNamespace("CensSpBayes", quietly = TRUE)) {
 source("../utils/data_simulation.R")
 y <- y_list[[k]]
 mask_cens <- (y < cens_ub) & (y > cens_lb)
-y_obs_SNN <- y
-y_obs_SNN[mask_cens] <- NA
 y_obs_CSB <- y
 y_obs_CSB[mask_cens] <- cens_ub[mask_cens]
 source("../utils/score_output.R")

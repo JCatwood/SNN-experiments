@@ -49,7 +49,10 @@ po/*~
 rsconnect/
 
 # R data files
-results/*.RData
+*.RData
 
 # Mac tmp files
 .DS_Store
+
+# csv files
+*.csv
