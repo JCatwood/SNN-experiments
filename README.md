@@ -1,108 +1,87 @@
-# Overview
+# SNN manuscript revision
 
-This document provides guidance on installing the dependencies for as well as running the experiments that can replicate the results in **Scalable Sampling of Truncated Multivariate Normals Using Sequential Nearest-Neighbor Approximation**.
+Experiments for **Scalable Sampling of Spatial Truncated Multivariate Normals Using Sequential Nearest-Neighbor Approximation**.
 
-# Installing Dependencies
+## Dependencies
 
-Most of our dependencies are on CRAN, with only one exception. The following R code can be used to installed the CRAN dependencies for running the experiments.
-```
-CRAN_pkg_names <- c("ggplot2", "fields", "scoringRules", "VeccTMVN", "sf", "spData", "GpGp", "nntmvn", "doParallel", "TruncatedNormal", "RColorBrewer", "autoimage", "mvtnorm", "RANN", "scales", "R.utils", "tidyr", "lhs", "devtools")
-for (pkg_name in CRAN_pkg_names) {
-  install.packages(pkg_name, repos='http://cran.us.r-project.org')
-}
+```r
+install.packages(c("nntmvn", "TruncatedNormal", "VeccTMVN", "GpGp", "fields",
+  "scoringRules", "RANN", "ggplot2", "dplyr", "tidyr", "scales", "lhs",
+  "doParallel", "R.utils", "sf", "spData", "RColorBrewer", "autoimage"))
 ```
 
-`CensSpBayes` is an optional R package that is not available on CRAN at this point. It is non-trivial to install and is based on [`INLA`](https://www.r-inla.org/download-install), which requires several libraries that you may not be able to install through R. The following bash script was used on a freshly created Ubuntu VM to install the required libraries.
+`CensSpBayes` is required to reproduce all numerical results in the paper but optional for experiments not involving the CSB method. Its modified version at `JCatwood/CensSpBayes` returns MCMC samples.
+
+## Local mean and variance diagnostics
+
+Run from `section_3`:
+
+```bash
+Rscript converge_analysis.R 1000
+# Optional full-neighborhood MET reference (can be expensive):
+Rscript converge_analysis.R 1000 true
 ```
-sudo apt-get install libudunits2-dev libssl-dev libgdal-dev libfontconfig-dev libgit2-dev libharfbuzz-dev libfribidi-dev libgsl-dev jags-dev
+
+Outputs are `results/local_moments_lowdim.csv`, a reproducibility RDS file, and `plots/local_moments_lowdim.pdf`. Each neighborhood is sampled with MET. Means and unbiased sample variances use the same draws; Monte Carlo standard errors are saved. Ten reproducible target indices are used. 
+If `Rscript converge_analysis.R 1000 true` was run, full-reference rows are saved in the CSV/RDS and intentionally omitted from the m=10,...,100 plot; inspect them to assess reference error.
+
+## Simulation study
+
+The simulation generates 10,000 responses and censors those below 1. Scenario 2 uses a normalized random Gram covariance with a 0.1 nugget. Scenario 3 has four-dimensional Latin-hypercube inputs.
+
+For the following codes, users should first set the `seed` variable (chosen from 1 to 20). Run from `section_4`:
+```bash
+for scene in 1 2 3; do
+  Rscript SNN_m_cmp_known.R "$seed" "$scene" 2 > "results/logs/snn_${scene}_${seed}.log" 2>&1
+  Rscript VMET_m_cmp_known.R "$seed" "$scene" > "results/logs/vmet_${scene}_${seed}.log" 2>&1
+  Rscript MET_known.R "$seed" "$scene" > "results/logs/met_${scene}_${seed}.log" 2>&1
+done
+```
+for the known covariance simulations. Here, the `2` in `SNN_m_cmp_known.R "$seed" "$scene" 2` indicates maximin ordering. Run from `section_4`:
+```bash
+for scene in 1; do
+  Rscript CSB_unknown.R "$seed" > "results/logs/CSB_unknown_${scene}_${seed}.log" 2>&1
+  Rscript SNN_unknown.R "$seed" > "results/logs/SNN_unknown_${scene}_${seed}.log" 2>&1
+done
+```
+for the unknown covariance simulations. Notice that `CSB_unknown.R` requires the existence of the `CensSpBayes` package. Run from `section_4`:
+```bash
+for scene in 1; do
+  Rscript SNN_m_cmp_known.R "$seed" "$scene" 0 > "results/logs/snn_coord_${scene}_${seed}.log" 2>&1
+  Rscript SNN_m_cmp_known.R "$seed" "$scene" 1 > "results/logs/snn_vardesc_${scene}_${seed}.log" 2>&1
+done
+```
+To produce Figures 4 and 8, run `performance_plot.R`. For Table 4, run `performance_table.R`.
+
+To produce Figure 5, run `sample_heatmap.R`, which uses a saved sample from CSB and newly generates samples for SNN, MET, VMET. This script does not require the `CensSpBayes` package.
+
+## PCE validation and Figure 6
+
+For Figures 6, run from `section_5`:
+
+```bash
+for seed in {1..10}; do
+  Rscript PCE_validate.R TX "$seed" 50 SNN,VMET,MET,LOD
+  Rscript PCE_validate.R US "$seed" 50 SNN,LOD
+done
+Rscript PCE_figures.R
 ```
 
-The following R code installs `CensSpBayes`. Notice that we made minor modification to the original implementation of [`CensSpBayes`](https://github.com/SumanM47/CensSpBayes) such that the MCMC samples can be returned.
+Add `CSB` to either method list on a machine with that package. Regional MET/VMET may still be expensive. The national default omits them because a full training TMVN may be infeasible.
+
+The split holds out about 20% of distinct longitude/latitude pairs, so repeated visits to the same well stay together. All response standardization and covariance fitting use training records only. A covariance fit is recomputed per split.
+
+Gaussian methods share a local marginal prediction rule with 50 nearest training responses in ARD-scaled coordinates and include residual Gaussian uncertainty. CSB uses its own spatial-only predictive model. Outcomes are scored with Brier score for predicted censoring probability where detection limits are known.
+
+Results are saved in `results/`.
+
+## National summaries and Figure 7
+
+In `PCE_modeling.R`, enable `run_seq_Vecc_all`. Leave `run_parm_est=FALSE` to use the supplied full-data fit for these descriptive maps. 
+
+```bash
+Rscript PCE_modeling.R
+Rscript PCE_figures.R
 ```
-library(devtools)
-Git_pkg_name <- "CensSpBayes"
-Git_pkg_link <- "JCatwood/CensSpBayes"
-devtools::install_github(Git_pkg_link)
-```
 
-The experiments involving `CensSpBayes` were run on a Linux system because the package could not be installed on macOS. The dedicated `lowdim_CSB.R`, `CSB_diagnosis.R`, and `highdim_truth_unknown.R` scripts require this optional package. The mixed timing and PCE workflows load its namespace only when their CSB switches are enabled.
-
-# Directories
-
-## Section 3
-
-Codes for producing figures/tables in Section 3 as well as the related figures/tables in the Appendix. All scripts can be run independently. 
-
-- Figure 1 and Table 1, run `lowdim_SNN.R`, `lowdim_VMET.R`, and `lowdim_CSB.R`.
-- Figure 2, run `sample_heatmap.R`
-- Figure 3, run `time_compare.R` and `time_SNN.R`. By default,
-  `time_compare.R` does not load or run `CensSpBayes`. To include it, pass
-  `true` as the fifth argument:
-  ```bash
-  Rscript time_compare.R 1 10 30 5 true
-  ```
-  To run the comparison without installing `CensSpBayes`, omit the fifth
-  argument or set it to `false`:
-  ```bash
-  Rscript time_compare.R 1 10 30 5 false
-  ```
-- Figure D.1, run `CSB_diagnosis.R`. Note that the successful installation of `CensSpBayes` R package is required.
-
-## Section 4
-
-Codes for producing figures/tables in Section 4 as well as the related figures/tables in the Appendix.
-
-- Figure 4, run `Rscript performance_plot.R RMSE maximin`.
-- Figure E.2, run `Rscript performance_plot.R CRPS maximin`.
-- Figure E.3, run `Rscript performance_plot.R RMSE none`.
-- Figure E.4, run `Rscript performance_plot.R CRPS none`.
-- Figure E.5 is also generated by `performance_plot.R`; run the script with
-  `RMSE` and `CRPS`, sequentially. Named arguments are also supported, for
-  example `Rscript performance_plot.R --score=CRPS --order=none`.
-- Figure 5, run `sample_heatmap.R`.
-
-The previous plots are based on the `mtd_cmp.csv` and the `m_cmp.csv` files. 
-
-`mtd_cmp.csv` stores the (processed) outputs from running
-- `highdim_truth_known.R` for 80 times, with `use_snn_order` set to 0, `scene_ID` sequentially set to 1, 2, 3, and 4, and seed ID `k` sequentially set to $1, \ldots, 20$
-- `highdim_truth_unknown.R` for 40 times, with `run_CB` set to `true`,
-  `scene_ID` sequentially set to 1 and 2, and seed ID `k` sequentially set
-  to $1, \ldots, 20$. The command-line syntax is
-  `Rscript highdim_truth_unknown.R k scene_ID run_CB`; for example,
-  `Rscript highdim_truth_unknown.R 1 1 true`. The third argument defaults to
-  `true` when it is omitted. The CSB comparison is restricted to Scenarios 1
-  and 2.
-
-`m_cmp.csv` stores the (processed) outputs from running
-- `SNN_m_cmp_known.R` for 160 times, with `use_snn_order` set to 0 and 2, `scene_ID` sequentially set to 1, 2, 3, and 4, and seed ID `k` sequentially set to $1, \ldots, 20$
-- `SNN_m_cmp_unknown.R` for 160 times, with `use_snn_order` set to 0 and 2, `scene_ID` sequentially set to 1, 2, 3, and 4, and seed ID `k` sequentially set to $1, \ldots, 20$
-- `SNN_m_cmp_known.R` for 20 times, with `use_snn_order` set to 1 `scene_ID` sequentially set to 3, and seed ID `k` sequentially set to $1, \ldots, 20$
-- `SNN_m_cmp_unknown.R` for 20 times, with `use_snn_order` set to 1 `scene_ID` sequentially set to 3, and seed ID `k` sequentially set to $1, \ldots, 20$
-- `VMET_m_cmp_known.R` for 80 times, with `scene_ID` sequentially set to 1, 2, 3, and 4, and seed ID `k` sequentially set to $1, \ldots, 20$
-
-`performance_plot.R` and the first part of `performance_table.R` obtain the
-scenario IDs from the result files, so Scenario 4 is included automatically
-after its rows are added to `m_cmp.csv` and `mtd_cmp.csv`. Their ordering-only
-comparisons intentionally remain restricted to Scenario 3. `sample_heatmap.R`
-should also remain restricted to a two-dimensional scenario; its square-grid
-heatmap is not defined for the four-dimensional Scenario 4.
-
-
-## Section 5
-
-Figures 6 and 7 in Section 5 can be reproduced by running `PCE_modeling.R`, where the control variables, `run_parm_est`, `run_VeccTMVN`, `run_TN`, `run_CB`, `run_seq_Vecc`, `run_seq_Vecc_all`, and `run_CB_all` should be set to `TRUE`.
- 
-Certain components of this script can take relatively long time
-
-- `run_parm_est` is the switch for covariance parameter estimation, which took around 10 hours. Its result was store in `results/PCE_modeling.RData`. You can reuse the previous covariance estimation by setting `run_parm_est` to `FALSE` 
-- `run_CB` and `run_CB_all` are the switches for using the CSB method for the inference over Texas and the entire US, respectively, the latter of which may take 3 hours
-- `CensSpBayes` is checked and loaded only when `run_CB` or `run_CB_all` is
-  `TRUE`; the other PCE experiments do not require it
-- All other methods are relatively fast
-
-
-
-
-
-
-
+The national plots visualize predicted posterior means and their standard errors at the censored records.

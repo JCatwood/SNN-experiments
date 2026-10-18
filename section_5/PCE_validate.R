@@ -1,4 +1,4 @@
-# Run from section_5: Rscript PCE_validate.R TX 123 1000 SNN,VMET,MET,LOD
+# Run from section_5: Rscript PCE_validate.R TX 123 50 SNN,VMET,MET,LOD
 source("../utils/predict_marginals.R")
 args <- commandArgs(TRUE)
 region <- if (length(args)) toupper(args[1]) else "TX"
@@ -101,7 +101,7 @@ for (method in methods) {
     cb <- CensSpBayes::CensSpBayes(Y = obs, S = S, X = matrix(1, nrow(S), 1),
       cutoff.Y = bt, S.pred = Sp, X.pred = matrix(1, nrow(Sp), 1),
       inla.mats = mats, rho.init = .1, rho.upper = 5,
-      iters = 20000 + 5 * 1000, burn = 20000, thin = 5, ret_samp = TRUE)
+      iters = 20000 + 5 * N, burn = 20000, thin = 5, ret_samp = TRUE)
     pred <- cb$Y.pred.samp
     mean_pred <- rowMeans(pred)
     probability <- rowMeans(pred <= b[test])
@@ -116,14 +116,6 @@ for (method in methods) {
   eligible <- is.finite(b[test])
   raw <- pred * scale_y + center
   actual <- y[test] * scale_y + center
-  interval <- t(apply(raw, 1, quantile, c(.05, .95)))
-  # metrics <- c(
-  #   RMSE = sqrt(mean((actual[observed] -
-  #     (mean_pred[observed] * scale_y + center))^2)),
-  #   CRPS = mean(scoringRules::crps_sample(actual[observed], raw[observed, , drop = FALSE])),
-  #   Brier = mean((probability[eligible] - cens[test][eligible])^2),
-  #   Coverage90 = mean(actual[observed] >= interval[observed, 1] &
-  #     actual[observed] <= interval[observed, 2]))
   metrics <- c(Brier = mean((probability[eligible] - cens[test][eligible])^2))
   records[[method]] <- data.frame(region, seed, method, metric = names(metrics),
     value = as.numeric(metrics), n_observed = sum(observed), n_status = sum(eligible),

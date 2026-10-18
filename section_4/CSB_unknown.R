@@ -51,3 +51,11 @@ score_output(
   parms = "unknown"
 )
 
+# Save one complete post-burn-in realization -----------------------------
+y_samp_CSB <- y_obs_CSB
+y_samp_CSB[mask_cens] <- ret_CSB$Y.pred.samp[, 1]
+dir.create("samples", showWarnings = FALSE)
+write.table(y_samp_CSB,
+            file = "samples/samp_cmp_known_CB_scene1.csv",
+            row.names = FALSE, col.names = FALSE
+)

@@ -1,86 +1,52 @@
-m_cmp_rslt <- read.table("m_cmp.csv", header = FALSE, sep = ",")
-mtd_cmp_rslt <- read.table("mtd_cmp.csv", header = FALSE, sep = ",")
-colnames(m_cmp_rslt) <- c("scenario", "m", "score", "method", "cov_kernel", "value")
-colnames(mtd_cmp_rslt) <- c("scenario", "score", "method", "cov_kernel", "value")
-mtd_cmp_rslt$m <- NA
-mtd_cmp_rslt$m[mtd_cmp_rslt$method == "SNN"] <- 30
-mtd_cmp_rslt <- mtd_cmp_rslt[c(1, 6, 2, 3, 4, 5)]
-all_rslt <- rbind(m_cmp_rslt, mtd_cmp_rslt)
-
-score <- "CRPS"
-m_vec <- sort(unique(m_cmp_rslt$m))
-m_length <- length(m_vec)
-for (scenario in sort(unique(m_cmp_rslt$scenario))) {
-  score_vec <- m_length + 4
-  score_sd_vec <- m_length + 4
-  ind <- 1
-  for (cov_kernel in c("known", "unknown")) {
-    if (cov_kernel == "known") {
-      for (method in c("VT", "TN", "SNN")) {
-        if (method == "SNN") {
-          for (m in m_vec) {
-            mask <- all_rslt$scenario == scenario & all_rslt$m == m &
-              all_rslt$score == score & all_rslt$cov_kernel == cov_kernel
-            mask[is.na(mask)] <- FALSE
-            score_vec[ind] <- mean(all_rslt$value[mask])
-            score_sd_vec[ind] <- sd(all_rslt$value[mask]) / sqrt(sum(mask))
-            ind <- ind + 1
-          }
-        } else {
-          mask <- all_rslt$scenario == scenario & all_rslt$method == method &
-            all_rslt$score == score & all_rslt$cov_kernel == cov_kernel
-          score_vec[ind] <- mean(all_rslt$value[mask])
-          score_sd_vec[ind] <- sd(all_rslt$value[mask]) / sqrt(sum(mask))
-          ind <- ind + 1
-        }
-      }
-    } else {
-      for (method in c("CB", "SNN")) {
-        mask <- all_rslt$scenario == scenario & all_rslt$method == method &
-          all_rslt$score == score & all_rslt$cov_kernel == cov_kernel
-        score_vec[ind] <- mean(all_rslt$value[mask])
-        score_sd_vec[ind] <- sd(all_rslt$value[mask]) / sqrt(sum(mask))
-        ind <- ind + 1
-      }
-    }
-  }
-  cat(sprintf("\\multirow{2}{*}{Scene %d}", scenario),
-    sapply(score_vec, FUN = function(x) {
-      sprintf("%.2f", x)
-    }),
-    sep = " & "
-  )
-  cat("\\\\\n")
-  cat(" ", sapply(score_sd_vec, FUN = function(x) {
-    sprintf("(%.3f)", x)
-  }), sep = " & ")
-  cat("\\\\\n")
-  cat("\\hline\n")
+library(dplyr)
+library(tidyr)
+files <- list.files("results/", "\\.csv$", full.names = TRUE)
+if (!length(files)) stop("Run the revised experiments first.")
+if (!dir.exists("results/output_tables")) {
+  dir.create("results/output_tables", recursive = TRUE)
 }
+x <- bind_rows(lapply(files, read.csv))
+stopifnot(all(x$scoring_version == 2))
+s <- x %>% group_by(scenario, method, cov_kernel, m, score) %>%
+  summarise(mean = mean(value), se = sd(value) / sqrt(n()), replicates = n(), .groups = "drop")
+table <- s %>% 
+  mutate(mean = if_else(method %in% c("MET", "VT") & score == "time", mean + 600, mean)) %>%
+  # mutate(cell = sprintf("%.4g (SE %.2g; n=%d)", mean, se, replicates)) %>%
+  mutate(cell = sprintf("%.4g (%.2g)", mean, se)) %>%
+  select(scenario, method, cov_kernel, m, score, cell) %>%
+  pivot_wider(names_from = score, values_from = cell) %>%
+  filter(method %in% c("CSB", "MET", "VT", "SNN_order_maximin")) %>%
+  mutate(method = ifelse(method == "SNN_order_maximin", "SNN (maximin)", method)) %>%
+  mutate(method = ifelse(method == "VT", "VMET", method)) %>%
+  rename(Covariance = cov_kernel) %>%
+  mutate(Covariance = ifelse(Covariance == "known", "true", "estimated"))
 
-score_vec <- numeric(m_length)
-score_sd_vec <- numeric(m_length)
-for (method in c("SNN", "SNN_order_desc", "SNN_order_ascd")) {
-  ind <- 1
-  for (m in m_vec) {
-    mask <- m_cmp_rslt$scenario == 3 & m_cmp_rslt$m == m &
-      m_cmp_rslt$score == score & m_cmp_rslt$cov_kernel == "known" &
-      m_cmp_rslt$method == method
-    mask[is.na(mask)] <- FALSE
-    score_vec[ind] <- mean(m_cmp_rslt$value[mask])
-    score_sd_vec[ind] <- sd(m_cmp_rslt$value[mask]) / sqrt(sum(mask))
-    ind <- ind + 1
-  }
-  cat(
-    sapply(score_vec, FUN = function(x) {
-      sprintf("%.3f", x)
-    }),
-    sep = " & "
-  )
-  cat("\\\\\n")
-  cat(" ", sapply(score_sd_vec, FUN = function(x) {
-    sprintf("(%.4f)", x)
-  }), sep = " & ")
-  cat("\\\\\n")
-  cat("\\hline\n")
-}
+# md table  
+header <- paste0("| ", paste(names(table), collapse = " | "), " |")
+rows <- apply(table, 1, function(z) paste0("| ", paste(z, collapse = " | "), " |"))
+writeLines(c(header, paste0("|", paste(rep("---", ncol(table)), collapse = "|"), "|"), rows),
+  "results/output_tables/performance_table.md")
+
+# tex table
+header <- paste0(
+  paste(names(table), collapse = " & "),
+  " \\\\"
+)
+rows <- apply(table, 1, function(z) {
+  paste0(paste(z, collapse = " & "), " \\\\")
+})
+latex_table <- c(
+  "\\begin{tabular}{",
+  paste(rep("c", ncol(table)), collapse = ""),
+  "}",
+  "\\hline",
+  header,
+  "\\hline",
+  rows,
+  "\\hline",
+  "\\end{tabular}"
+)
+writeLines(
+  latex_table,
+  "results/output_tables/performance_table.tex"
+)

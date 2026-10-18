@@ -6,33 +6,29 @@ library(GpGp)
 m <- 30
 k <- 1
 scene_ID <- 1
-use_snn_order <- 0
+use_snn_order <- 2
 source("../utils/data_simulation.R")
 # locs and GP realization over 100X100 grid --------------
-locs_all <- matrix(NA, nrow = n + n_test, ncol = ncol(locs))
-locs_all[ind_train, ] <- locs
-locs_all[ind_test, ] <- locs_test
 y_true <- read.table(paste0("samples/sim_data_scene", scene_ID, "_true.csv"),
   header = F, row.names = NULL
 )[, 1]
 cov_func <- GpGp::matern15_isotropic
 cov_parms <- c(1.0, 0.03, 0.0001)
 cov_name <- "matern15_isotropic"
-covmat <- cov_func(cov_parms, locs_all)
-cens_lb <- rep(-Inf, n + n_test)
-cens_ub <- rep(1, n + n_test)
+covmat <- cov_func(cov_parms, locs)
+cens_lb <- rep(-Inf, n)
+cens_ub <- rep(1, n)
 mask_cens <- y_true < cens_ub
 y_obs <- y_true
 y_obs[mask_cens] <- NA
 # sample using SNN ----------------
 y_SNN <- nntmvn::rptmvn(y_obs, cens_lb, cens_ub, mask_cens,
-  m = m, covmat = covmat, locs = locs_all,
+  m = m, covmat = covmat, locs = locs,
   ordering = use_snn_order
 )
 # sample using VT and TN ---------------
 source("sample_func_VT_TN.R")
-locs <- locs_all
-n <- nrow(locs_all)
+n <- nrow(locs)
 n_samp <- 2
 y_VT <- matrix(y_obs,
   nrow = length(y_obs),

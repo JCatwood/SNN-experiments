@@ -7,13 +7,15 @@ rm(list = ls())
 set.seed(123)
 
 run_parm_est <- FALSE
-run_VeccTMVN <- TRUE
-run_TN <- TRUE
+run_VeccTMVN <- FALSE
+run_TN <- FALSE
 run_CB <- FALSE
-run_seq_Vecc <- TRUE
+run_seq_Vecc <- FALSE
 run_seq_Vecc_all <- TRUE
 run_CB_all <- FALSE
-n_national <- 3 # independent SNN draws; retain the same number for CSB
+n_national <- 100 # independent SNN draws; retain the same number for CSB
+n_regional <- 3 # regional replicates, no sd needed, so a small number is fine
+ncores <- 1 # 1 for single thread, which will not load the `foreach` and the `doParallel` packages
 
 # CensSpBayes is optional and is checked only when a CSB experiment is enabled.
 if ((run_CB || run_CB_all) &&
@@ -107,7 +109,6 @@ if (run_VeccTMVN) {
   y_scaled_Texas_big <- y_scaled[ind_Texas_big]
   b_scaled_Texas_big <- b_scaled[ind_Texas_big]
   ind_obs_tmp <- which(!is.na(y_scaled_Texas_big))
-  n_samp <- 3
   n_cens <- sum(is.na(y_scaled_Texas_big))
   covparms <- exp(opt_obj$par)
   m <- 50
@@ -125,11 +126,11 @@ if (run_VeccTMVN) {
     covmat_Texas_big[ind_obs_tmp, -ind_obs_tmp]
   cond_covmat_TX_cens[lower.tri(cond_covmat_TX_cens)] <-
     t(cond_covmat_TX_cens)[lower.tri(cond_covmat_TX_cens)]
-  samp_TX_VT <- outer(y_scaled_Texas_big, rep(1, n_samp))
+  samp_TX_VT <- outer(y_scaled_Texas_big, rep(1, n_regional))
   time_TX_VT <- system.time(
     samp_TX_VT[-ind_obs_tmp, ] <- VeccTMVN::mvrandn(
       lower = rep(-Inf, n_cens), upper = b_scaled_Texas_big[-ind_obs_tmp],
-      mean = cond_mean_TX_cens, sigma = cond_covmat_TX_cens, N = n_samp, m = m
+      mean = cond_mean_TX_cens, sigma = cond_covmat_TX_cens, N = n_regional, m = m
     )
   )[[3]]
   if (!file.exists("results")) {
@@ -141,8 +142,7 @@ if (run_VeccTMVN) {
 }
 # SNN method for TX --------------------
 if (run_seq_Vecc) {
-  library(nntmvn)
-  library(doParallel)
+  
   load("results/PCE_modeling.RData")
   ind_Texas_big <- ind_Texas
   ind_obs <- which(!is.na(y))
@@ -152,7 +152,6 @@ if (run_seq_Vecc) {
   y_scaled_Texas_big <- y_scaled[ind_Texas_big]
   b_scaled_Texas_big <- b_scaled[ind_Texas_big]
   ind_obs_tmp <- which(!is.na(y_scaled_Texas_big))
-  n_samp <- 3
   n_cens <- sum(is.na(y_scaled_Texas_big))
   covparms <- exp(opt_obj$par)
   m <- 50
@@ -170,24 +169,24 @@ if (run_seq_Vecc) {
     covmat_Texas_big[ind_obs_tmp, -ind_obs_tmp]
   cond_covmat_TX_cens[lower.tri(cond_covmat_TX_cens)] <-
     t(cond_covmat_TX_cens)[lower.tri(cond_covmat_TX_cens)]
-  samp_seq_Vecc <- outer(y_scaled_Texas_big, rep(1, n_samp))
-  ncores <- 4
-  cl <- makeCluster(ncores)
-  registerDoParallel(cl)
-  samp_seq_Vecc_sub <- foreach(i = 1:n_samp, .packages = c("nntmvn")) %dopar% {
+  samp_seq_Vecc <- outer(y_scaled_Texas_big, rep(1, n_regional))
+  samp_seq_Vecc_sub <- lapply(seq_len(n_regional), function(i) {
     nntmvn::rtmvn(
       cens_lb = rep(-Inf, n_cens) - cond_mean_TX_cens,
       cens_ub = b_scaled_Texas_big[-ind_obs_tmp] - cond_mean_TX_cens,
-      m = m, covmat = cond_covmat_TX_cens, ordering = 2,
-      locs = locs_scaled_Texas_big[-ind_obs_tmp, ], seed = i
+      m = m,
+      covmat = cond_covmat_TX_cens,
+      ordering = 2,
+      locs = locs_scaled_Texas_big[-ind_obs_tmp, ],
+      seed = i
     ) + cond_mean_TX_cens
-  }
-  stopCluster(cl)
+  })
+  
   time_end <- Sys.time()
   time_seq_Vecc <- difftime(time_end, time_bgn, units = "secs")[[1]]
   samp_seq_Vecc_sub <- matrix(unlist(samp_seq_Vecc_sub),
     length(samp_seq_Vecc_sub[[1]]),
-    n_samp,
+    n_regional,
     byrow = FALSE
   )
   samp_seq_Vecc[-ind_obs_tmp, ] <- samp_seq_Vecc_sub
@@ -208,11 +207,30 @@ if (run_seq_Vecc_all) {
   covparms_tmp <- covparms
   covparms_tmp[2:4] <- 1
   time_bgn <- Sys.time()
-  samp_seq_Vecc_all <- vapply(seq_len(n_national), function(s) nntmvn::rptmvn(
-    y_scaled, rep(-Inf, n), b_scaled, is.na(y_scaled), m,
-    locs = locs_scaled_twice, cov_name = cov_name,
-    cov_parm = covparms_tmp, seed = s, ordering = 2
-  ), numeric(n))
+  if (ncores > 1) {
+    library(foreach)
+    library(doParallel)
+    cl <- makeCluster(ncores)
+    registerDoParallel(cl)
+    samp_seq_Vecc_all <- foreach(
+      s = seq_len(n_national),
+      .combine = "cbind",
+      .packages = "nntmvn"
+    ) %dopar% {
+      nntmvn::rptmvn(
+        y_scaled, rep(-Inf, n), b_scaled, is.na(y_scaled), m,
+        locs = locs_scaled_twice, cov_name = cov_name,
+        cov_parm = covparms_tmp, seed = s, ordering = 2
+      )
+    }
+    stopCluster(cl)
+  } else {
+    samp_seq_Vecc_all <- vapply(seq_len(n_national), function(s) nntmvn::rptmvn(
+      y_scaled, rep(-Inf, n), b_scaled, is.na(y_scaled), m,
+      locs = locs_scaled_twice, cov_name = cov_name,
+      cov_parm = covparms_tmp, seed = s, ordering = 2
+    ), numeric(n))
+  }
   time_end <- Sys.time()
   time_seq_Vecc_all <- difftime(time_end, time_bgn, units = "secs")[[1]]
   if (!file.exists("results")) {
@@ -235,8 +253,9 @@ if (run_CB) {
   y_obs_scaled_Texas_big[mask_cens_Texas_big] <-
     b_scaled_Texas_big[mask_cens_Texas_big]
   n_burn <- 20000
-  n_iter_MC <- 20015
   thin <- 5
+  n_iter_MC <- n_burn + thin * n_regional
+  
   ## Sample at locations given by `ind_Texas_big` using CB -----------------
   time_bgn <- Sys.time()
   inla.mats <- CensSpBayes::create_inla_mats(
@@ -269,8 +288,9 @@ if (run_CB_all) {
   y_obs_scaled <- y_scaled
   y_obs_scaled[mask_censor] <- b_scaled[mask_censor]
   n_burn <- 20000
-  n_iter_MC <- n_burn + 5 * n_national
   thin <- 5
+  n_iter_MC <- n_burn + 5 * thin
+  
   ## Sample at all locations using CB -----------------
   time_bgn <- Sys.time()
   inla.mats <- CensSpBayes::create_inla_mats(
@@ -308,7 +328,6 @@ if (run_TN) {
   y_scaled_Texas_big <- y_scaled[ind_Texas_big]
   b_scaled_Texas_big <- b_scaled[ind_Texas_big]
   ind_obs_tmp <- which(!is.na(y_scaled_Texas_big))
-  n_samp <- 3
   n_cens <- sum(is.na(y_scaled_Texas_big))
   covparms <- exp(opt_obj$par)
   ## Sample at locations given by `ind_Texas_big` using TN -----------------
@@ -327,7 +346,7 @@ if (run_TN) {
   cond_covmat_TX_cens[lower.tri(cond_covmat_TX_cens)] <-
     t(cond_covmat_TX_cens)[lower.tri(cond_covmat_TX_cens)]
   samp_TX_TN <- TruncatedNormal::rtmvnorm(
-    n_samp, cond_mean_TX_cens,
+    n_regional, cond_mean_TX_cens,
     cond_covmat_TX_cens, rep(-Inf, n_cens), b_scaled_Texas_big[-ind_obs_tmp]
   )
   time_end <- Sys.time()
@@ -340,4 +359,4 @@ if (run_TN) {
   )
 }
 
-# Run PCE_validate.R for Figure 6 and PCE_figures.R for Figures 6--7.
+# Run PCE_validate.R for Figure 6 and PCE_figures.R for Figure 7.
