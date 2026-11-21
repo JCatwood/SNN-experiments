@@ -6,7 +6,6 @@ if (!dir.exists("results/output_tables")) {
   dir.create("results/output_tables", recursive = TRUE)
 }
 x <- bind_rows(lapply(files, read.csv))
-stopifnot(all(x$scoring_version == 2))
 s <- x %>% group_by(scenario, method, cov_kernel, m, score) %>%
   summarise(mean = mean(value), se = sd(value) / sqrt(n()), replicates = n(), .groups = "drop")
 table <- s %>% 

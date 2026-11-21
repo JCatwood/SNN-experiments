@@ -105,17 +105,18 @@ cat(
   sqrt(mean((rowMeans(y_cens_samp_MET) - y[mask_cens])^2)), "\n"
 )
 
-# compute nll ------------------------------------
+# compute nll (predictive density: sd is the sample SD of the draws,
+# not the standard error of their mean) ----------------
 cat("nll for SNN is ", -mean(
   dnorm(y[mask_cens],
     mean = rowMeans(y_cens_samp_SNN),
-    sd = apply(y_cens_samp_SNN, 1, sd) / sqrt(n_samp), log = T
+    sd = apply(y_cens_samp_SNN, 1, sd), log = T
   )
 ), "\n")
 cat("nll for MET is ", -mean(
   dnorm(y[mask_cens],
     mean = rowMeans(y_cens_samp_MET),
-    sd = apply(y_cens_samp_MET, 1, sd) / sqrt(n_samp), log = T
+    sd = apply(y_cens_samp_MET, 1, sd), log = T
   )
 ), "\n")
 

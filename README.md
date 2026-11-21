@@ -1,4 +1,4 @@
-# SNN manuscript revision
+# Summary
 
 Experiments for **Scalable Sampling of Spatial Truncated Multivariate Normals Using Sequential Nearest-Neighbor Approximation**.
 
@@ -6,30 +6,55 @@ Experiments for **Scalable Sampling of Spatial Truncated Multivariate Normals Us
 
 ```r
 install.packages(c("nntmvn", "TruncatedNormal", "VeccTMVN", "GpGp", "fields",
-  "scoringRules", "RANN", "ggplot2", "dplyr", "tidyr", "scales", "lhs",
-  "doParallel", "R.utils", "sf", "spData", "RColorBrewer", "autoimage"))
+  "scoringRules", "RANN", "ggplot2", "dplyr", "tidyr", "lhs",
+  "doParallel", "R.utils", "sf", "spData", "mvtnorm", "knitr"))
 ```
 
 `CensSpBayes` is required to reproduce all numerical results in the paper but optional for experiments not involving the CSB method. Its modified version at `JCatwood/CensSpBayes` returns MCMC samples.
 
-## Local mean and variance diagnostics
+## Section 3
 
 Run from `section_3`:
-
+```bash
+mkdir -p plots
+mkdir -p results
+```
+For Figure 1 and Table 1, run
+```
+Rscript lowdim_SNN.R
+Rscript lowdim_VMET.R
+Rscript lowdim_CSB.R
+```
+Notice that `lowdim_CSB.R` requires the existence of the `CensSpBayes` package. For Figure 2, run
 ```bash
 Rscript converge_analysis.R 1000
-# Optional full-neighborhood MET reference (can be expensive):
-Rscript converge_analysis.R 1000 true
+```
+Outputs are `results/local_moments_lowdim.csv`, a reproducibility RDS file, and `plots/local_moments_lowdim.pdf`. Each neighborhood is sampled with MET. Means and unbiased sample variances use the same draws; Monte Carlo standard errors are saved. Ten reproducible target indices are used. 
+
+For Figure 3, run
+```bash
+Rscript time_compare.R
+Rscript time_SNN.R
 ```
 
-Outputs are `results/local_moments_lowdim.csv`, a reproducibility RDS file, and `plots/local_moments_lowdim.pdf`. Each neighborhood is sampled with MET. Means and unbiased sample variances use the same draws; Monte Carlo standard errors are saved. Ten reproducible target indices are used. 
-If `Rscript converge_analysis.R 1000 true` was run, full-reference rows are saved in the CSV/RDS and intentionally omitted from the m=10,...,100 plot; inspect them to assess reference error.
+## Section 4
 
-## Simulation study
-
-The simulation generates 10,000 responses and censors those below 1. Scenario 2 uses a normalized random Gram covariance with a 0.1 nugget. Scenario 3 has four-dimensional Latin-hypercube inputs.
-
-For the following codes, users should first set the `seed` variable (chosen from 1 to 20). Run from `section_4`:
+Run from `section_4`:
+```bash
+mkdir -p results/logs
+mkdir -p plots
+```
+Run the following script for data simulation once (not in parallel):
+```bash
+for scene in 1 2 3; do
+  Rscript -e "scene_ID <- $scene; source('../utils/data_simulation.R')"
+done
+```
+Delete `section_4/data/` whenever the scenario definitions change. For the following experiment codes, users should first set the `seed` variable (chosen from 1 to 20). For example
+```bash
+export seed=1
+```
+Then run
 ```bash
 for scene in 1 2 3; do
   Rscript SNN_m_cmp_known.R "$seed" "$scene" 2 > "results/logs/snn_${scene}_${seed}.log" 2>&1
@@ -51,11 +76,9 @@ for scene in 1; do
   Rscript SNN_m_cmp_known.R "$seed" "$scene" 1 > "results/logs/snn_vardesc_${scene}_${seed}.log" 2>&1
 done
 ```
-To produce Figures 4 and 8, run `performance_plot.R`. For Table 4, run `performance_table.R`.
+to get the results for two other ordering schemes considered for the SNN method. To produce Figures 4 and 8, run `performance_plot.R`. For Table 4, run `performance_table.R`. Notice that 600 seconds were added to `MET` and `VMET` because their first partition is needed and partitions are applied when a timeout is encountered. To produce Figure 5, run `sample_heatmap.R`, which uses a saved sample from CSB and newly generates samples for SNN, MET, VMET. This script does not require the `CensSpBayes` package.
 
-To produce Figure 5, run `sample_heatmap.R`, which uses a saved sample from CSB and newly generates samples for SNN, MET, VMET. This script does not require the `CensSpBayes` package.
-
-## PCE validation and Figure 6
+## Section 5
 
 For Figures 6, run from `section_5`:
 
@@ -75,13 +98,9 @@ Gaussian methods share a local marginal prediction rule with 50 nearest training
 
 Results are saved in `results/`.
 
-## National summaries and Figure 7
-
-In `PCE_modeling.R`, enable `run_seq_Vecc_all`. Leave `run_parm_est=FALSE` to use the supplied full-data fit for these descriptive maps. 
-
+For Figure 7, in `PCE_modeling.R`, enable `run_seq_Vecc_all`. Leave `run_parm_est=FALSE` to use the supplied full-data fit for these descriptive maps. 
 ```bash
 Rscript PCE_modeling.R
 Rscript PCE_figures.R
 ```
-
 The national plots visualize predicted posterior means and their standard errors at the censored records.

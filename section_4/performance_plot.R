@@ -17,11 +17,11 @@ dir.create("plots/revision", recursive = TRUE, showWarnings = FALSE)
 chosen <- c(if (ordering == "none") "SNN" else paste0("SNN_order_", ordering), "VT", "MET")
 a <- filter(s, score == !!score, method %in% chosen, cov_kernel == "known")
 t <- filter(s, score == "time") %>% select(scenario, m, method, cov_kernel, time = avg_value) %>%
-  mutate(time = if_else(!startsWith(method, "SNN"), time + 600, time))
+  mutate(time = if_else(grepl("^(SNN|CSB)", method), time, time + 600))
 a <- left_join(a, t, by = c("scenario", "m", "method", "cov_kernel"))
 a$label <- ifelse(a$method == "VT", "VMET", ifelse(a$method == "MET", "MET",
   ifelse(a$cov_kernel == "unknown", "SNN (fitted)", "SNN")))
-a <- a %>% filter(!(label == "VMET" & scenario == "2" & m > 10))
+a <- a %>% filter(!(label == "VMET" & scenario == "2" & m > 10)) # VMET with m > 10 and scenario 2 appears to have numerical issue and the results are very wrong
 for (scene in sort(unique(a$scenario))) {
   p <- ggplot(filter(a, scenario == scene), aes(time, avg_value, color = label, shape = label)) +
     geom_errorbar(aes(ymin = avg_value - 1.96 * se, ymax = avg_value + 1.96 * se), width = 0) +

@@ -56,3 +56,8 @@ rsconnect/
 
 # csv files
 *.csv
+
+# results, plots, data
+results/
+plots/
+data/

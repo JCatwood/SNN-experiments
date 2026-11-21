@@ -1,5 +1,5 @@
-if (length(scene_ID) != 1L || is.na(scene_ID) || !scene_ID %in% 1:4) {
-  stop("scene_ID must be one of 1, 2, 3, or 4.")
+if (length(scene_ID) != 1L || is.na(scene_ID) || !scene_ID %in% 1:3) {
+  stop("scene_ID must be one of 1, 2, 3.")
 }
 
 # Scenario 1 is the mean-zero Matern 1.5 GP realized over [0, 1]^2.
